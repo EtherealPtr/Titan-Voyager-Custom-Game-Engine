@@ -6,6 +6,7 @@
 #include "Dependencies/SDL2/include/SDL.h"
 
 enum class GameState { MAIN_MENU, PLAY, EXIT, TOTAL_STATES };
+enum class Controller {W_DOWN = 50, S_DOWN, A_DOWN, D_DOWN, W_UP, S_UP, A_UP, D_UP };
 
 class Input
 {
@@ -17,7 +18,6 @@ public:
 private:
 	SDL_Event m_event;
 	SDL_KeyboardEvent* m_pkey;
-	uShort m_processedInput;
 };
 
 #endif // !__INPUT_H__

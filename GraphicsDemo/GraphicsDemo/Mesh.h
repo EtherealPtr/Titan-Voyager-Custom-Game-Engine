@@ -19,15 +19,13 @@ public:
 	~Mesh();
 
 	void CreateMesh(Vertex* verts, GLuint numOfVertices, unsigned int* indices, GLuint numOfIndices);
-	void Draw();
-	
-	Shader shaderComponent;
-	Texture m_textureComponent;
-	Audio m_audioComponent; 
-	Physics m_physicsComponent; 
-	Animation m_animationComponent; 
+	void Draw(glm::mat4 proj, glm::mat4 view);
 
-	Camera GetCamera() { return m_camera; }
+	Shader& GetShaderComponent()			{ return shaderComponent; }
+	Texture& GetTextureComponent()			{ return m_textureComponent; }
+	Audio& GetAudioComponent()				{ return m_audioComponent; }
+	Physics& GetPhysicsComponent()			{ return m_physicsComponent; }
+	Animation& GetAnimationComponent()		{ return m_animationComponent; }
 
 	void SetTextureId(char* texId);
 	char* GetTextureId() const;
@@ -42,7 +40,12 @@ private:
 
 private:
 	glm::mat4 model;
-	Camera m_camera;
+
+	Shader shaderComponent;
+	Texture m_textureComponent;
+	Audio m_audioComponent;
+	Physics m_physicsComponent;
+	Animation m_animationComponent;
 };
 
 #endif // !__MESH_H__

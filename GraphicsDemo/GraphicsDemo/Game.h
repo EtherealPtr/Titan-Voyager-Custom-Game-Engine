@@ -18,6 +18,7 @@ public:
 private:
 	void InitMeshes();
 	void GameLoop();
+	void Update();
 
 	GameState m_gameState;
 	Input m_input;

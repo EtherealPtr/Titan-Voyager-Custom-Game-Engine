@@ -3,9 +3,7 @@
 
 Mesh::Mesh()
 {
-	//m_camera.InitCameraOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 0.0f, 600.0f);
-	m_camera.InitCameraPerspective(80.0f, 800.0f / 600.0f, 1.0f, 500.0f);
-	m_camera.SetCameraPos(glm::vec3(0.0f, 0.0f, 1.0f));
+	
 }
 
 Mesh::~Mesh()
@@ -49,7 +47,7 @@ void Mesh::CreateMesh(Vertex* verts, GLuint numOfVertices, unsigned int* indices
 
 	glGenBuffers(TOTAL_BUFFERS, m_vbo);
 
-	glBindBuffer(GL_ARRAY_BUFFER, m_vbo[POSITION_VB]); 
+	glBindBuffer(GL_ARRAY_BUFFER, m_vbo[POSITION_VB]);
 	glBufferData(GL_ARRAY_BUFFER, numOfVertices * sizeof(vertexPos[0]), &vertexPos[0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
@@ -66,23 +64,22 @@ void Mesh::CreateMesh(Vertex* verts, GLuint numOfVertices, unsigned int* indices
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo[ELEMENT_VB]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, numOfIndices * sizeof(indices[0]), &indices[0], GL_STATIC_DRAW);
-	
+
 	glBindVertexArray(0);
 }
 
-void Mesh::Draw()
+void Mesh::Draw(glm::mat4 proj, glm::mat4 view)
 {
-	model = glm::translate(glm::vec3(0.0f, 0.3f, -1.0f));
-	model = glm::rotate(model, (float)SDL_GetTicks() * 0.001f, glm::vec3(1.0f, 0.0f, 1.0f));
-	m_camera.Update();
+	model = glm::translate(glm::vec3(0.0f, 0.0f, -1.0f));
+	//model = glm::rotate(model, (float)SDL_GetTicks() * 0.001f, glm::vec3(1.0f, 0.0f, 1.0f));
 
 	this->m_textureComponent.ActivateTexture();
-	this->shaderComponent.SetMat4("projection", m_camera.GetProjectionMatrix());
-	this->shaderComponent.SetMat4("view", m_camera.GetViewMatrix());
+	this->shaderComponent.SetMat4("projection", proj);
+	this->shaderComponent.SetMat4("view", view);
 	this->shaderComponent.SetMat4("model", model);
 
 	glBindVertexArray(m_vao);
-	glDrawElements(GL_TRIANGLES, m_numOfIndices, GL_UNSIGNED_INT, nullptr); 
+	glDrawElements(GL_TRIANGLES, m_numOfIndices, GL_UNSIGNED_INT, nullptr);
 	glBindVertexArray(0);
 
 	this->shaderComponent.DeactivateProgram();

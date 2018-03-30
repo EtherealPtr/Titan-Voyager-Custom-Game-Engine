@@ -24,7 +24,7 @@ public:
 	void operator=(Renderer const&) = delete;
 
 	void Run();
-	void RenderMeshes();
+	void RenderMeshes(glm::mat4 proj, glm::mat4 view);
 	void InitMesh(GLuint meshType, char* texId);
 	SDL_Window* GetAppWindow() { return window; }
 

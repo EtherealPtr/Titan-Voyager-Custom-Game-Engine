@@ -97,6 +97,9 @@ bool Renderer::InitSDLAndOpenGL()
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 
+	//SDL_SetRelativeMouseMode(SDL_TRUE);
+	//SDL_CaptureMouse(SDL_TRUE);
+
 	glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
 
 	return true;
@@ -106,12 +109,12 @@ bool Renderer::InitSDLAndOpenGL()
 // Author: Rony Hanna
 // Description: Function that renders all the meshes in the vector
 // -------------------
-void Renderer::RenderMeshes()
+void Renderer::RenderMeshes(glm::mat4 _proj, glm::mat4 _view)
 {
 	for (auto& mesh : m_meshes)
 	{
-		mesh->shaderComponent.ActivateProgram();
-		mesh->Draw();
+		mesh->GetShaderComponent().ActivateProgram();
+		mesh->Draw(_proj, _view);
 	}
 }
 
@@ -130,18 +133,16 @@ void Renderer::InitMesh(GLuint meshType, char* textureId)
 	{
 	case TRIANGLE:
 		polygon->CreateMesh(m_shape->GetVertexData(), m_shape->GetVertexDataCount(), m_shape->GetIndexData(), m_shape->GetIndexDataCount());
-		polygon->shaderComponent.CreateProgram("res/Shaders/VertexShader.vs", "res/Shaders/FragmentShader.fs");
-		polygon->m_textureComponent.GenerateTexture(textureId);
+		polygon->GetShaderComponent().CreateProgram("res/Shaders/VertexShader.vs", "res/Shaders/FragmentShader.fs");
+		polygon->GetTextureComponent().GenerateTexture(textureId);
 		polygon->SetTextureId(textureId);
-		polygon->m_textureComponent.ActivateTexture();
 		break;
 
 	case QUAD:
 		polygon->CreateMesh(m_shape->GetVertexData(), m_shape->GetVertexDataCount(), m_shape->GetIndexData(), m_shape->GetIndexDataCount());
-		polygon->shaderComponent.CreateProgram("res/Shaders/VertexShader.vs", "res/Shaders/FragmentShader.fs");
-		polygon->m_textureComponent.GenerateTexture(textureId);
+		polygon->GetShaderComponent().CreateProgram("res/Shaders/VertexShader.vs", "res/Shaders/FragmentShader.fs");
+		polygon->GetTextureComponent().GenerateTexture(textureId);
 		polygon->SetTextureId(textureId);
-		polygon->m_textureComponent.ActivateTexture();
 		break;
 	}
 
