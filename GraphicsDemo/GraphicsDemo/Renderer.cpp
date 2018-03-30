@@ -113,7 +113,6 @@ void Renderer::RenderMeshes(glm::mat4 _proj, glm::mat4 _view)
 {
 	for (auto& mesh : m_meshes)
 	{
-		mesh->GetShaderComponent().ActivateProgram();
 		mesh->Draw(_proj, _view);
 	}
 }

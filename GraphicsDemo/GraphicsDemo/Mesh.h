@@ -19,7 +19,7 @@ public:
 	~Mesh();
 
 	void CreateMesh(Vertex* verts, GLuint numOfVertices, unsigned int* indices, GLuint numOfIndices);
-	void Draw(glm::mat4 proj, glm::mat4 view);
+	void Draw(glm::mat4 proj, glm::mat4 view, glm::vec3 pos = glm::vec3(1.0f), glm::vec3 rot = glm::vec3(1.0f), glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f));
 
 	Shader& GetShaderComponent()			{ return shaderComponent; }
 	Texture& GetTextureComponent()			{ return m_textureComponent; }
@@ -39,7 +39,7 @@ private:
 	GLuint m_vbo[TOTAL_BUFFERS];
 
 private:
-	glm::mat4 model;
+	glm::mat4 m_model;
 
 	Shader shaderComponent;
 	Texture m_textureComponent;

@@ -68,15 +68,20 @@ void Mesh::CreateMesh(Vertex* verts, GLuint numOfVertices, unsigned int* indices
 	glBindVertexArray(0);
 }
 
-void Mesh::Draw(glm::mat4 proj, glm::mat4 view)
+void Mesh::Draw(glm::mat4 proj, glm::mat4 view, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale)
 {
-	model = glm::translate(glm::vec3(0.0f, 0.0f, -1.0f));
+	this->shaderComponent.ActivateProgram();
+	this->m_textureComponent.ActivateTexture();
+
+	glm::mat4 translation = glm::translate(pos);
+	glm::mat4 scaleMatrix = glm::scale(scale);
+	m_model = translation * scaleMatrix;
+
 	//model = glm::rotate(model, (float)SDL_GetTicks() * 0.001f, glm::vec3(1.0f, 0.0f, 1.0f));
 
-	this->m_textureComponent.ActivateTexture();
 	this->shaderComponent.SetMat4("projection", proj);
 	this->shaderComponent.SetMat4("view", view);
-	this->shaderComponent.SetMat4("model", model);
+	this->shaderComponent.SetMat4("model", m_model);
 
 	glBindVertexArray(m_vao);
 	glDrawElements(GL_TRIANGLES, m_numOfIndices, GL_UNSIGNED_INT, nullptr);

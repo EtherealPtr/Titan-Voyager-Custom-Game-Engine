@@ -5,7 +5,7 @@ Camera::Camera() :
 	m_cameraPos(glm::vec3(0.0f, 0.0f, 1.0f)),
 	m_cameraForward(glm::vec3(0.0f, 0.0f, -1.0f)),
 	m_cameraUpVector(glm::vec3(0.0f, 1.0f, 0.0f)),
-	m_cameraSpeed(15.0f)
+	m_cameraSpeed(2.5f)
 {
 	m_cameraRight = glm::normalize(glm::cross(m_cameraUpVector, -m_cameraForward));
 }
