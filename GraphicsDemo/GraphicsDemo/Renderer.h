@@ -5,6 +5,7 @@
 #include "Dependencies/SDL2/include/SDL.h"
 #include "Mesh.h"
 #include <vector>
+#include "Shape.h"
 
 enum { TRIANGLE, QUAD, TOTAL_POLYGONS };
 
@@ -37,6 +38,8 @@ private:
 
 private:
 	Renderer() {};
+	Shape* m_shape;
+	std::vector<Shape*> shapes;
 	std::vector<Mesh*> m_meshes;
 };
 

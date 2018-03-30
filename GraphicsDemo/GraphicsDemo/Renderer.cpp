@@ -1,6 +1,5 @@
 #include "Renderer.h"
 #include <iostream>
-#include "Shape.h"
 
 // -------------------
 // Author: Rony Hanna
@@ -122,16 +121,15 @@ void Renderer::RenderMeshes()
 // -------------------
 void Renderer::InitMesh(GLuint meshType, char* textureId)
 {
-	std::vector<Shape*> shapes;
-	shapes.push_back(Shape::CreateShape(0));
-	shapes[0]->InitVertexData();
+	m_shape = m_shape->CreateShape(meshType);
+	m_shape->InitVertexData();
 
 	Mesh* polygon = new Mesh();
 
 	switch (meshType)
 	{
 	case TRIANGLE:
-		polygon->CreateMesh(shapes[0]->GetVertexData(), shapes[0]->GetVertexDataCount(), shapes[0]->GetIndexData(), shapes[0]->GetIndexDataCount());
+		polygon->CreateMesh(m_shape->GetVertexData(), m_shape->GetVertexDataCount(), m_shape->GetIndexData(), m_shape->GetIndexDataCount());
 		polygon->shaderComponent.CreateProgram("Shaders/VertexShader.vs", "Shaders/FragmentShader.fs");
 		polygon->m_textureComponent.GenerateTexture(textureId);
 		polygon->SetTextureId(textureId);
@@ -139,13 +137,16 @@ void Renderer::InitMesh(GLuint meshType, char* textureId)
 		break;
 
 	case QUAD:
-		polygon->CreateMesh(shapes[0]->GetVertexData(), shapes[0]->GetVertexDataCount(), shapes[0]->GetIndexData(), shapes[0]->GetIndexDataCount());
+		polygon->CreateMesh(m_shape->GetVertexData(), m_shape->GetVertexDataCount(), m_shape->GetIndexData(), m_shape->GetIndexDataCount());
 		polygon->shaderComponent.CreateProgram("Shaders/VertexShader.vs", "Shaders/FragmentShader.fs");
 		polygon->m_textureComponent.GenerateTexture(textureId);
 		polygon->SetTextureId(textureId);
 		polygon->m_textureComponent.ActivateTexture();
 		break;
 	}
+
+	delete m_shape;
+	m_shape = nullptr;
 
 	m_meshes.push_back(polygon);
 }

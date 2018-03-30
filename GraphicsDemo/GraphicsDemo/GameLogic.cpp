@@ -18,6 +18,7 @@ void GameLogic::Run()
 void GameLogic::InitMeshes()
 {
 	Renderer::GetInstance().InitMesh(TRIANGLE, "mario");
+	Renderer::GetInstance().InitMesh(QUAD, "wall");
 }
 
 void GameLogic::GameLoop()
