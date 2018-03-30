@@ -1,23 +1,5 @@
-﻿  Texture.cpp
-  Shape.cpp
-  Shader.cpp
-  ResourceManager.cpp
-  Renderer.cpp
-  Physics.cpp
+﻿  Physics.cpp
   Mesh.cpp
-  main.cpp
-  Input.cpp
-  Game.cpp
-  Engine.cpp
-  Camera.cpp
-  Audio.cpp
-  Animation.cpp
   Generating Code...
-c:\users\rony hanna\desktop\graphics-demo\graphicsdemo\graphicsdemo\resourcemanager.cpp(51): warning C4715: 'ResourceManager::GetImageWidth': not all control paths return a value
-c:\users\rony hanna\desktop\graphics-demo\graphicsdemo\graphicsdemo\resourcemanager.cpp(63): warning C4715: 'ResourceManager::GetImageHeight': not all control paths return a value
-SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'SOIL.lib(image_DXT.obj)' or at 'C:\Users\Rony Hanna\Desktop\Graphics-Demo\GraphicsDemo\Debug\SOIL.pdb'; linking object as if no debug info
-SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'SOIL.lib(image_helper.obj)' or at 'C:\Users\Rony Hanna\Desktop\Graphics-Demo\GraphicsDemo\Debug\SOIL.pdb'; linking object as if no debug info
-SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'SOIL.lib(SOIL.obj)' or at 'C:\Users\Rony Hanna\Desktop\Graphics-Demo\GraphicsDemo\Debug\SOIL.pdb'; linking object as if no debug info
-SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'SOIL.lib(stb_image_aug.obj)' or at 'C:\Users\Rony Hanna\Desktop\Graphics-Demo\GraphicsDemo\Debug\SOIL.pdb'; linking object as if no debug info
   GraphicsDemo.vcxproj -> C:\Users\Rony Hanna\Desktop\Graphics-Demo\GraphicsDemo\Debug\GraphicsDemo.exe
   GraphicsDemo.vcxproj -> C:\Users\Rony Hanna\Desktop\Graphics-Demo\GraphicsDemo\Debug\GraphicsDemo.pdb (Partial PDB)
