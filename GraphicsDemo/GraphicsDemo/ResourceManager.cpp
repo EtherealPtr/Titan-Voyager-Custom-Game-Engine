@@ -62,7 +62,7 @@ int& ResourceManager::GetImageHeight(char* id)
 	}
 }
 
-void ResourceManager::LoadTextureImagesFromFile(char* filename, char* id)
+bool ResourceManager::LoadTextureImagesFromFile(char* filename, char* id)
 {
 	width = new int;
 	height = new int;
@@ -71,7 +71,10 @@ void ResourceManager::LoadTextureImagesFromFile(char* filename, char* id)
 	m_pImages.push_back(SOIL_load_image(filename, width, height, 0, SOIL_LOAD_RGBA));
 
 	if (m_pImages.back() == nullptr)
+	{
 		std::cerr << "TEXTURE LOAD ERROR: Error occured while loading texture image.\n";
+		return false;
+	}
 
 	m_w.push_back(width);
 	m_h.push_back(height);
@@ -80,4 +83,6 @@ void ResourceManager::LoadTextureImagesFromFile(char* filename, char* id)
 	m_resourceId[id] = m_pImages.back();
 	m_widths[id] = m_w.back();
 	m_heights[id] = m_h.back();
+
+	return true;
 }

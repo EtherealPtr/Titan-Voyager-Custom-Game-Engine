@@ -16,9 +16,18 @@ void Engine::Run()
 	m_game.Run();
 }
 
+// -------------------
+// Author: Rony Hanna
+// Description: Function that loads resources and determine whether the loaded items are fit for use
+// -------------------
 void Engine::LoadApplicationResources()
 {
-	ResourceManager::GetInstance().LoadTextureImagesFromFile("Textures/wall.jpg", "wall");
-	ResourceManager::GetInstance().LoadTextureImagesFromFile("Textures/mario.png", "mario");
-	ResourceManager::GetInstance().LoadTextureImagesFromFile("Textures/level01.png", "level01");
+	bool bUnitTest;
+
+	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/wall.jpg", "wall");
+	assert(bUnitTest);
+	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/mario.png", "mario");
+	assert(bUnitTest);
+	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/level01.png", "level01");
+	assert(bUnitTest);
 }

@@ -22,7 +22,7 @@ public:
 	void operator=(ResourceManager const&) = delete;
 
 	unsigned char* GetTexture(char* id);
-	void LoadTextureImagesFromFile(char* filename, char* id);
+	bool LoadTextureImagesFromFile(char* filename, char* id);
 
 	int& GetImageWidth(char* id);
 	int& GetImageHeight(char* id);

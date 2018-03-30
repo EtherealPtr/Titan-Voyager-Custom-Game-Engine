@@ -1,10 +1,11 @@
 #include "Mesh.h"
 #include <vector>
-#include <iostream>
 
 Mesh::Mesh()
 {
-
+	//m_camera.InitCameraOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 0.0f, 600.0f);
+	m_camera.InitCameraPerspective(80.0f, 800.0f / 600.0f, 1.0f, 500.0f);
+	m_camera.SetCameraPos(glm::vec3(0.0f, 0.0f, 1.0f));
 }
 
 Mesh::~Mesh()
@@ -74,10 +75,8 @@ void Mesh::Draw()
 	model = glm::translate(glm::vec3(0.0f, 0.3f, -1.0f));
 	model = glm::rotate(model, (float)SDL_GetTicks() * 0.001f, glm::vec3(1.0f, 0.0f, 1.0f));
 
-	//m_camera.InitCameraOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 0.0f, 600.0f);
-	m_camera.InitCameraPerspective(80.0f, 800.0f / 600.0f, 1.0f, 500.0f);
-	m_camera.SetCameraPos(glm::vec3(0.0f, 0.0f, 1.0f));
 	m_camera.Update();
+
 	this->shaderComponent.SetMat4("projection", m_camera.GetProjectionMatrix());
 	this->shaderComponent.SetMat4("view", m_camera.GetViewMatrix());
 	this->shaderComponent.SetMat4("model", model);

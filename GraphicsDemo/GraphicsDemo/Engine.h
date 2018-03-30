@@ -3,7 +3,7 @@
 #define __ENGINE_H__
 
 #include "Renderer.h"
-#include "GameLogic.h"
+#include "Game.h"
 #include "ResourceManager.h"
 
 class Engine
@@ -17,7 +17,7 @@ public:
 private:
 	void LoadApplicationResources();
 
-	GameLogic m_game;
+	Game m_game;
 };
 
 #endif // !__ENGINE_H__

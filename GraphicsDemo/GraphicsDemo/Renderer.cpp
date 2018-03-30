@@ -130,7 +130,7 @@ void Renderer::InitMesh(GLuint meshType, char* textureId)
 	{
 	case TRIANGLE:
 		polygon->CreateMesh(m_shape->GetVertexData(), m_shape->GetVertexDataCount(), m_shape->GetIndexData(), m_shape->GetIndexDataCount());
-		polygon->shaderComponent.CreateProgram("Shaders/VertexShader.vs", "Shaders/FragmentShader.fs");
+		polygon->shaderComponent.CreateProgram("res/Shaders/VertexShader.vs", "res/Shaders/FragmentShader.fs");
 		polygon->m_textureComponent.GenerateTexture(textureId);
 		polygon->SetTextureId(textureId);
 		polygon->m_textureComponent.ActivateTexture();
@@ -138,7 +138,7 @@ void Renderer::InitMesh(GLuint meshType, char* textureId)
 
 	case QUAD:
 		polygon->CreateMesh(m_shape->GetVertexData(), m_shape->GetVertexDataCount(), m_shape->GetIndexData(), m_shape->GetIndexDataCount());
-		polygon->shaderComponent.CreateProgram("Shaders/VertexShader.vs", "Shaders/FragmentShader.fs");
+		polygon->shaderComponent.CreateProgram("res/Shaders/VertexShader.vs", "res/Shaders/FragmentShader.fs");
 		polygon->m_textureComponent.GenerateTexture(textureId);
 		polygon->SetTextureId(textureId);
 		polygon->m_textureComponent.ActivateTexture();

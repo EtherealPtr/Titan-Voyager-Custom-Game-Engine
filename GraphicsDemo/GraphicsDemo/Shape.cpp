@@ -19,10 +19,12 @@ public:
 	{
 		return (sizeof(m_triVertices) / sizeof(m_triVertices[0]));
 	}
+
 	virtual unsigned int* GetIndexData() override
 	{
 		return m_triIndices;
 	}
+
 	virtual unsigned int GetIndexDataCount() override
 	{
 		return (sizeof(m_triIndices) / sizeof(m_triIndices[0]));
@@ -75,7 +77,6 @@ private:
 		2, 3, 0
 	};
 };
-
 
 Shape* Shape::CreateShape(unsigned int shapeID)
 {

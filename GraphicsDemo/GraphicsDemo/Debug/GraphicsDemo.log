@@ -7,7 +7,7 @@
   Mesh.cpp
   main.cpp
   Input.cpp
-  GameLogic.cpp
+  Game.cpp
   Engine.cpp
   Camera.cpp
   Audio.cpp
