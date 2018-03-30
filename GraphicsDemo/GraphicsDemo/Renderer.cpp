@@ -58,7 +58,7 @@ void Renderer::SetWindowAttribs()
 // -------------------
 bool Renderer::InitSDLAndOpenGL()
 {
-	int ret = SDL_Init(SDL_INIT_VIDEO);
+	int ret = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
 	if (ret < 0)
 	{
 		std::cerr << "ERROR: SDL could not initialize, error: " << SDL_GetError() << "\n";
@@ -97,8 +97,8 @@ bool Renderer::InitSDLAndOpenGL()
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 
-	//SDL_SetRelativeMouseMode(SDL_TRUE);
-	//SDL_CaptureMouse(SDL_TRUE);
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+	SDL_CaptureMouse(SDL_TRUE);
 
 	glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
 
