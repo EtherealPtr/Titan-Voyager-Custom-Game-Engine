@@ -7,7 +7,7 @@
 #include <vector>
 #include "Shape.h"
 
-enum { TRIANGLE, QUAD, TOTAL_POLYGONS };
+enum { TRIANGLE, QUAD, CUBE, TOTAL_POLYGONS };
 
 class Renderer
 {

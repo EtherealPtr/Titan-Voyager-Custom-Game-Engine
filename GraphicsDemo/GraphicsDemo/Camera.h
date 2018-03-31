@@ -13,7 +13,7 @@ public:
 	Camera();
 	~Camera();
 
-	void Update();
+	void UpdateLookAt();
 
 	void InitCameraPerspective(float fov, float aspectRatio, float near, float far);
 	void InitCameraOrthographic(float left, float right, float bottom, float up, float near, float far);

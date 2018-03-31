@@ -75,7 +75,7 @@ void Camera::MouseUpdate(const glm::vec2& newMousePos, float dt)
 	m_oldMousePos = newMousePos;
 }
 
-void Camera::Update()
+void Camera::UpdateLookAt()
 {
 	m_view = glm::lookAt(m_cameraPos, m_cameraPos + m_cameraForward, m_cameraUpVector);
 }

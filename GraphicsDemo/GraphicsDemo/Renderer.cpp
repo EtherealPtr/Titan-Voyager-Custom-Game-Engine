@@ -97,6 +97,9 @@ bool Renderer::InitSDLAndOpenGL()
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	SDL_CaptureMouse(SDL_TRUE);
 
@@ -127,23 +130,10 @@ void Renderer::InitMesh(GLuint meshType, char* textureId)
 	m_shape->InitVertexData();
 
 	Mesh* polygon = new Mesh();
-
-	switch (meshType)
-	{
-	case TRIANGLE:
-		polygon->CreateMesh(m_shape->GetVertexData(), m_shape->GetVertexDataCount(), m_shape->GetIndexData(), m_shape->GetIndexDataCount());
-		polygon->GetShaderComponent().CreateProgram("res/Shaders/VertexShader.vs", "res/Shaders/FragmentShader.fs");
-		polygon->GetTextureComponent().GenerateTexture(textureId);
-		polygon->SetTextureId(textureId);
-		break;
-
-	case QUAD:
-		polygon->CreateMesh(m_shape->GetVertexData(), m_shape->GetVertexDataCount(), m_shape->GetIndexData(), m_shape->GetIndexDataCount());
-		polygon->GetShaderComponent().CreateProgram("res/Shaders/VertexShader.vs", "res/Shaders/FragmentShader.fs");
-		polygon->GetTextureComponent().GenerateTexture(textureId);
-		polygon->SetTextureId(textureId);
-		break;
-	}
+	polygon->CreateMesh(m_shape->GetVertexData(), m_shape->GetVertexDataCount(), m_shape->GetIndexData(), m_shape->GetIndexDataCount());
+	polygon->GetShaderComponent().CreateProgram("res/Shaders/VertexShader.vs", "res/Shaders/FragmentShader.fs");
+	polygon->GetTextureComponent().GenerateTexture(textureId);
+	polygon->SetTextureId(textureId);
 
 	delete m_shape;
 	m_shape = nullptr;

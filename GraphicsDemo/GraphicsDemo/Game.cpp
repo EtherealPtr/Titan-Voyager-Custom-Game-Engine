@@ -21,6 +21,7 @@ void Game::InitMeshes()
 {
 	Renderer::GetInstance().InitMesh(TRIANGLE, "wall");
 	Renderer::GetInstance().InitMesh(QUAD, "mario");
+	Renderer::GetInstance().InitMesh(CUBE, "cubeTex");
 }
 
 void Game::GameLoop()
@@ -37,11 +38,29 @@ void Game::GameLoop()
 
 		ProcessInput();
 		Update();
+		m_camera.UpdateLookAt();
 
-		m_camera.Update();
-		//Renderer::GetInstance().RenderMeshes(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix());
 		Renderer::GetInstance().GetComponent("mario").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(-1.0f, 0.0f, 0.0f));
+		Renderer::GetInstance().GetComponent("mario").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(1.0f, -1.0f, -5.0f));
+		Renderer::GetInstance().GetComponent("mario").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(-1.0f, 0.0f, -2.0f));
+		Renderer::GetInstance().GetComponent("mario").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(2.0f, 1.0f, -2.0f));
+		Renderer::GetInstance().GetComponent("mario").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(-4.0f, 0.0f, -3.0f));
+		Renderer::GetInstance().GetComponent("mario").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(3.0f, 0.5f, -2.0f));
+		Renderer::GetInstance().GetComponent("mario").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(3.5f, 1.0f, -7.0f));
+		Renderer::GetInstance().GetComponent("mario").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(1.0f, 0.0f, -1.0f));
 		Renderer::GetInstance().GetComponent("wall").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(0.0f, 0.0f, 0.0f));
+		Renderer::GetInstance().GetComponent("cubeTex").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(0.0f, 2.0f, 0.0f));
+		Renderer::GetInstance().GetComponent("cubeTex").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(1.0f, -0.5f, -0.5f));
+		Renderer::GetInstance().GetComponent("cubeTex").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(0.5f, -2.0f, 0.0f));
+		Renderer::GetInstance().GetComponent("cubeTex").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(3.0f, 0.0f, -1.0f));
+		Renderer::GetInstance().GetComponent("cubeTex").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(-2.0f, 2.0f, -4.0f));
+		Renderer::GetInstance().GetComponent("cubeTex").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(1.0f, 1.0f, -7.0f));
+		Renderer::GetInstance().GetComponent("cubeTex").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(5.0f, 0.0f, 0.0f));
+		Renderer::GetInstance().GetComponent("cubeTex").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(-4.0f, -1.0f, -3.0f));
+		Renderer::GetInstance().GetComponent("cubeTex").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(-7.0f, -3.0f, -5.0f));
+		Renderer::GetInstance().GetComponent("cubeTex").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(-2.0f, 4.0f, -2.0f));
+		Renderer::GetInstance().GetComponent("cubeTex").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(-1.0f, 0.0f, -5.0f));
+		Renderer::GetInstance().GetComponent("cubeTex").Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix(), glm::vec3(3.0f, -1.0f, -0.5f));
 
 		SDL_GL_SwapWindow(Renderer::GetInstance().GetAppWindow());
 		SDL_Delay(1);
@@ -88,7 +107,7 @@ void Game::ProcessInput()
 					m_gameState= GameState::EXIT;
 					break;
 
-				case SDLK_z:
+				case SDLK_SPACE:
 					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 					break;
 
@@ -126,7 +145,7 @@ void Game::ProcessInput()
 		{
 			switch (m_event.key.keysym.sym)
 			{
-				case SDLK_z:
+				case SDLK_SPACE:
 					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 					break;
 
