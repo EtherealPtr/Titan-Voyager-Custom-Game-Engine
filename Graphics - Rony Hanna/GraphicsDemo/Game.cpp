@@ -19,27 +19,27 @@ void Game::Run()
 
 Shader aShader;
 
+
 void Game::InitMeshes()
 {
 	int id = 0;
 
-	Renderer::GetInstance().InitMesh(TRIANGLE, "wall", id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs",	  glm::vec3(3.0f, 0.0f, 0.0f),			glm::vec3(0.0f, 0.0f, 0.0f),		glm::vec3(1.0f, 1.0f, 1.0f));
-	Renderer::GetInstance().InitMesh(QUAD, "mario", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs",		  glm::vec3(0.0f, 0.0f, 0.0f),			glm::vec3(0.0f, 0.0f, 0.0f),		glm::vec3(1.0f, 1.0f, 1.0f));
-	Renderer::GetInstance().InitMesh(QUAD, "saturnRings", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(200.0f, 170.0f, -500.0f),	glm::vec3(125.0f, 0.0f, 0.0f),		glm::vec3(330.0f, 330.0f, 330.0f));
-	Renderer::GetInstance().InitMesh(CUBE, "cubeTex", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs",     glm::vec3(-3.0f, 0.0f, 0.0f),			glm::vec3(0.0f, 0.0f, 0.0f),		glm::vec3(1.0f, 1.0f, 1.0f));
-	Renderer::GetInstance().InitMesh(CUBE, "skybox", ++id, "res/Shaders/SkyboxVertexShader.vs", "res/Shaders/SkyboxFragmentShader.fs",		  glm::vec3(0.0f, 0.0f, 0.0f),			glm::vec3(0.0f, 0.0f, 0.0f),		glm::vec3(1900.0f, 1900.0f, 1900.0f));
-	Renderer::GetInstance().InitMesh(SPHERE, "saturn", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs",	  glm::vec3(200.0f, 150.0f, -500.0f),	glm::vec3(25.0f, 90.0f, 0.0f),		glm::vec3(55.0f, 55.0f, 55.0f));
-	Renderer::GetInstance().InitMesh(SPHERE, "mars", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs",	  glm::vec3(-70.0f, 50.0f, -70.0f),		glm::vec3(0.0f, 90.0f, 0.0f),		glm::vec3(6.36f, 6.36f, 6.36f));
-	Renderer::GetInstance().InitMesh(SPHERE, "mercury", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs",	  glm::vec3(50.0f, 45.0f, -60.0f),		glm::vec3(0.0f, 90.0f, 0.0f),		glm::vec3(4.56f, 4.56f, 4.56f));
-	Renderer::GetInstance().InitMesh(SPHERE, "neptune", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs",	  glm::vec3(-200.0f, -70.0f, -150.0f),  glm::vec3(0.0f, 90.0f, 0.0f),		glm::vec3(40.0f, 40.0f, 40.0f));
-	Renderer::GetInstance().InitMesh(SPHERE, "earth", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs",	  glm::vec3(0.0f, 0.0f, -60.0f),		glm::vec3(0.0f, 90.0f, 0.0f),		glm::vec3(12.0f, 12.0f, 12.0f));
-	
+	Renderer::GetInstance().InitMesh(TRIANGLE, "wall", id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	Renderer::GetInstance().InitMesh(QUAD, "mario", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	Renderer::GetInstance().InitMesh(QUAD, "saturnRings", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(200.0f, 170.0f, -500.0f), glm::vec3(125.0f, 0.0f, 0.0f), glm::vec3(330.0f, 330.0f, 330.0f));
+	Renderer::GetInstance().InitMesh(CUBE, "cubeTex", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	Renderer::GetInstance().InitMesh(CUBE, "skybox", ++id, "res/Shaders/SkyboxVertexShader.vs", "res/Shaders/SkyboxFragmentShader.fs", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1900.0f, 1900.0f, 1900.0f));
+	Renderer::GetInstance().InitMesh(SPHERE, "saturn", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(200.0f, 150.0f, -500.0f), glm::vec3(25.0f, 90.0f, 0.0f), glm::vec3(55.0f, 55.0f, 55.0f));
+	Renderer::GetInstance().InitMesh(SPHERE, "mars", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(-70.0f, 50.0f, -70.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(6.36f, 6.36f, 6.36f));
+	Renderer::GetInstance().InitMesh(SPHERE, "mercury", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(50.0f, 45.0f, -60.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(4.56f, 4.56f, 4.56f));
+	Renderer::GetInstance().InitMesh(SPHERE, "neptune", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(-200.0f, -70.0f, -150.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(40.0f, 40.0f, 40.0f));
+	Renderer::GetInstance().InitMesh(SPHERE, "earth", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(0.0f, 0.0f, -60.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(12.0f, 12.0f, 12.0f));
+
 	aShader.CreateProgram("res/Shaders/testingVert.vs", "res/Shaders/testingFrag.fs");
-	m_model[0].Init("res/Models3D/Aircraft/Aircraft.obj", &m_camera, aShader.GetShaderProgram());
-	m_model[1].Init("res/Models3D/Rock/rock.obj", &m_camera, aShader.GetShaderProgram());
+	m_asteroid.Init("res/Models3D/Rock/rock.obj", &m_camera, aShader.GetShaderProgram(), true);
 }
 
-void Game::GameLoop() 
+void Game::GameLoop()
 {
 	float lastFrame = 0.0;
 
@@ -63,40 +63,27 @@ void Game::GameLoop()
 
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
-		
+
 		// Planets
 		Renderer::GetInstance().GetComponent(5).GetTransformComponent().GetRot().y += 1.0f * m_deltaTime;
 		Renderer::GetInstance().GetComponent(5).Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix());
-		
+
 		Renderer::GetInstance().GetComponent(6).GetTransformComponent().GetRot().y += 1.0f * m_deltaTime;
 		Renderer::GetInstance().GetComponent(6).Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix());
-		
+
 		Renderer::GetInstance().GetComponent(7).GetTransformComponent().GetRot().y += 1.0f * m_deltaTime;
 		Renderer::GetInstance().GetComponent(7).Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix());
-		
+
 		Renderer::GetInstance().GetComponent(8).GetTransformComponent().GetRot().y += 1.0f * m_deltaTime;
 		Renderer::GetInstance().GetComponent(8).Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix());
-		
+
 		Renderer::GetInstance().GetComponent(9).GetTransformComponent().GetRot().y += 1.0f * m_deltaTime;
 		Renderer::GetInstance().GetComponent(9).Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix());
 
 		aShader.ActivateProgram();
 		aShader.SetMat4("projection", m_camera.GetProjectionMatrix());
 		aShader.SetMat4("view", m_camera.GetViewMatrix());
-		glm::mat4 model(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 10.0f, 0.0f)); 
-		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));	
-		aShader.SetMat4("model", model);
-		m_model[0].Draw();
-		
-		aShader.ActivateProgram();
-		aShader.SetMat4("projection", m_camera.GetProjectionMatrix());
-		aShader.SetMat4("view", m_camera.GetViewMatrix());
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 5.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-		aShader.SetMat4("model", model);
-		m_model[1].Draw();
+		m_asteroid.DrawInstanced();
 
 		glDisable(GL_CULL_FACE);
 
