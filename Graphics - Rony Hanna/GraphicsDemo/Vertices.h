@@ -8,21 +8,24 @@ class Vertex
 {
 public:
 	Vertex() {};
-	Vertex(glm::vec3& pos, glm::vec3& col, glm::vec2& tex) 
+	Vertex(glm::vec3& pos, glm::vec3& col, glm::vec2& tex, glm::vec3& normals) 
 	{
 		this->m_pos = pos;
 		this->m_col = col;
 		this->m_tex = tex;
+		this->m_normals = normals;
 	}
 
 	glm::vec3& GetPos() { return m_pos; }
 	glm::vec3& GetCol() { return m_col; }
 	glm::vec2& GetTex() { return m_tex; }
+	glm::vec3& GetNormals() { return m_normals; }
 
 private:
 	glm::vec3 m_pos;
 	glm::vec3 m_col;
 	glm::vec2 m_tex;
+	glm::vec3 m_normals;
 };
 
 #endif // !__VERTICES_H__

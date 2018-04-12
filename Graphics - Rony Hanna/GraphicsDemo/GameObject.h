@@ -38,7 +38,7 @@ public:
 	int GetObjectId() const; 
 
 private:
-	enum { POSITION_VB, COLOR_VB, UV_VB, ELEMENT_VB, TOTAL_BUFFERS };
+	enum { POSITION_VB, COLOR_VB, UV_VB, NORMALS_VB, ELEMENT_VB, TOTAL_BUFFERS };
 
 	char* m_texId;
 	int m_objId;

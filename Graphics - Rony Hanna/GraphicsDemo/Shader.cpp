@@ -30,6 +30,11 @@ void Shader::SetVec2(const char* name, glm::vec2 value) const
 	glUniform2f(glGetUniformLocation(m_program, name), value.x, value.y);
 }
 
+void Shader::SetVec3(const char* name, glm::vec3 value) const
+{
+	glUniform3f(glGetUniformLocation(m_program, name), value.x, value.y, value.z);
+}
+
 void Shader::SetVec4(GLchar* name, glm::vec4 value) const
 {
 	glUniform4f(glGetUniformLocation(m_program, name), value.x, value.y, value.z, value.w);
