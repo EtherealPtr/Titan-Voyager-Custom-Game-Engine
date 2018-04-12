@@ -45,9 +45,6 @@ void Mesh::Draw(Camera camera, Shader shaderProgram, bool instancing)
 	}
 	else
 	{
-		glm::mat4 model(1.0f);
-		model = glm::translate(glm::vec3(0.0f, 0.0f, 0.0f));
-		shaderProgram.SetMat4("model", model);
 		glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
 	}
 
@@ -87,8 +84,8 @@ void Mesh::CreateMesh(bool instancing)
 		glm::mat4* m_modelMatricesIns;
 		m_modelMatricesIns = new glm::mat4[amount];
 		srand(static_cast<unsigned int>(time(NULL)));
-		float radius = 150.0f;
-		float offset = 20.0f;
+		float radius = 250.0f;
+		float offset = 25.0f;
 
 		for (unsigned int i = 0; i < amount; ++i)
 		{
@@ -96,13 +93,13 @@ void Mesh::CreateMesh(bool instancing)
 			float _x, _y, _z;
 
 			float angle = (float)i / (float)amount * 360.0f;
-			float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+			float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset + 200.0f;  
 			_x = sin(angle) * radius + displacement;
 
-			displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-			_y = displacement * 2.2f;
+			displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset + 35.0f;
+			_y = displacement * 2.7f;
 
-			displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+			displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset - 495.0f;
 			_z = cos(angle) * radius + displacement;
 
 			model = glm::translate(model, glm::vec3(_x, _y, _z));

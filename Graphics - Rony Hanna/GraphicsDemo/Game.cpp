@@ -23,7 +23,7 @@ void Game::InitMeshes()
 
 	Renderer::GetInstance().InitMesh(TRIANGLE, "wall", id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 	Renderer::GetInstance().InitMesh(QUAD, "mario", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-	Renderer::GetInstance().InitMesh(QUAD, "saturnRings", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(200.0f, 170.0f, -500.0f), glm::vec3(125.0f, 0.0f, 0.0f), glm::vec3(330.0f, 330.0f, 330.0f));
+	Renderer::GetInstance().InitMesh(QUAD, "saturnRings", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(200.0f, 160.0f, -500.0f), glm::vec3(110.0f, 0.0f, 0.0f), glm::vec3(330.0f, 330.0f, 330.0f));
 	Renderer::GetInstance().InitMesh(CUBE, "cubeTex", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 	Renderer::GetInstance().InitMesh(CUBE, "skybox", ++id, "res/Shaders/SkyboxVertexShader.vs", "res/Shaders/SkyboxFragmentShader.fs", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1900.0f, 1900.0f, 1900.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "saturn", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(200.0f, 150.0f, -500.0f), glm::vec3(25.0f, 90.0f, 0.0f), glm::vec3(55.0f, 55.0f, 55.0f));
