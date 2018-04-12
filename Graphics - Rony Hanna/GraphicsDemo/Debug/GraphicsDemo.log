@@ -1,8 +1,0 @@
-﻿  Game.cpp
-c:\users\rony hanna\desktop\graphics-demo\graphics - rony hanna\graphicsdemo\dependencies\assimp\include\assimp\metadata.h(152): warning C4800: 'void *': forcing value to bool 'true' or 'false' (performance warning)
-c:\users\rony hanna\desktop\graphics-demo\graphics - rony hanna\graphicsdemo\mesh.h(16): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\rony hanna\desktop\graphics-demo\graphics - rony hanna\graphicsdemo\game.cpp(62): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\rony hanna\desktop\graphics-demo\graphics - rony hanna\graphicsdemo\game.cpp(65): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\rony hanna\desktop\graphics-demo\graphics - rony hanna\graphicsdemo\game.cpp(107): warning C4244: 'initializing': conversion from 'Uint32' to 'float', possible loss of data
-  GraphicsDemo.vcxproj -> C:\Users\Rony Hanna\Desktop\Graphics-Demo\Graphics - Rony Hanna\Debug\GraphicsDemo.exe
-  GraphicsDemo.vcxproj -> C:\Users\Rony Hanna\Desktop\Graphics-Demo\Graphics - Rony Hanna\Debug\GraphicsDemo.pdb (Partial PDB)

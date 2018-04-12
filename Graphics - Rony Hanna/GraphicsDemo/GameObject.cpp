@@ -80,7 +80,7 @@ void GameObject::CreateGameObj(std::vector<Vertex> verts, GLuint numOfVertices, 
 
 	if (bInstancing)
 	{
-		unsigned int amount = 1000;
+		unsigned int amount = 30000;
 		m_modelMatricesIns = new glm::mat4[amount];
 		srand(static_cast<unsigned int>(time(NULL)));
 		float radius = 50.0f;
@@ -138,12 +138,13 @@ void GameObject::CreateGameObj(std::vector<Vertex> verts, GLuint numOfVertices, 
 	glBindVertexArray(0);
 }
 
-void GameObject::Draw(glm::mat4 proj, glm::mat4 view)
+void GameObject::Draw(Camera cam)
 {
+	m_camera = cam;
 	this->shaderComponent.ActivateProgram();
 	this->m_textureComponent.ActivateTexture();
-	this->shaderComponent.SetMat4("projection", proj);
-	this->shaderComponent.SetMat4("view", view);
+	this->shaderComponent.SetMat4("projection", m_camera.GetProjectionMatrix());
+	this->shaderComponent.SetMat4("view", m_camera.GetViewMatrix());
 	this->shaderComponent.SetMat4("model", m_transform.GetModel());
 
 	glBindVertexArray(m_vao);
@@ -164,7 +165,7 @@ void GameObject::DrawInstanced(glm::mat4 proj, glm::mat4 view)
 	for (unsigned int i = 0; i < 1000; ++i)
 	{
 
-		glDrawElementsInstanced(GL_TRIANGLES, m_numOfIndices, GL_UNSIGNED_INT, nullptr, 1000);
+		glDrawElementsInstanced(GL_TRIANGLES, m_numOfIndices, GL_UNSIGNED_INT, nullptr, 30000);
 	}
 
 	glBindVertexArray(0);

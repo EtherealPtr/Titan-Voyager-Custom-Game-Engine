@@ -49,7 +49,7 @@ public:
 	glm::mat4* m_modelMatricesIns;
 	GLuint m_vao;
 
-	void Draw(Camera* camera, GLuint program, bool instancing);
+	void Draw(Camera camera, Shader program, bool instancing);
 
 private:
 	GLuint m_vbo, m_ebo;

@@ -31,8 +31,9 @@ private:
 	GameState m_gameState;
 private:
 	float m_deltaTime;
-	//Model m_model[2];
+
 	Model m_asteroid;
+	Model m_aircraft;
 };
 
 #endif // !__GAME_H__

@@ -8,8 +8,10 @@ Mesh::Mesh(std::vector<MeshVertex> vertices, std::vector<GLuint> indices, std::v
 	CreateMesh(instancing);
 }
 
-void Mesh::Draw(Camera* camera, GLuint program, bool instancing)
+void Mesh::Draw(Camera camera, Shader shaderProgram, bool instancing)
 {
+	shaderProgram.ActivateProgram();
+
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
 	
@@ -25,7 +27,13 @@ void Mesh::Draw(Camera* camera, GLuint program, bool instancing)
 		else if (name == "texture_specular")
 			number = std::to_string(specularNr++);
 	
-		glUniform1i(glGetUniformLocation(program, (name + number).c_str()), i);
+		glm::mat4 projMat = camera.GetProjectionMatrix();
+		glm::mat4 viewMat = camera.GetViewMatrix();
+
+		shaderProgram.SetMat4("projection", projMat);
+		shaderProgram.SetMat4("view", viewMat);
+		glUniform1i(glGetUniformLocation(shaderProgram.GetShaderProgram(), (name + number).c_str()), i);
+
 		glBindTexture(GL_TEXTURE_2D, m_textures[i].m_id);
 	}
 	
@@ -33,10 +41,13 @@ void Mesh::Draw(Camera* camera, GLuint program, bool instancing)
 
 	if (instancing)
 	{
-		glDrawElementsInstanced(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0, 20000);
+		glDrawElementsInstanced(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0, 25000);
 	}
 	else
 	{
+		glm::mat4 model(1.0f);
+		model = glm::translate(glm::vec3(0.0f, 0.0f, 0.0f));
+		shaderProgram.SetMat4("model", model);
 		glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
 	}
 
@@ -72,12 +83,12 @@ void Mesh::CreateMesh(bool instancing)
 
 	if (instancing)
 	{
-		unsigned int amount = 20000;
+		unsigned int amount = 25000;
 		glm::mat4* m_modelMatricesIns;
 		m_modelMatricesIns = new glm::mat4[amount];
 		srand(static_cast<unsigned int>(time(NULL)));
 		float radius = 150.0f;
-		float offset = 25.0f;
+		float offset = 20.0f;
 
 		for (unsigned int i = 0; i < amount; ++i)
 		{
@@ -87,13 +98,16 @@ void Mesh::CreateMesh(bool instancing)
 			float angle = (float)i / (float)amount * 360.0f;
 			float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
 			_x = sin(angle) * radius + displacement;
+
 			displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-			_y = displacement * 0.4f;
+			_y = displacement * 2.2f;
+
 			displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
 			_z = cos(angle) * radius + displacement;
+
 			model = glm::translate(model, glm::vec3(_x, _y, _z));
 
-			float scale = (rand() % 20) / 100.0f + 0.05;
+			float scale = (rand() % 20) / 100.0f + 0.1f;
 			model = glm::scale(model, glm::vec3(scale));
 
 			float rotAngle = (rand() % 360);

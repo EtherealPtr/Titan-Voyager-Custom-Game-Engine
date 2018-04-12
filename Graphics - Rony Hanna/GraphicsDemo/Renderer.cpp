@@ -101,7 +101,7 @@ bool Renderer::InitSDLAndOpenGL()
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	SDL_CaptureMouse(SDL_TRUE);
 
-	glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.137255f, 0.137255f, 0.556863f, 1.0f);
 
 	return true;
 }
@@ -110,11 +110,12 @@ bool Renderer::InitSDLAndOpenGL()
 // Author: Rony Hanna
 // Description: Function that renders all the game objects in the vector
 // -------------------
-void Renderer::RenderObjects(glm::mat4 _proj, glm::mat4 _view)
+void Renderer::RenderObjects(Camera cam)
 {
+	m_camera = cam;
 	for (auto& entity : m_gameEntities)
 	{
-		entity->Draw(_proj, _view);
+		entity->Draw(m_camera);
 	}
 }
 

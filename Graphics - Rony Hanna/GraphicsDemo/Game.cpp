@@ -17,9 +17,6 @@ void Game::Run()
 	GameLoop();
 }
 
-Shader aShader;
-
-
 void Game::InitMeshes()
 {
 	int id = 0;
@@ -35,8 +32,7 @@ void Game::InitMeshes()
 	Renderer::GetInstance().InitMesh(SPHERE, "neptune", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(-200.0f, -70.0f, -150.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(40.0f, 40.0f, 40.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "earth", ++id, "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs", glm::vec3(0.0f, 0.0f, -60.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(12.0f, 12.0f, 12.0f));
 
-	aShader.CreateProgram("res/Shaders/testingVert.vs", "res/Shaders/testingFrag.fs");
-	m_asteroid.Init("res/Models3D/Rock/rock.obj", &m_camera, aShader.GetShaderProgram(), true);
+	m_asteroid.Init("res/Models3D/Rock/rock.obj", m_camera, "res/Shaders/InstancingVert.vs", "res/Shaders/InstancingFrag.fs", true);
 }
 
 void Game::GameLoop()
@@ -55,35 +51,32 @@ void Game::GameLoop()
 		Update();
 		m_camera.UpdateLookAt();
 
-		Renderer::GetInstance().GetComponent(0).Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix());
-		Renderer::GetInstance().GetComponent(1).Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix());
-		Renderer::GetInstance().GetComponent(2).Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix());
-		Renderer::GetInstance().GetComponent(3).Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix());
-		Renderer::GetInstance().GetComponent(4).Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix());
+		Renderer::GetInstance().GetComponent(0).Draw(m_camera);
+		Renderer::GetInstance().GetComponent(1).Draw(m_camera);
+		Renderer::GetInstance().GetComponent(2).Draw(m_camera);
+		Renderer::GetInstance().GetComponent(3).Draw(m_camera);
+		Renderer::GetInstance().GetComponent(4).Draw(m_camera);
 
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 
 		// Planets
 		Renderer::GetInstance().GetComponent(5).GetTransformComponent().GetRot().y += 1.0f * m_deltaTime;
-		Renderer::GetInstance().GetComponent(5).Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix());
+		Renderer::GetInstance().GetComponent(5).Draw(m_camera);
 
 		Renderer::GetInstance().GetComponent(6).GetTransformComponent().GetRot().y += 1.0f * m_deltaTime;
-		Renderer::GetInstance().GetComponent(6).Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix());
+		Renderer::GetInstance().GetComponent(6).Draw(m_camera);
 
 		Renderer::GetInstance().GetComponent(7).GetTransformComponent().GetRot().y += 1.0f * m_deltaTime;
-		Renderer::GetInstance().GetComponent(7).Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix());
+		Renderer::GetInstance().GetComponent(7).Draw(m_camera);
 
 		Renderer::GetInstance().GetComponent(8).GetTransformComponent().GetRot().y += 1.0f * m_deltaTime;
-		Renderer::GetInstance().GetComponent(8).Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix());
+		Renderer::GetInstance().GetComponent(8).Draw(m_camera);
 
 		Renderer::GetInstance().GetComponent(9).GetTransformComponent().GetRot().y += 1.0f * m_deltaTime;
-		Renderer::GetInstance().GetComponent(9).Draw(m_camera.GetProjectionMatrix(), m_camera.GetViewMatrix());
+		Renderer::GetInstance().GetComponent(9).Draw(m_camera);
 
-		aShader.ActivateProgram();
-		aShader.SetMat4("projection", m_camera.GetProjectionMatrix());
-		aShader.SetMat4("view", m_camera.GetViewMatrix());
-		m_asteroid.DrawInstanced();
+		m_asteroid.DrawInstanced(m_camera);
 
 		glDisable(GL_CULL_FACE);
 

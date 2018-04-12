@@ -23,27 +23,27 @@ GLint Model::TextureFromFile(const char* path, std::string directory)
 	return textureID;
 }
 
-void Model::Init(GLchar * path, Camera * camera, GLuint program, bool instancing)
+void Model::Init(GLchar* path, Camera camera, char* vs, char* fs, bool instancing)
 {
-	program = program;
-	camera = camera;
+	m_shader.CreateProgram(vs, fs);
+	m_camera = camera;
 	m_instancing = instancing;
 	loadModel(path);
 }
 
-void Model::Draw()
+void Model::Draw(Camera cam)
 {
 	for (GLuint i = 0; i < meshes.size(); ++i)
 	{
-		meshes[i].Draw(camera, program, false);
+		meshes[i].Draw(m_camera, m_shader, false);
 	}
 }
 
-void Model::DrawInstanced()
+void Model::DrawInstanced(Camera cam)
 {
 	for (GLuint i = 0; i < meshes.size(); ++i)
 	{
-		meshes[i].Draw(camera, program, true);
+		meshes[i].Draw(cam, m_shader, true);
 	}
 }
 

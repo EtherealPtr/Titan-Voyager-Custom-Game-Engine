@@ -11,12 +11,11 @@ public:
 	Model() {}
 
 	GLint TextureFromFile(const char* path, std::string directory);
-	void Init(GLchar* path, Camera* camera, GLuint program, bool instancing);
-	void Draw();
-	void DrawInstanced();
+	void Init(GLchar* path, Camera camera, char* vs, char* fs, bool instancing);
+	void Draw(Camera cam);
+	void DrawInstanced(Camera cam);
 
 	std::vector<Mesh> meshes;
-	Camera* camera;
 	GLuint program;
 	bool m_instancing = false;
 	std::vector<MeshTexture> textures_loaded;	 
@@ -28,6 +27,8 @@ private:
 	std::vector<MeshTexture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 
 	std::string directory;
+	Shader m_shader;
+	Camera m_camera;
 };
 
 #endif // !__MODEL_H__

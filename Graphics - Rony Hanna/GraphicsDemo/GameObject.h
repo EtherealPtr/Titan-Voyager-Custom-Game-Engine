@@ -21,7 +21,7 @@ public:
 	~GameObject();
 
 	void CreateGameObj(std::vector<Vertex>, GLuint numOfVertices, unsigned int* indices, GLuint numOfIndices, bool bInstancing = false);
-	void Draw(glm::mat4 proj, glm::mat4 view);
+	void Draw(Camera cam);
 	void DrawInstanced(glm::mat4 proj, glm::mat4 view);
 	void SetTransform(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale);
 
@@ -56,6 +56,7 @@ private:
 	Audio m_audioComponent;
 	Physics m_physicsComponent;
 	Animation m_animationComponent;
+	Camera m_camera;
 };
 
 #endif // !__GAMEOBJECT_H__
