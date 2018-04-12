@@ -8,24 +8,32 @@ in vec3 fragPos;
 
 uniform sampler2D meshTexture;
 uniform vec3 lightPos; 
+uniform vec3 viewPos;
 
 void main()
 {
 	float ambientFactor = 0.3f;
-	vec4 ambientLightColor = vec4(0.5f, 0.972f, 0.905f, 1.0f);
-	vec4 ambientLighting = ambientFactor * ambientLightColor;
+	vec3 lightColor = vec3(0.5f, 0.972f, 0.905f);
+	vec3 ambient = ambientFactor * lightColor;
 
 	vec3 norm = normalize(vertexNorms);
 	vec3 lightDir = normalize(lightPos - fragPos);
 
 	float diff = max(dot(norm, lightDir), 0.0f);
-	vec4 diffuse = diff * ambientLightColor;
+	vec3 diffuse = diff * lightColor;
 	vec4 texColor = texture(meshTexture, vertexUv); 
+
+	float specularFactor = 0.5f;
+	vec3 viewDir = normalize(viewPos - fragPos);
+	vec3 reflectDir = reflect(-lightDir, norm);
+
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+	vec3 specular = specularFactor * spec * lightColor;
 
 	if (texColor.a < 0.1f) 
 		discard;
 	
-	vec4 result = (ambientLighting + diffuse) * texColor;
+	vec3 result = (ambient + diffuse + specular) * vec3(texColor);
 
-    FragColor = result;
+    FragColor = vec4(result, 1.0f);
 } 
