@@ -63,6 +63,12 @@
     <ClCompile Include="Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PerlinNoise.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Texture.h">
@@ -113,6 +119,12 @@
     <ClInclude Include="Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PerlinNoise.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\DefaultVertexShader.vs">
@@ -131,6 +143,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="res\Shaders\VertexShader_Instancing.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="res\Shaders\TerrainFragmentShader.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="res\Shaders\TerrainVertexShader.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

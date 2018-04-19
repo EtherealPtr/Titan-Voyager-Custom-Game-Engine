@@ -51,6 +51,9 @@ void Engine::LoadApplicationResources()
 	skyboxFaces.push_back("res/Textures/front.jpg");
 	skyboxFaces.push_back("res/Textures/back.jpg");
 
+	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/soil01.jpg", "soil");
+	assert(bUnitTest);
+
 	// Review this (make into a loop)
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(0), "skybox");
 	assert(bUnitTest);

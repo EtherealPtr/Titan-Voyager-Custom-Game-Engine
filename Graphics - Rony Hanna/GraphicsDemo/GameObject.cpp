@@ -1,8 +1,5 @@
 #include "GameObject.h"
-#include <sstream>
 #include <string>
-#include <cstdlib>>
-#include <ctime>
 
 GameObject::GameObject()
 {
@@ -88,75 +85,23 @@ void GameObject::CreateGameObj(std::vector<Vertex> verts, GLuint numOfVertices, 
 
 	if (bInstancing)
 	{
-		unsigned int amount = 30000;
-		m_modelMatricesIns = new glm::mat4[amount];
-		srand(static_cast<unsigned int>(time(NULL)));
-		float radius = 50.0f;
-		float offset = 2.5f;
-
-		for (unsigned int i = 0; i < amount; ++i)
-		{
-			glm::mat4 model;
-			float angle = (float)i / (float)amount * 360.0f;
-			float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-			float x = sin(angle) * radius + displacement;
-			displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-			float y = displacement * 0.4f;
-			displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
-			float z = cos(angle) * radius + displacement;
-			model = glm::translate(model, glm::vec3(x, y, z));
-
-			float scale = (rand() % 20) / 100.0f + 0.05f;
-			model = glm::scale(model, glm::vec3(x, y, z));
-
-			float rotAngle = (rand() % 360);
-			model = glm::rotate(model, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
-
-			m_modelMatricesIns[i] = model;
-		}
-
-		unsigned int instanceVBO;
-		glGenBuffers(1, &instanceVBO);
-		glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * amount, &m_modelMatricesIns[0], GL_STATIC_DRAW);
-
-		for (unsigned int i = 0; i < amount; ++i)
-		{
-			glBindVertexArray(m_vao);
-
-			glEnableVertexAttribArray(3);
-			glEnableVertexAttribArray(4);
-			glEnableVertexAttribArray(5);
-			glEnableVertexAttribArray(6);
-
-			glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)0);
-			glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)4);
-			glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)8);
-			glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)12);
-
-			glVertexAttribDivisor(3, 1);
-			glVertexAttribDivisor(4, 1);
-			glVertexAttribDivisor(5, 1);
-			glVertexAttribDivisor(6, 1);
-
-			glBindVertexArray(0);
-		}
+		// Do some instancing stuff for the basic shapes here in the future
 	}
 
 	glBindVertexArray(0);
 }
 
-void GameObject::Draw(Camera cam)
+void GameObject::Draw(Camera& camera)
 {
-	glm::vec3 lightPos = glm::vec3(cam.GetCameraPos().x, cam.GetCameraPos().y, cam.GetCameraPos().z);
-	m_camera = cam;
+	glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
+
 	this->shaderComponent.ActivateProgram();
 	this->m_textureComponent.ActivateTexture();
-	this->shaderComponent.SetMat4("projection", m_camera.GetProjectionMatrix());
-	this->shaderComponent.SetMat4("view", m_camera.GetViewMatrix());
+	this->shaderComponent.SetMat4("projection", camera.GetProjectionMatrix());
+	this->shaderComponent.SetMat4("view", camera.GetViewMatrix());
 	this->shaderComponent.SetMat4("model", m_transform.GetModel());
 	this->shaderComponent.SetVec3("lightPos", lightPos);
-	this->shaderComponent.SetVec3("viewPos", m_camera.GetCameraPos());
+	this->shaderComponent.SetVec3("viewPos", camera.GetCameraPos());
 
 	glBindVertexArray(m_vao);
 	glDrawElements(GL_TRIANGLES, m_numOfIndices, GL_UNSIGNED_INT, nullptr);
@@ -175,7 +120,6 @@ void GameObject::DrawInstanced(glm::mat4 proj, glm::mat4 view)
 
 	for (unsigned int i = 0; i < 1000; ++i)
 	{
-
 		glDrawElementsInstanced(GL_TRIANGLES, m_numOfIndices, GL_UNSIGNED_INT, nullptr, 30000);
 	}
 

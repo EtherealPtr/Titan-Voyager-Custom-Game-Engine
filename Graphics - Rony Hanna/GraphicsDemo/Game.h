@@ -6,6 +6,7 @@
 #include "Renderer.h"
 #include "Camera.h"
 #include "Model.h"
+#include "Terrain.h"
 
 class Game
 {
@@ -26,7 +27,9 @@ private:
 private:
 	enum { CAM_FORWARD, CAM_BACKWARD, CAM_LEFT, CAM_RIGHT, CAM_RISE, CAM_FALL, TOTAL_CAM_MOVES };
 	bool m_bCamMovements[TOTAL_CAM_MOVES];
-
+	
+	enum { SATURN_RINGS = 1, SPACE_CUBE, SKYBOX, SATURN, MARS, MERCURY, NEPTUNE, EARTH };
+	
 	enum class GameState { MAIN_MENU = 100, PLAY, EXIT, TOTAL_STATES };
 	GameState m_gameState;
 private:
@@ -34,6 +37,7 @@ private:
 
 	Model m_asteroid;
 	Model m_aircraft;
+	Terrain m_terrain;
 };
 
 #endif // !__GAME_H__
