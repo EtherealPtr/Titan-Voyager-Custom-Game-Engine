@@ -21,7 +21,7 @@ public:
 	~GameObject();
 
 	void CreateGameObj(std::vector<Vertex>, GLuint numOfVertices, unsigned int* indices, GLuint numOfIndices, bool bInstancing = false);
-	void Draw(Camera& cam);
+	void Draw(Camera& cam, glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f));
 	void DrawInstanced(glm::mat4 proj, glm::mat4 view);
 	void SetTransform(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale);
 

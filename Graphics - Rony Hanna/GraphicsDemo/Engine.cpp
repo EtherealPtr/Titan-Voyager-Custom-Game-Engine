@@ -18,7 +18,7 @@ void Engine::Run()
 
 // -------------------
 // Author: Rony Hanna
-// Description: Function that loads resources and determine whether the loaded items are fit for use
+// Description: Function that loads external resources and uses unit testing to ensure that items were loaded 
 // -------------------
 void Engine::LoadApplicationResources()
 {
@@ -51,7 +51,16 @@ void Engine::LoadApplicationResources()
 	skyboxFaces.push_back("res/Textures/front.jpg");
 	skyboxFaces.push_back("res/Textures/back.jpg");
 
+	// Terrain textures
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/soil01.jpg", "soil");
+	assert(bUnitTest);
+	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/soil02.jpg", "soil2");
+	assert(bUnitTest);
+	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/soil03.jpg", "soil3");
+	assert(bUnitTest);
+	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/soil04.jpg", "soil4");
+	assert(bUnitTest);
+	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/blendMap.png", "blendMap");
 	assert(bUnitTest);
 
 	// Review this (make into a loop)

@@ -4,7 +4,7 @@ Game::Game() :
 	m_deltaTime(0.0f),
 	m_gameState(GameState::PLAY)
 {
-	m_camera.InitCameraPerspective(80.0f, 1440.0f / 900.0f, 0.1f, 4000.0f);
+	m_camera.InitCameraPerspective(80.0f, 1440.0f / 900.0f, 0.1f, 5000.0f);
 }
 
 Game::~Game()
@@ -25,7 +25,7 @@ void Game::InitMeshes()
 
 	Renderer::GetInstance().InitMesh(QUAD, "saturnRings", ++id, defVsPath, defFsPath, glm::vec3(200.0f, 160.0f, -500.0f), glm::vec3(-65.0f, 0.0f, 0.0f), glm::vec3(330.0f, 330.0f, 330.0f));
 	Renderer::GetInstance().InitMesh(CUBE, "cubeTex", ++id, defVsPath, defFsPath, glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-	Renderer::GetInstance().InitMesh(CUBE, "skybox", ++id, "res/Shaders/SkyboxVertexShader.vs", "res/Shaders/SkyboxFragmentShader.fs", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1900.0f, 1900.0f, 1900.0f));
+	Renderer::GetInstance().InitMesh(CUBE, "skybox", ++id, "res/Shaders/SkyboxVertexShader.vs", "res/Shaders/SkyboxFragmentShader.fs", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(3000.0f, 3000.0f, 3000.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "saturn", ++id, defVsPath, defFsPath, glm::vec3(200.0f, 150.0f, -500.0f), glm::vec3(25.0f, 90.0f, 0.0f), glm::vec3(55.0f, 55.0f, 55.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "mars", ++id, defVsPath, defFsPath, glm::vec3(-70.0f, 50.0f, -70.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(6.36f, 6.36f, 6.36f));
 	Renderer::GetInstance().InitMesh(SPHERE, "mercury", ++id, defVsPath, defFsPath, glm::vec3(50.0f, 45.0f, -60.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(4.56f, 4.56f, 4.56f));
@@ -53,6 +53,7 @@ void Game::GameLoop()
 		ProcessInput();
 		Update();
 		m_camera.UpdateLookAt();
+		m_light.SetPos(glm::vec3(m_camera.GetCameraPos().x, m_camera.GetCameraPos().y, m_camera.GetCameraPos().z));
 
 		Renderer::GetInstance().GetComponent(SATURN_RINGS).Draw(m_camera);
 
@@ -81,7 +82,7 @@ void Game::GameLoop()
 
 		glDisable(GL_CULL_FACE);
 
-		m_terrain.Draw(m_camera);
+		m_terrain.Draw(m_camera, m_light.GetPos());
 
 		Renderer::GetInstance().GetComponent(SKYBOX).Draw(m_camera);
 

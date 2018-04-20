@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "Model.h"
 #include "Terrain.h"
+#include "Light.h"
 
 class Game
 {
@@ -32,12 +33,13 @@ private:
 	
 	enum class GameState { MAIN_MENU = 100, PLAY, EXIT, TOTAL_STATES };
 	GameState m_gameState;
-private:
 	float m_deltaTime;
 
+private:
 	Model m_asteroid;
 	Model m_aircraft;
 	Terrain m_terrain;
+	Light m_light;
 };
 
 #endif // !__GAME_H__

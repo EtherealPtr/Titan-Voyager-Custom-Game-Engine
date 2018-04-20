@@ -25,11 +25,12 @@ public:
 	void CreateTerrainWithPerlinNoise();
 	glm::vec3 CalculateNormal(unsigned int x, unsigned int z);
 
-	void Draw(Camera& cam);
+	void Draw(Camera& cam, glm::vec3 lightPos = glm::vec3(0.0f));
 
 private:
 	Shader m_terrainShader;
 	Texture m_terrainTexture;
+	GLuint m_terrainTextures[5];
 	glm::mat4 m_model;
 
 private:

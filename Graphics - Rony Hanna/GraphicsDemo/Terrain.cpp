@@ -3,13 +3,14 @@
 #include "Dependencies\soil\include\SOIL.h"
 #include <cstdlib>
 #include <ctime>
+#include "ResourceManager.h"
 
 // -------------------
 // Author: Rony Hanna
 // Description: Constructor that initializes terrain components 
 // -------------------
 Terrain::Terrain() :
-	m_fTerrainHeight(70.0f), m_cellSpacing(1.0f),
+	m_fTerrainHeight(70.0f), m_cellSpacing(2.7f),
 	m_terrainHeight(256), m_terrainWidth(256),
 	m_model(1.0f)
 {
@@ -32,7 +33,8 @@ Terrain::~Terrain()
 void Terrain::InitTerrain(char* vs, char* fs)
 {
 	m_terrainShader.CreateProgram(vs, fs);
-	m_terrainTexture.GenerateTexture("soil");
+	std::vector<char*> images{ "soil", "soil2", "soil3", "soil4", "blendMap" };
+	m_terrainTexture.GenerateMultipleTextures(images);
 }
 
 // -------------------
@@ -150,7 +152,7 @@ void Terrain::CreateTerrainWithPerlinNoise()
 {
 	// Set the seed of the noise so that it is different every time
 	noise.SetSeed(static_cast<unsigned int>(time(0)));
-	double frequency = 2.0;
+	double frequency = 4.2;
 	int octaves = 5;
 
 	const double fx = 256.0 / frequency;
@@ -248,7 +250,7 @@ glm::vec3 Terrain::CalculateNormal(unsigned int x, unsigned int z)
 		return normal;
 	}
 
-	return glm::vec3(0.0f, 1.0f, 0.0f);
+	return glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 // -------------------
@@ -310,14 +312,24 @@ float Terrain::BarryCentric(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec2 
 // Author: Rony Hanna
 // Description: Function that binds the terrain vertex array object (VAO) and draws its vertex data
 // -------------------
-void Terrain::Draw(Camera& _cam)
+void Terrain::Draw(Camera& _cam, glm::vec3 lightPos)
 {
 	m_terrainShader.ActivateProgram();
 
-	m_terrainTexture.ActivateTexture();
+	m_terrainShader.SetInt("meshTexture", 0);
+	m_terrainShader.SetInt("rTexture", 1);
+	m_terrainShader.SetInt("gTexture", 2);
+	m_terrainShader.SetInt("bTexture", 3);
+	m_terrainShader.SetInt("blendMap", 4);
+
+	for (unsigned int i = 0; i < 5; ++i)
+		m_terrainTexture.ActivateTextures(i);
+
 	m_terrainShader.SetMat4("model", m_model);
 	m_terrainShader.SetMat4("view", _cam.GetViewMatrix());
 	m_terrainShader.SetMat4("projection", _cam.GetProjectionMatrix());
+	m_terrainShader.SetVec3("lightPos", lightPos);
+	m_terrainShader.SetVec3("viewPos", _cam.GetCameraPos());
 
 	glBindVertexArray(m_VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_VBO[ELEMENT_BUFFER]);

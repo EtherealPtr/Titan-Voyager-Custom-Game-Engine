@@ -91,10 +91,8 @@ void GameObject::CreateGameObj(std::vector<Vertex> verts, GLuint numOfVertices, 
 	glBindVertexArray(0);
 }
 
-void GameObject::Draw(Camera& camera)
+void GameObject::Draw(Camera& camera, glm::vec3 lightPos)
 {
-	glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
-
 	this->shaderComponent.ActivateProgram();
 	this->m_textureComponent.ActivateTexture();
 	this->shaderComponent.SetMat4("projection", camera.GetProjectionMatrix());
