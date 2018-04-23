@@ -3,7 +3,6 @@
 out vec4 FragColor;
 in vec4 vertexColor;
 in vec2 vertexUv;
-in vec3 vertexNorms;
 in vec3 fragPos;
 in mat3 TBN;
 
@@ -32,15 +31,11 @@ void main()
 	float diff = max(dot(fragNormal, lightDir), 0.0f);
 	vec3 diffuse = diff * lightColor;
 
-
 	float specularFactor = 0.5f;
 	vec3 viewDir = normalize(viewPos - fragPos);
 	vec3 reflectDir = reflect(-lightDir, fragNormal);
-
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
 	vec3 specular = specularFactor * spec * lightColor;
-
-
 	
 	vec3 result = (ambient + diffuse + specular) * vec3(texColor);
 

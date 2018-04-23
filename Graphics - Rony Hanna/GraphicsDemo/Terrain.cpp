@@ -33,7 +33,7 @@ Terrain::~Terrain()
 void Terrain::InitTerrain(char* vs, char* fs)
 {
 	m_terrainShader.CreateProgram(vs, fs);
-	std::vector<char*> images{ "soil", "soil2", "soil3", "soil4", "blendMap" };
+	std::vector<char*> images{ "soil", "soil2", "grass", "soil4", "blendMap", "grassNormalMap" };
 	m_terrainTexture.GenerateMultipleTextures(images);
 }
 
@@ -174,7 +174,9 @@ void Terrain::CreateTerrainWithPerlinNoise()
 	std::vector<glm::vec3> Vertices;
 	std::vector<glm::vec2> Textures;
 	std::vector<glm::vec3> Normals;
+	std::vector<glm::vec3> tangents;
 
+	// Calculate vertices
 	for (unsigned int i = 0; i < m_vHeights.size(); ++i)
 	{
 		for (unsigned int j = 0; j < m_vHeights.size(); ++j)
@@ -185,6 +187,7 @@ void Terrain::CreateTerrainWithPerlinNoise()
 		}
 	}
 
+	// Calculate indices
 	for (unsigned int i = 0; i < m_vHeights.size() - 1; ++i)
 	{
 		for (unsigned int j = 0; j < m_vHeights.size() - 1; ++j)
@@ -199,29 +202,55 @@ void Terrain::CreateTerrainWithPerlinNoise()
 		}
 	}
 
+	// Calculate tangents
+	for (unsigned int i = 0; i < m_vHeights.size(); ++i)
+	{
+		for (unsigned int j = 0; j < m_vHeights.size(); ++j)
+		{
+			int vertexIndex = j + i * 256;
+			glm::vec3 v1 = Vertices[vertexIndex];
+	
+			if (j < 255)
+			{
+				glm::vec3 v2 = Vertices[vertexIndex + 1];
+				glm::vec3 result = v1 - v2;
+				result = glm::normalize(result);
+				tangents.push_back(result);
+			}
+			else
+			{
+				glm::vec3 v2 = Vertices[vertexIndex - 1];
+				glm::vec3 result = v1 - v2;
+				result = glm::normalize(result);
+				tangents.push_back(result);
+			}
+		}
+	}
+
 	glGenVertexArrays(1, &m_VAO);
 	glBindVertexArray(m_VAO);
 
-	glGenBuffers(1, &m_VBO[VERTEX_BUFFER]);
+	glGenBuffers(TOTAL_BUFFERS, m_VBO);
+
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[VERTEX_BUFFER]);
 	glBufferData(GL_ARRAY_BUFFER, Vertices.size() * sizeof(glm::vec3), &Vertices[0], GL_STATIC_DRAW);
-
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
 
-	glGenBuffers(1, &m_VBO[TEXTURE_BUFFER]);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[TEXTURE_BUFFER]);
 	glBufferData(GL_ARRAY_BUFFER, Textures.size() * sizeof(glm::vec2), &Textures[0], GL_STATIC_DRAW);
-
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
 
-	glGenBuffers(1, &m_VBO[NORMAL_BUFFER]);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[NORMAL_BUFFER]);
 	glBufferData(GL_ARRAY_BUFFER, Normals.size() * sizeof(glm::vec3), &Normals[0], GL_STATIC_DRAW);
-
 	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[TANGENT_BUFFER]);
+	glBufferData(GL_ARRAY_BUFFER, tangents.size() * sizeof(glm::vec3), &tangents[0], GL_STATIC_DRAW);
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
 
 	glGenBuffers(1, &m_VBO[ELEMENT_BUFFER]);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_VBO[ELEMENT_BUFFER]);
@@ -321,8 +350,9 @@ void Terrain::Draw(Camera& _cam, glm::vec3 lightPos)
 	m_terrainShader.SetInt("gTexture", 2);
 	m_terrainShader.SetInt("bTexture", 3);
 	m_terrainShader.SetInt("blendMap", 4);
+	m_terrainShader.SetInt("grassNormalMap", 5);
 
-	for (unsigned int i = 0; i < 5; ++i)
+	for (unsigned int i = 0; i < 6; ++i)
 		m_terrainTexture.ActivateTextures(i);
 
 	m_terrainShader.SetMat4("model", m_model);

@@ -12,7 +12,7 @@ public:
 	~Light();
 
 	void SetPos(glm::vec3 _pos) { m_pos = _pos; }
-	glm::vec3 GetPos() { return m_pos; }
+	glm::vec3& GetPos() { return m_pos; }
 
 private:
 	glm::vec3 m_pos;

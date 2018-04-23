@@ -3,7 +3,7 @@
 Game::Game() :
 	m_deltaTime(0.0f),
 	m_gameState(GameState::PLAY),
-	m_spaceScene(true)
+	m_spaceScene(false)
 {
 	m_camera.InitCameraPerspective(80.0f, 1440.0f / 900.0f, 0.1f, 5000.0f);
 }
@@ -26,8 +26,8 @@ void Game::InitMeshes()
 	std::vector<char*> normalMappingShaders{ "res/Shaders/NormalMapping.vs", "res/Shaders/NormalMapping.fs" };
 	
 	Renderer::GetInstance().InitMesh(QUAD, "saturnRings", ++id, defShaders, glm::vec3(200.0f, 160.0f, -500.0f), glm::vec3(-65.0f, 0.0f, 0.0f), glm::vec3(330.0f, 330.0f, 330.0f));
-	Renderer::GetInstance().InitMesh(CUBE, "cubeTex", ++id, normalMappingShaders, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "cubeTexNormalMap");
-	Renderer::GetInstance().InitMesh(CUBE, "cubeTex", ++id, defShaders, glm::vec3(3.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	Renderer::GetInstance().InitMesh(CUBE, "cubeTex", ++id, normalMappingShaders, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), "cubeTexNormalMap");
+	//Renderer::GetInstance().InitMesh(CUBE, "cubeTex", ++id, defShaders, glm::vec3(3.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 	Renderer::GetInstance().InitMesh(CUBE, "skybox", ++id, skyboxShaders, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(3000.0f, 3000.0f, 3000.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "saturn", ++id, defShaders, glm::vec3(200.0f, 150.0f, -500.0f), glm::vec3(25.0f, 90.0f, 0.0f), glm::vec3(55.0f, 55.0f, 55.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "mars", ++id, defShaders, glm::vec3(-70.0f, 50.0f, -70.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(6.36f, 6.36f, 6.36f));
@@ -35,9 +35,9 @@ void Game::InitMeshes()
 	Renderer::GetInstance().InitMesh(SPHERE, "neptune", ++id, defShaders, glm::vec3(-200.0f, -70.0f, -180.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(40.0f, 40.0f, 40.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "earth", ++id, defShaders, glm::vec3(0.0f, 0.0f, -60.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(12.0f, 12.0f, 12.0f));
 
-	//m_terrain.InitTerrain("res/Shaders/TerrainVertexShader.vs", "res/Shaders/TerrainFragmentShader.fs");
-	//m_terrain.CreateTerrainWithPerlinNoise();
-
+	m_terrain.InitTerrain("res/Shaders/TerrainVertexShader.vs", "res/Shaders/TerrainFragmentShader.fs");
+	m_terrain.CreateTerrainWithPerlinNoise();
+	m_light.SetPos(glm::vec3(0.0f, -139.0f, 0.0f));
 	//m_aircraft.Init("res/Models3D/Walkyrie/object.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
 	//m_asteroid.Init("res/Models3D/Rock/rock.obj", m_camera, "res/Shaders/InstancingVert.vs", "res/Shaders/InstancingFrag.fs", true);
 }
@@ -58,7 +58,6 @@ void Game::GameLoop()
 		Update();
 		m_camera.UpdateLookAt();
 		m_light.SetPos(glm::vec3(m_camera.GetCameraPos().x, m_camera.GetCameraPos().y, m_camera.GetCameraPos().z));
-
 		//m_aircraft.Draw(m_camera);
 
 		glEnable(GL_CULL_FACE);
@@ -67,7 +66,11 @@ void Game::GameLoop()
 		if (m_spaceScene)
 		{
 			Renderer::GetInstance().GetComponent(SPACE_CUBE).Draw(m_camera, glm::vec3(m_camera.GetCameraPos().x, m_camera.GetCameraPos().y, m_camera.GetCameraPos().z), true);
-			Renderer::GetInstance().GetComponent(3).Draw(m_camera, glm::vec3(m_camera.GetCameraPos().x, m_camera.GetCameraPos().y, m_camera.GetCameraPos().z), false);
+			Renderer::GetInstance().GetComponent(SPACE_CUBE).GetTransformComponent().GetRot().y += 6.0f * m_deltaTime;
+			Renderer::GetInstance().GetComponent(SPACE_CUBE).GetTransformComponent().GetRot().x += 6.0f * m_deltaTime;
+			//Renderer::GetInstance().GetComponent(3).Draw(m_camera, glm::vec3(m_camera.GetCameraPos().x, m_camera.GetCameraPos().y, m_camera.GetCameraPos().z), false);
+			//Renderer::GetInstance().GetComponent(3).GetTransformComponent().GetRot().y += 6.0f * m_deltaTime;
+			//Renderer::GetInstance().GetComponent(3).GetTransformComponent().GetRot().x += 6.0f * m_deltaTime;
 			//Renderer::GetInstance().GetComponent(SATURN_RINGS).Draw(m_camera);
 			//
 			//// Planets
@@ -91,9 +94,9 @@ void Game::GameLoop()
 
 		glDisable(GL_CULL_FACE);
 
-		//m_terrain.Draw(m_camera, m_light.GetPos());
+		m_terrain.Draw(m_camera, m_light.GetPos());
 
-		Renderer::GetInstance().GetComponent(4).Draw(m_camera);
+		Renderer::GetInstance().GetComponent(SKYBOX).Draw(m_camera);
 
 		SDL_GL_SwapWindow(Renderer::GetInstance().GetAppWindow());
 		SDL_Delay(1);

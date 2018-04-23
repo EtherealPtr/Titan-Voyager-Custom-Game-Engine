@@ -99,10 +99,11 @@ void GameObject::CreateGameObj(std::vector<Vertex> verts, GLuint numOfVertices, 
 	glBindVertexArray(0);
 }
 
-void GameObject::Draw(Camera& camera, glm::vec3 lightPos, bool bSomething)
+void GameObject::Draw(Camera& camera, glm::vec3 lightPos, bool normalMapping)
 {
 	this->shaderComponent.ActivateProgram();
-	if (bSomething)
+
+	if (normalMapping)
 	{
 		this->shaderComponent.SetInt("meshTexture", 0); 
 		this->shaderComponent.SetInt("normalMap", 1);
@@ -113,6 +114,7 @@ void GameObject::Draw(Camera& camera, glm::vec3 lightPos, bool bSomething)
 	{
 		this->m_textureComponent.ActivateTexture();
 	}
+
 	this->shaderComponent.SetMat4("projection", camera.GetProjectionMatrix());
 	this->shaderComponent.SetMat4("view", camera.GetViewMatrix());
 	this->shaderComponent.SetMat4("model", m_transform.GetModel());

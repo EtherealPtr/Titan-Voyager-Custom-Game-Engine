@@ -7,7 +7,6 @@ layout (location = 4) in vec3 vertex_tangent;
 
 out vec4 vertexColor; 
 out vec2 vertexUv;
-out vec3 vertexNorms;
 out vec3 fragPos;
 out mat3 TBN;
 
@@ -21,7 +20,6 @@ void main()
 	vertexColor = vec4(vertex_color, 1.0f);
 	vertexUv = vertex_uv;
 	fragPos = vec3(model * vec4(vertex_position, 1.0f));
-	vertexNorms = mat3(transpose(inverse(model))) * vertex_normals;
 	
 	// Create TBN matrix
 	vec3 T = normalize(vec3(model * vec4(vertex_tangent, 0.0f)));

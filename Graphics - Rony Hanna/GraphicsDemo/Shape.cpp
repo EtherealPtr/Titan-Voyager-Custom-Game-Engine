@@ -1,5 +1,45 @@
 #include "Shape.h"
 
+// -------------------
+// Author: Rony Hanna
+// Description: Helper function that calculates the tangent of a given vertex of a triangle  
+// -------------------
+std::vector<glm::vec3> CalculateVertexTangent(std::vector<glm::vec3> positions, std::vector<glm::vec2> textures)
+{
+	std::vector<glm::vec3> tangents;
+	glm::vec3 tan1, tan2;
+
+	// Triangle 1
+	glm::vec3 edge1 = positions.at(1) - positions.at(0);
+	glm::vec3 edge2 = positions.at(2) - positions.at(0);
+	glm::vec2 deltaUV1 = textures.at(1) - textures.at(0);
+	glm::vec2 deltaUV2 = textures.at(2) - textures.at(0);
+
+	float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+	tan1.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+	tan1.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+	tan1.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+	tan1 = glm::normalize(tan1);
+	tangents.push_back(tan1);
+
+	// Triangle 2
+	edge1 = positions.at(2) - positions.at(0);
+	edge2 = positions.at(3) - positions.at(0);
+	deltaUV1 = textures.at(2) - textures.at(0);
+	deltaUV2 = textures.at(3) - textures.at(0);
+
+	f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+	tan2.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+	tan2.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+	tan2.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+	tan2 = glm::normalize(tan2);
+	tangents.push_back(tan2);
+
+	return tangents;
+}
+
 class Triangle : public Shape
 {
 public:
@@ -77,46 +117,6 @@ private:
 		2, 3, 0
 	};
 };
-
-// -------------------
-// Author: Rony Hanna
-// Description: Helper function that calculates the tangent of a given vertex of a triangle  
-// -------------------
-std::vector<glm::vec3> CalculateVertexTangent(std::vector<glm::vec3> positions, std::vector<glm::vec2> textures)
-{
-	std::vector<glm::vec3> tangents;
-	glm::vec3 tan1, tan2;
-	
-	// Triangle 1
-	glm::vec3 edge1 = positions.at(1) - positions.at(0);
-	glm::vec3 edge2 = positions.at(2) - positions.at(0);
-	glm::vec2 deltaUV1 = textures.at(1) - textures.at(0);
-	glm::vec2 deltaUV2 = textures.at(2) - textures.at(0);
-
-	float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
-
-	tan1.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-	tan1.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-	tan1.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
-	tan1 = glm::normalize(tan1);
-	tangents.push_back(tan1);
-
-	// Triangle 2
-	edge1 = positions.at(2) - positions.at(0);
-	edge2 = positions.at(3) - positions.at(0);
-	deltaUV1 = textures.at(2) - textures.at(0);
-	deltaUV2 = textures.at(3) - textures.at(0);
-
-	f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
-
-	tan2.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-	tan2.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-	tan2.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
-	tan2 = glm::normalize(tan2);
-	tangents.push_back(tan2);
-
-	return tangents;
-}
 
 class Cube : public Shape
 {
