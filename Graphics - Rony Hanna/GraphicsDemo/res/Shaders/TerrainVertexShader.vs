@@ -9,6 +9,11 @@ out vec2 vertexUv;
 out vec3 vertexNorms;
 out vec3 fragPos;
 
+// Fog items 
+out float visibility; 
+const float fogDensity = 0.0035f;
+const float gradient = 6.0f;
+
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
@@ -20,4 +25,10 @@ void main()
 	vertexUv = vertex_uv;
 	fragPos = vec3(model * vec4(vertex_position, 1.0f));
 	vertexNorms = mat3(transpose(inverse(model))) * vertex_normals;
+
+	// Fog calculation (calculate distance of this vertex to camera)
+	vec4 worldPos = model * vec4(vertex_position, 1.0f);
+	vec4 posRelativeToCamera = view * worldPos;
+	float distanceFromCamera = length(posRelativeToCamera.xyz);
+	visibility = exp(-pow((distanceFromCamera * fogDensity), gradient));
 }

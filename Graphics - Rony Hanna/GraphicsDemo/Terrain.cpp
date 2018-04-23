@@ -240,10 +240,10 @@ glm::vec3 Terrain::CalculateNormal(unsigned int x, unsigned int z)
 {
 	if (x >= 0 && x < m_terrainWidth - 1 && z >= 0 && z < m_terrainHeight - 1)
 	{
-		float heightL = GetHeightOfTerrain(x - 1, z);
-		float heightR = GetHeightOfTerrain(x + 1, z);
-		float heightD = GetHeightOfTerrain(x, z - 1);
-		float heightU = GetHeightOfTerrain(x, z + 1);
+		float heightL = GetHeightOfTerrain((float)x - 1, (float)z);
+		float heightR = GetHeightOfTerrain((float)x + 1, (float)z);
+		float heightD = GetHeightOfTerrain((float)x, (float)z - 1);
+		float heightU = GetHeightOfTerrain((float)x, (float)z + 1);
 
 		glm::vec3 normal(heightL - heightR, 2.0f, heightD - heightU);
 		normal = glm::normalize(normal);

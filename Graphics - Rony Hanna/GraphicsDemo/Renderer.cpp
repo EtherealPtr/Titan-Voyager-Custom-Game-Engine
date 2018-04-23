@@ -123,19 +123,24 @@ void Renderer::RenderObjects(Camera cam)
 // Author: Rony Hanna
 // Description: Function that creates a game object using a shape factory
 // -------------------
-void Renderer::InitMesh(GLuint meshType, char* textureId, int objId, char* vs, char* fs, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, bool bIsInstancing)
+void Renderer::InitMesh(GLuint meshType, char* textureId, int objId, std::vector<char*> shaders, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, char* normalMapping, bool bIsInstancing)
 {
 	m_shape = m_shape->CreateShape(meshType);
 	m_shape->InitVertexData();
 
 	GameObject* polygon = new GameObject();
 	polygon->CreateGameObj(m_shape->GetVertexData(), m_shape->GetVertexDataCount(), m_shape->GetIndexData(), m_shape->GetIndexDataCount(), bIsInstancing);
-	polygon->GetShaderComponent().CreateProgram(vs, fs);
+	polygon->GetShaderComponent().CreateProgram(shaders.at(0), shaders.at(1));
 
-	if (textureId != "skybox")
-		polygon->GetTextureComponent().GenerateTexture(textureId);
-	else
+	if (textureId == "skybox")
 		polygon->GetTextureComponent().GenerateSkybox();
+	else if (normalMapping != "blank")
+	{
+		std::vector<char*> imgs{ textureId, normalMapping };
+		polygon->GetTextureComponent().GenerateMultipleTextures(imgs);
+	}
+	else
+		polygon->GetTextureComponent().GenerateTexture(textureId);
 
 	polygon->SetTransform(pos, rot, scale);
 	polygon->SetTextureId(textureId);

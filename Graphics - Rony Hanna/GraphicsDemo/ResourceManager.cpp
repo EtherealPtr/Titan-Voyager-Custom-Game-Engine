@@ -95,6 +95,12 @@ void ResourceManager::SetSkyboxTextureIDs()
 	skyboxTexturesIds.push_back("skybox3");
 	skyboxTexturesIds.push_back("skybox4");
 	skyboxTexturesIds.push_back("skybox5");
+	skyboxTexturesIds.push_back("skybox6");
+	skyboxTexturesIds.push_back("skybox7");
+	skyboxTexturesIds.push_back("skybox8");
+	skyboxTexturesIds.push_back("skybox9");
+	skyboxTexturesIds.push_back("skybox10");
+	skyboxTexturesIds.push_back("skybox11");
 }
 
 std::vector<char*> ResourceManager::GetSkyboxTextureIds()

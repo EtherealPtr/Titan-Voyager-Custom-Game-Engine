@@ -11,9 +11,9 @@ public:
 	Model() {}
 
 	GLint TextureFromFile(const char* path, std::string directory);
-	void Init(GLchar* path, Camera camera, char* vs, char* fs, bool instancing);
-	void Draw(Camera cam);
-	void DrawInstanced(Camera cam);
+	void Init(GLchar* path, Camera& camera, char* vs, char* fs, bool instancing);
+	void Draw(Camera& cam);
+	void DrawInstanced(Camera& cam);
 
 	std::vector<Mesh> meshes;
 	GLuint program;

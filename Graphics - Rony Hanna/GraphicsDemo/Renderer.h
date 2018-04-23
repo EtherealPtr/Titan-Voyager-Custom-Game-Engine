@@ -25,7 +25,7 @@ public:
 
 	void Run();
 	void RenderObjects(Camera cam);
-	void InitMesh(GLuint meshType, char* texId, int objId, char* vs, char* fs, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, bool bIsInstancing = false);
+	void InitMesh(GLuint meshType, char* texId, int objId, std::vector<char*> shaders, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, char* normalMapping = "blank", bool instancing = false);
 	SDL_Window* GetAppWindow() { return window; }
 
 	GameObject& GetComponent(char* textureId);

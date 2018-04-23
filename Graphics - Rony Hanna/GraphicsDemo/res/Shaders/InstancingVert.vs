@@ -5,13 +5,14 @@ layout (location = 2) in vec2 vertex_uv;
 layout (location = 3) in mat4 instanceMatrix;
 
 out vec2 vertexUv;
+out vec3 vertexNormals;
 
 uniform mat4 view;
 uniform mat4 projection;
-uniform mat4 model;
 
 void main()
 {
     gl_Position = projection * view *  instanceMatrix * vec4(vertex_position, 1.0f);
 	vertexUv = vertex_uv;
+	vertexNormals = vertex_normals;
 }

@@ -7,6 +7,7 @@ in vec3 vertexNorms;
 in vec3 fragPos;
 
 uniform sampler2D meshTexture;
+
 uniform vec3 lightPos; 
 uniform vec3 viewPos;
 

@@ -44,11 +44,13 @@ void GameObject::CreateGameObj(std::vector<Vertex> verts, GLuint numOfVertices, 
 	std::vector<glm::vec3> vertexCol;
 	std::vector<glm::vec2> vertexUv;
 	std::vector<glm::vec3> vertexNorms;
+	std::vector<glm::vec3> vertexTan;
 
 	vertexPos.reserve(m_numOfVertices);
 	vertexUv.reserve(m_numOfVertices);
 	vertexCol.reserve(m_numOfVertices);
 	vertexNorms.reserve(m_numOfVertices);
+	vertexTan.reserve(m_numOfVertices);
 
 	for (size_t i = 0; i < numOfVertices; ++i)
 	{
@@ -56,6 +58,7 @@ void GameObject::CreateGameObj(std::vector<Vertex> verts, GLuint numOfVertices, 
 		vertexCol.push_back(verts[i].GetCol());
 		vertexUv.push_back(verts[i].GetTex());
 		vertexNorms.push_back(verts[i].GetNormals());
+		vertexTan.push_back(verts[i].GetTangent());
 	}
 
 	glGenBuffers(TOTAL_BUFFERS, m_vbo);
@@ -80,6 +83,11 @@ void GameObject::CreateGameObj(std::vector<Vertex> verts, GLuint numOfVertices, 
 	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
 
+	glBindBuffer(GL_ARRAY_BUFFER, m_vbo[TANGENT_VB]);
+	glBufferData(GL_ARRAY_BUFFER, numOfVertices * sizeof(vertexTan[0]), &vertexTan[0], GL_STATIC_DRAW);
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vbo[ELEMENT_VB]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, numOfIndices * sizeof(indices[0]), &indices[0], GL_STATIC_DRAW);
 
@@ -91,10 +99,20 @@ void GameObject::CreateGameObj(std::vector<Vertex> verts, GLuint numOfVertices, 
 	glBindVertexArray(0);
 }
 
-void GameObject::Draw(Camera& camera, glm::vec3 lightPos)
+void GameObject::Draw(Camera& camera, glm::vec3 lightPos, bool bSomething)
 {
 	this->shaderComponent.ActivateProgram();
-	this->m_textureComponent.ActivateTexture();
+	if (bSomething)
+	{
+		this->shaderComponent.SetInt("meshTexture", 0); 
+		this->shaderComponent.SetInt("normalMap", 1);
+		this->m_textureComponent.ActivateTextures(0);
+		this->m_textureComponent.ActivateTextures(1);
+	}
+	else
+	{
+		this->m_textureComponent.ActivateTexture();
+	}
 	this->shaderComponent.SetMat4("projection", camera.GetProjectionMatrix());
 	this->shaderComponent.SetMat4("view", camera.GetViewMatrix());
 	this->shaderComponent.SetMat4("model", m_transform.GetModel());

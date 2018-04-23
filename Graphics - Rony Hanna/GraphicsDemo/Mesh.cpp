@@ -12,6 +12,12 @@ void Mesh::Draw(Camera camera, Shader shaderProgram, bool instancing)
 {
 	shaderProgram.ActivateProgram();
 
+	glm::mat4 model(1.0f);
+	glm::mat4 translation = glm::translate(glm::vec3(0.0f, -150.0f, 0.0f));
+	glm::mat4 scaleMat = glm::scale(glm::vec3(0.2f, 0.2f, 0.2f));
+	model = translation * scaleMat;
+	shaderProgram.SetMat4("model", model);
+
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
 	

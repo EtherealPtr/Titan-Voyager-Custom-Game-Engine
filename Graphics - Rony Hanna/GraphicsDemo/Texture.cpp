@@ -35,6 +35,10 @@ void Texture::GenerateTexture(char* textureId)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
 }
 
+// -------------------
+// Author: Rony Hanna
+// Description: Function that generates multiple textures and binds them to appropriate texture unit
+// -------------------
 void Texture::GenerateMultipleTextures(std::vector<char*>& textureIds)
 {
 	std::vector<unsigned char*> images(textureIds.size(), 0);
@@ -66,17 +70,20 @@ void Texture::GenerateMultipleTextures(std::vector<char*>& textureIds)
 // Author: Rony Hanna
 // Description: Function that generates a cubemap texture
 // -------------------
-void Texture::GenerateSkybox()
+void Texture::GenerateSkybox(unsigned short int beginIndex, unsigned short int finalIndex)
 {
-	glGenTextures(1, &m_skyboxTex);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxTex);
+	glGenTextures(1, &m_texture);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, m_texture);
+	int c = 0;
 
-	for (unsigned int i = 0; i < 6; ++i)
+	for (unsigned int i = beginIndex; i < finalIndex; ++i)
 	{
 		unsigned char* image = ResourceManager::GetInstance().GetTexture(ResourceManager::GetInstance().GetSkyboxTextureIds()[i]);
 		int w = ResourceManager::GetInstance().GetImageWidth(ResourceManager::GetInstance().GetSkyboxTextureIds()[i]);
 		int h = ResourceManager::GetInstance().GetImageHeight(ResourceManager::GetInstance().GetSkyboxTextureIds()[i]);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + c, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+		c++;
 	}
 
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -100,7 +107,7 @@ void Texture::ActivateTexture(unsigned int unit)
 
 // -------------------
 // Author: Rony Hanna
-// Description: Function that activates (or binds) a texture 
+// Description: Function that activates (or binds) multiple textures  
 // -------------------
 void Texture::ActivateTextures(unsigned int unit)
 {

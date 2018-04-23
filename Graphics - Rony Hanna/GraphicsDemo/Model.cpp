@@ -26,7 +26,7 @@ GLint Model::TextureFromFile(const char* path, std::string directory)
 	return textureID;
 }
 
-void Model::Init(GLchar* path, Camera camera, char* vs, char* fs, bool instancing)
+void Model::Init(GLchar* path, Camera& camera, char* vs, char* fs, bool instancing)
 {
 	m_shader.CreateProgram(vs, fs);
 	m_camera = camera;
@@ -34,15 +34,15 @@ void Model::Init(GLchar* path, Camera camera, char* vs, char* fs, bool instancin
 	loadModel(path);
 }
 
-void Model::Draw(Camera cam)
+void Model::Draw(Camera& cam)
 {
 	for (GLuint i = 0; i < meshes.size(); ++i)
 	{
-		meshes[i].Draw(m_camera, m_shader, false);
+		meshes[i].Draw(cam, m_shader, false);
 	}
 }
 
-void Model::DrawInstanced(Camera cam)
+void Model::DrawInstanced(Camera& cam)
 {
 	for (GLuint i = 0; i < meshes.size(); ++i)
 	{
@@ -159,5 +159,6 @@ std::vector<MeshTexture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureT
 			textures_loaded.push_back(texture);
 		}
 	}
+
 	return textures;
 }

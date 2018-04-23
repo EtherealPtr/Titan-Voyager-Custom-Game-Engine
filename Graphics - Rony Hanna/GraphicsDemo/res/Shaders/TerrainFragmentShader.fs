@@ -5,6 +5,8 @@ in vec4 vertexColor;
 in vec2 vertexUv;
 in vec3 vertexNorms;
 in vec3 fragPos;
+in float visibility; 
+vec3 fogColour = vec3(0.97f, 0.88f, 0.70f);
 
 uniform sampler2D meshTexture;
 uniform sampler2D rTexture;
@@ -48,4 +50,5 @@ void main()
 	vec3 result = (ambient + diffuse + specular) * vec3(totalColour);
 
     FragColor = vec4(result, 1.0f);
+	FragColor = mix(vec4(fogColour, 1.0f), FragColor, visibility);
 } 

@@ -78,46 +78,145 @@ private:
 	};
 };
 
+// -------------------
+// Author: Rony Hanna
+// Description: Helper function that calculates the tangent of a given vertex of a triangle  
+// -------------------
+std::vector<glm::vec3> CalculateVertexTangent(std::vector<glm::vec3> positions, std::vector<glm::vec2> textures)
+{
+	std::vector<glm::vec3> tangents;
+	glm::vec3 tan1, tan2;
+	
+	// Triangle 1
+	glm::vec3 edge1 = positions.at(1) - positions.at(0);
+	glm::vec3 edge2 = positions.at(2) - positions.at(0);
+	glm::vec2 deltaUV1 = textures.at(1) - textures.at(0);
+	glm::vec2 deltaUV2 = textures.at(2) - textures.at(0);
+
+	float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+	tan1.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+	tan1.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+	tan1.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+	tan1 = glm::normalize(tan1);
+	tangents.push_back(tan1);
+
+	// Triangle 2
+	edge1 = positions.at(2) - positions.at(0);
+	edge2 = positions.at(3) - positions.at(0);
+	deltaUV1 = textures.at(2) - textures.at(0);
+	deltaUV2 = textures.at(3) - textures.at(0);
+
+	f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+	tan2.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+	tan2.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+	tan2.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+	tan2 = glm::normalize(tan2);
+	tangents.push_back(tan2);
+
+	return tangents;
+}
+
 class Cube : public Shape
 {
 	virtual void InitVertexData() override
 	{
 		// Cube is drawn in a counter-clockwise winding format to allow for face culling
 		// Front face
-		m_cubeVertices.push_back(Vertex(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
+		std::vector<glm::vec3> frontFacePos;
+		frontFacePos.push_back(glm::vec3(-0.5f, -0.5f, 0.5f));
+		frontFacePos.push_back(glm::vec3(0.5f, -0.5f, 0.5f));
+		frontFacePos.push_back(glm::vec3(0.5f, 0.5f, 0.5f));
+		frontFacePos.push_back(glm::vec3(-0.5f, 0.5f, 0.5f));
+
+		std::vector<glm::vec2> textures;
+		textures.push_back(glm::vec2(0.0f, 0.0f));
+		textures.push_back(glm::vec2(1.0f, 0.0f));
+		textures.push_back(glm::vec2(1.0f, 1.0f));
+		textures.push_back(glm::vec2(0.0f, 1.0f));
+
+		std::vector<glm::vec3> frontFaceTan = CalculateVertexTangent(frontFacePos, textures);
+
+		m_cubeVertices.push_back(Vertex(frontFacePos.at(0), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(0), glm::vec3(0.0f, 0.0f, 1.0f), frontFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(frontFacePos.at(1), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(1), glm::vec3(0.0f, 0.0f, 1.0f), frontFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(frontFacePos.at(2), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(2), glm::vec3(0.0f, 0.0f, 1.0f), frontFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(frontFacePos.at(3), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(3), glm::vec3(0.0f, 0.0f, 1.0f), frontFaceTan.at(1)));
+
+		// Calculate tangents for back face
+		std::vector<glm::vec3> backFacePos;
+		backFacePos.push_back(glm::vec3(0.5f, -0.5f, -0.5f));
+		backFacePos.push_back(glm::vec3(-0.5f, -0.5f, -0.5f));
+		backFacePos.push_back(glm::vec3(-0.5f, 0.5f, -0.5f));
+		backFacePos.push_back(glm::vec3(0.5f, 0.5f, -0.5f));
+
+		std::vector<glm::vec3> backFaceTan = CalculateVertexTangent(backFacePos, textures);
 
 		// Back face
-		m_cubeVertices.push_back(Vertex(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
+		m_cubeVertices.push_back(Vertex(backFacePos.at(0), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(0), glm::vec3(0.0f, 0.0f, -1.0f), backFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(backFacePos.at(1), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(1), glm::vec3(0.0f, 0.0f, -1.0f), backFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(backFacePos.at(2), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(2), glm::vec3(0.0f, 0.0f, -1.0f), backFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(backFacePos.at(3), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(3), glm::vec3(0.0f, 0.0f, -1.0f), backFaceTan.at(1)));
+
+		// Calculate tangents for right face
+		std::vector<glm::vec3> rightFacePos;
+		rightFacePos.push_back(glm::vec3(0.5f, -0.5f, 0.5f));
+		rightFacePos.push_back(glm::vec3(0.5f, -0.5f, -0.5f));
+		rightFacePos.push_back(glm::vec3(0.5f, 0.5f, -0.5f));
+		rightFacePos.push_back(glm::vec3(0.5f, 0.5f, 0.5f));
+
+		std::vector<glm::vec3> rightFaceTan = CalculateVertexTangent(rightFacePos, textures);
 
 		// Right face
-		m_cubeVertices.push_back(Vertex(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
+		m_cubeVertices.push_back(Vertex(rightFacePos.at(0), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(0), glm::vec3(1.0f, 0.0f, 0.0f), rightFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(rightFacePos.at(1), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(1), glm::vec3(1.0f, 0.0f, 0.0f), rightFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(rightFacePos.at(2), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(2), glm::vec3(1.0f, 0.0f, 0.0f), rightFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(rightFacePos.at(3), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(3), glm::vec3(1.0f, 0.0f, 0.0f), rightFaceTan.at(1)));
+
+		// Calculate tangents for left face
+		std::vector<glm::vec3> leftFacePos;
+		leftFacePos.push_back(glm::vec3(-0.5f, -0.5f, -0.5f));
+		leftFacePos.push_back(glm::vec3(-0.5f, -0.5f, 0.5f));
+		leftFacePos.push_back(glm::vec3(-0.5f, 0.5f, 0.5f));
+		leftFacePos.push_back(glm::vec3(-0.5f, 0.5f, -0.5f));
+
+		std::vector<glm::vec3> leftFaceTan = CalculateVertexTangent(leftFacePos, textures);
 
 		// Left face
-		m_cubeVertices.push_back(Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(-1.0f, 0.0f, 0.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(-1.0f, 0.0f, 0.0f)));
+		m_cubeVertices.push_back(Vertex(leftFacePos.at(0), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(0), glm::vec3(-1.0f, 0.0f, 0.0f), leftFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(leftFacePos.at(1), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(1), glm::vec3(-1.0f, 0.0f, 0.0f), leftFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(leftFacePos.at(2), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(2), glm::vec3(-1.0f, 0.0f, 0.0f), leftFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(leftFacePos.at(3), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(3), glm::vec3(-1.0f, 0.0f, 0.0f), leftFaceTan.at(1)));
+
+		// Calculate tangents for top face
+		std::vector<glm::vec3> topFacePos;
+		topFacePos.push_back(glm::vec3(-0.5f, 0.5f, 0.5f));
+		topFacePos.push_back(glm::vec3(0.5f, 0.5f, 0.5f));
+		topFacePos.push_back(glm::vec3(0.5f, 0.5f, -0.5f));
+		topFacePos.push_back(glm::vec3(-0.5f, 0.5f, -0.5f));
+
+		std::vector<glm::vec3> topFaceTan = CalculateVertexTangent(topFacePos, textures);
 
 		// Top face
-		m_cubeVertices.push_back(Vertex(glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(0.5f, 0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+		m_cubeVertices.push_back(Vertex(topFacePos.at(0), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(0), glm::vec3(0.0f, 1.0f, 0.0f), topFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(topFacePos.at(1), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(1), glm::vec3(0.0f, 1.0f, 0.0f), topFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(topFacePos.at(2), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(2), glm::vec3(0.0f, 1.0f, 0.0f), topFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(topFacePos.at(3), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(3), glm::vec3(0.0f, 1.0f, 0.0f), topFaceTan.at(1)));
+
+		// Calculate tangents for bottom face
+		std::vector<glm::vec3> bottomFacePos;
+		bottomFacePos.push_back(glm::vec3(0.5f, -0.5f, 0.5f));
+		bottomFacePos.push_back(glm::vec3(-0.5f, -0.5f, 0.5f));
+		bottomFacePos.push_back(glm::vec3(-0.5f, -0.5f, -0.5f));
+		bottomFacePos.push_back(glm::vec3(0.5f, -0.5f, -0.5f));
+
+		std::vector<glm::vec3> bottomFaceTan = CalculateVertexTangent(bottomFacePos, textures);
 
 		// Bottom face
-		m_cubeVertices.push_back(Vertex(glm::vec3(0.5f, -0.5f, 0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
-		m_cubeVertices.push_back(Vertex(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+		m_cubeVertices.push_back(Vertex(bottomFacePos.at(0), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(0), glm::vec3(0.0f, -1.0f, 0.0f), bottomFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(bottomFacePos.at(1), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(1), glm::vec3(0.0f, -1.0f, 0.0f), bottomFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(bottomFacePos.at(2), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(2), glm::vec3(0.0f, -1.0f, 0.0f), bottomFaceTan.at(0)));
+		m_cubeVertices.push_back(Vertex(bottomFacePos.at(3), glm::vec3(1.0f, 0.0f, 0.0f), textures.at(3), glm::vec3(0.0f, -1.0f, 0.0f), bottomFaceTan.at(1)));
 	}
 
 	virtual std::vector<Vertex> GetVertexData() override
@@ -247,10 +346,6 @@ Shape* Shape::CreateShape(unsigned int shapeID)
 
 	case 3:
 		return new Sphere;
-		break;
-
-	case 4:
-		//return new Circle;
 		break;
 
 	default:

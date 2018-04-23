@@ -21,7 +21,7 @@ public:
 	~GameObject();
 
 	void CreateGameObj(std::vector<Vertex>, GLuint numOfVertices, unsigned int* indices, GLuint numOfIndices, bool bInstancing = false);
-	void Draw(Camera& cam, glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f));
+	void Draw(Camera& cam, glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f), bool bSomething = false);
 	void DrawInstanced(glm::mat4 proj, glm::mat4 view);
 	void SetTransform(glm::vec3 pos, glm::vec3 rot, glm::vec3 scale);
 
@@ -38,7 +38,7 @@ public:
 	int GetObjectId() const; 
 
 private:
-	enum { POSITION_VB, COLOR_VB, UV_VB, NORMALS_VB, ELEMENT_VB, TOTAL_BUFFERS };
+	enum { POSITION_VB, COLOR_VB, UV_VB, NORMALS_VB, TANGENT_VB, ELEMENT_VB, TOTAL_BUFFERS };
 
 	char* m_texId;
 	int m_objId;

@@ -40,6 +40,9 @@ private:
 	Model m_aircraft;
 	Terrain m_terrain;
 	Light m_light;
+
+private:
+	bool m_spaceScene;
 };
 
 #endif // !__GAME_H__

@@ -16,13 +16,11 @@ public:
 	void GenerateMultipleTextures(std::vector<char*>& textureIds);
 	void ActivateTexture(unsigned int unit = 0);
 	void ActivateTextures(unsigned int unit = 0);
-
-	void GenerateSkybox();
+	void GenerateSkybox(unsigned short int startIndex = 0, unsigned short int lastIndex = 6);
 
 private:
 	GLuint m_texture;
 	GLuint m_textures[32];
-	GLuint m_skyboxTex;
 };
 
 #endif // !__TEXTURE_H__
