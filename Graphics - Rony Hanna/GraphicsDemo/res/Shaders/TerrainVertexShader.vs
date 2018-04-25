@@ -26,7 +26,7 @@ void main()
 	vertexColor = vec4(vertex_color, 1.0f);
 	vertexUv = vertex_uv;
 	fragPos = vec3(model * vec4(vertex_position, 1.0f));
-	vertexNorms = mat3(transpose(inverse(model))) * vertex_normals;
+	//vertexNorms = mat3(transpose(inverse(model))) * vertex_normals;
 
 	vec3 T = normalize(vec3(model * vec4(vertex_tangent, 0.0f)));
 	vec3 N = normalize(vec3(model * vec4(vertex_normals, 0.0f)));

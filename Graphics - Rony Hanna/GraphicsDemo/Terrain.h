@@ -11,6 +11,9 @@
 #include "PerlinNoise.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "DirectionalLight.h"
+#include "PointLight.h"
+#include "SpotLight.h"
 
 class Terrain
 {
@@ -25,7 +28,7 @@ public:
 	void CreateTerrainWithPerlinNoise();
 	glm::vec3 CalculateNormal(unsigned int x, unsigned int z);
 
-	void Draw(Camera& cam, glm::vec3 lightPos = glm::vec3(0.0f));
+	void Draw(Camera& cam, DirectionalLight* directionLight, PointLight* lamp, SpotLight* spotlight);
 
 private:
 	Shader m_terrainShader;

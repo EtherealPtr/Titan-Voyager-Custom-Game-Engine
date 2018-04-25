@@ -15,6 +15,7 @@ Game::~Game()
 void Game::Run()
 {
 	InitMeshes();
+	InitLights();
 	GameLoop();
 }
 
@@ -27,19 +28,31 @@ void Game::InitMeshes()
 	
 	Renderer::GetInstance().InitMesh(QUAD, "saturnRings", ++id, defShaders, glm::vec3(200.0f, 160.0f, -500.0f), glm::vec3(-65.0f, 0.0f, 0.0f), glm::vec3(330.0f, 330.0f, 330.0f));
 	Renderer::GetInstance().InitMesh(CUBE, "cubeTex", ++id, normalMappingShaders, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), "cubeTexNormalMap");
-	//Renderer::GetInstance().InitMesh(CUBE, "cubeTex", ++id, defShaders, glm::vec3(3.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 	Renderer::GetInstance().InitMesh(CUBE, "skybox", ++id, skyboxShaders, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(3000.0f, 3000.0f, 3000.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "saturn", ++id, defShaders, glm::vec3(200.0f, 150.0f, -500.0f), glm::vec3(25.0f, 90.0f, 0.0f), glm::vec3(55.0f, 55.0f, 55.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "mars", ++id, defShaders, glm::vec3(-70.0f, 50.0f, -70.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(6.36f, 6.36f, 6.36f));
 	Renderer::GetInstance().InitMesh(SPHERE, "mercury", ++id, defShaders, glm::vec3(50.0f, 45.0f, -60.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(4.56f, 4.56f, 4.56f));
 	Renderer::GetInstance().InitMesh(SPHERE, "neptune", ++id, defShaders, glm::vec3(-200.0f, -70.0f, -180.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(40.0f, 40.0f, 40.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "earth", ++id, defShaders, glm::vec3(0.0f, 0.0f, -60.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(12.0f, 12.0f, 12.0f));
+	Renderer::GetInstance().InitMesh(SPHERE, "cubeTex", ++id, defShaders, glm::vec3(-39.0f, -143.0f, 44.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.2f, 1.2f, 1.2f));
 
 	m_terrain.InitTerrain("res/Shaders/TerrainVertexShader.vs", "res/Shaders/TerrainFragmentShader.fs");
 	m_terrain.CreateTerrainWithPerlinNoise();
-	m_light.SetPos(glm::vec3(0.0f, -139.0f, 0.0f));
+
 	//m_aircraft.Init("res/Models3D/Walkyrie/object.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
 	//m_asteroid.Init("res/Models3D/Rock/rock.obj", m_camera, "res/Shaders/InstancingVert.vs", "res/Shaders/InstancingFrag.fs", true);
+}
+
+void Game::InitLights()
+{
+	m_dirLight.Configure(glm::vec3(0.01f, 0.01f, 0.01f), glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(0.5f, 0.5f, 0.5f));
+	m_dirLight.SetDirection(glm::vec3(0.2f, 1.0f, 0.5f));
+
+	m_pointLight.Configure(glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.014f, 0.0007f);
+	m_pointLight.SetPosition(glm::vec3(-39.0f, -143.0f, 44.0f));
+	m_pointLight.SetLightColour(glm::vec3(1.0f, 0.0f, 0.0f));
+
+	m_spotlight.Configure(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, 22.5f, 25.0f);
 }
 
 void Game::GameLoop()
@@ -57,44 +70,46 @@ void Game::GameLoop()
 		ProcessInput();
 		Update();
 		m_camera.UpdateLookAt();
-		m_light.SetPos(glm::vec3(m_camera.GetCameraPos().x, m_camera.GetCameraPos().y, m_camera.GetCameraPos().z));
+
 		//m_aircraft.Draw(m_camera);
 
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
+ 
+		m_spotlight.SetPosition(glm::vec3(m_camera.GetCameraPos().x, m_camera.GetCameraPos().y, m_camera.GetCameraPos().z));
+		m_spotlight.SetDirection(glm::vec3(m_camera.GetCameraForward().x, m_camera.GetCameraForward().y, m_camera.GetCameraForward().z));
+
+		Renderer::GetInstance().GetComponent(LIGHT_BULB).Draw(m_camera);
 
 		if (m_spaceScene)
 		{
-			Renderer::GetInstance().GetComponent(SPACE_CUBE).Draw(m_camera, glm::vec3(m_camera.GetCameraPos().x, m_camera.GetCameraPos().y, m_camera.GetCameraPos().z), true);
+			Renderer::GetInstance().GetComponent(SPACE_CUBE).Draw(m_camera, glm::vec3(0.0f, 0.0f, 0.0f), true);
 			Renderer::GetInstance().GetComponent(SPACE_CUBE).GetTransformComponent().GetRot().y += 6.0f * m_deltaTime;
 			Renderer::GetInstance().GetComponent(SPACE_CUBE).GetTransformComponent().GetRot().x += 6.0f * m_deltaTime;
-			//Renderer::GetInstance().GetComponent(3).Draw(m_camera, glm::vec3(m_camera.GetCameraPos().x, m_camera.GetCameraPos().y, m_camera.GetCameraPos().z), false);
-			//Renderer::GetInstance().GetComponent(3).GetTransformComponent().GetRot().y += 6.0f * m_deltaTime;
-			//Renderer::GetInstance().GetComponent(3).GetTransformComponent().GetRot().x += 6.0f * m_deltaTime;
-			//Renderer::GetInstance().GetComponent(SATURN_RINGS).Draw(m_camera);
-			//
-			//// Planets
-			//Renderer::GetInstance().GetComponent(SATURN).GetTransformComponent().GetRot().y += 2.0f * m_deltaTime;
-			//Renderer::GetInstance().GetComponent(SATURN).Draw(m_camera);
-			//
-			//Renderer::GetInstance().GetComponent(MARS).GetTransformComponent().GetRot().y += 2.0f * m_deltaTime;
-			//Renderer::GetInstance().GetComponent(MARS).Draw(m_camera);
-			//
-			//Renderer::GetInstance().GetComponent(MERCURY).GetTransformComponent().GetRot().y += 2.0f * m_deltaTime;
-			//Renderer::GetInstance().GetComponent(MERCURY).Draw(m_camera);
-			//
-			//Renderer::GetInstance().GetComponent(NEPTUNE).GetTransformComponent().GetRot().y += 2.0f * m_deltaTime;
-			//Renderer::GetInstance().GetComponent(NEPTUNE).Draw(m_camera);
-			//
-			//Renderer::GetInstance().GetComponent(EARTH).GetTransformComponent().GetRot().y += 2.0f * m_deltaTime;
-			//Renderer::GetInstance().GetComponent(EARTH).Draw(m_camera);
+
+			// Planets
+			Renderer::GetInstance().GetComponent(SATURN_RINGS).Draw(m_camera);
+			Renderer::GetInstance().GetComponent(SATURN).GetTransformComponent().GetRot().y += 2.0f * m_deltaTime;
+			Renderer::GetInstance().GetComponent(SATURN).Draw(m_camera);
+			
+			Renderer::GetInstance().GetComponent(MARS).GetTransformComponent().GetRot().y += 2.0f * m_deltaTime;
+			Renderer::GetInstance().GetComponent(MARS).Draw(m_camera);
+			
+			Renderer::GetInstance().GetComponent(MERCURY).GetTransformComponent().GetRot().y += 2.0f * m_deltaTime;
+			Renderer::GetInstance().GetComponent(MERCURY).Draw(m_camera);
+			
+			Renderer::GetInstance().GetComponent(NEPTUNE).GetTransformComponent().GetRot().y += 2.0f * m_deltaTime;
+			Renderer::GetInstance().GetComponent(NEPTUNE).Draw(m_camera);
+			
+			Renderer::GetInstance().GetComponent(EARTH).GetTransformComponent().GetRot().y += 2.0f * m_deltaTime;
+			Renderer::GetInstance().GetComponent(EARTH).Draw(m_camera);
 		}
 
 		//m_asteroid.DrawInstanced(m_camera);
 
 		glDisable(GL_CULL_FACE);
 
-		m_terrain.Draw(m_camera, m_light.GetPos());
+		m_terrain.Draw(m_camera, &m_dirLight, &m_pointLight, &m_spotlight);
 
 		Renderer::GetInstance().GetComponent(SKYBOX).Draw(m_camera);
 

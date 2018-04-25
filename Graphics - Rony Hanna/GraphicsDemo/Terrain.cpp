@@ -179,7 +179,7 @@ void Terrain::CreateTerrainWithPerlinNoise()
 	// Calculate vertices
 	for (unsigned int i = 0; i < m_vHeights.size(); ++i)
 	{
-		for (unsigned int j = 0; j < m_vHeights.size(); ++j)
+		for (unsigned int j = 0; j < m_vHeights[0].size(); ++j)
 		{
 			Vertices.push_back(glm::vec3(i * m_cellSpacing, m_vHeights[i][j] * m_fTerrainHeight, j * m_cellSpacing));
 			Textures.push_back(glm::vec2(i * 1.0f / m_vHeights.size(), j * 1.0f / m_vHeights[0].size()));
@@ -205,7 +205,7 @@ void Terrain::CreateTerrainWithPerlinNoise()
 	// Calculate tangents
 	for (unsigned int i = 0; i < m_vHeights.size(); ++i)
 	{
-		for (unsigned int j = 0; j < m_vHeights.size(); ++j)
+		for (unsigned int j = 0; j < m_vHeights[0].size(); ++j)
 		{
 			int vertexIndex = j + i * 256;
 			glm::vec3 v1 = Vertices[vertexIndex];
@@ -341,10 +341,11 @@ float Terrain::BarryCentric(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec2 
 // Author: Rony Hanna
 // Description: Function that binds the terrain vertex array object (VAO) and draws its vertex data
 // -------------------
-void Terrain::Draw(Camera& _cam, glm::vec3 lightPos)
+void Terrain::Draw(Camera& _cam, DirectionalLight* directionLight, PointLight* lamp, SpotLight* spotlight)
 {
 	m_terrainShader.ActivateProgram();
 
+	// Texture properties
 	m_terrainShader.SetInt("meshTexture", 0);
 	m_terrainShader.SetInt("rTexture", 1);
 	m_terrainShader.SetInt("gTexture", 2);
@@ -352,15 +353,45 @@ void Terrain::Draw(Camera& _cam, glm::vec3 lightPos)
 	m_terrainShader.SetInt("blendMap", 4);
 	m_terrainShader.SetInt("grassNormalMap", 5);
 
+	// Activate all the textures
 	for (unsigned int i = 0; i < 6; ++i)
 		m_terrainTexture.ActivateTextures(i);
 
+	// MVP transformation matrix
 	m_terrainShader.SetMat4("model", m_model);
 	m_terrainShader.SetMat4("view", _cam.GetViewMatrix());
 	m_terrainShader.SetMat4("projection", _cam.GetProjectionMatrix());
-	m_terrainShader.SetVec3("lightPos", lightPos);
 	m_terrainShader.SetVec3("viewPos", _cam.GetCameraPos());
 
+	// Lighting properties 
+		// a. Directional Light
+	m_terrainShader.SetVec3("dirLight.direction", directionLight->GetDirection());
+	m_terrainShader.SetVec3("dirLight.ambient", directionLight->GetAmbient());
+	m_terrainShader.SetVec3("dirLight.diffuse", directionLight->GetDiffuse());
+	m_terrainShader.SetVec3("dirLight.specular", directionLight->GetSpecular());
+
+		// b. Some light bulbs
+	m_terrainShader.SetVec3("pointLight.position", lamp->GetPos()); 
+	m_terrainShader.SetVec3("pointLight.ambient", lamp->GetAmbient());
+	m_terrainShader.SetVec3("pointLight.diffuse", lamp->GetDiffuse());
+	m_terrainShader.SetVec3("pointLight.specular", lamp->GetSpecular());
+	m_terrainShader.SetVec3("pointLight.lightColour", lamp->GetColour());
+	m_terrainShader.SetFloat("pointLight.constant", lamp->GetConstant()); 
+	m_terrainShader.SetFloat("pointLight.linear", lamp->GetLinear());
+	m_terrainShader.SetFloat("pointLight.quadratic", lamp->GetQuadratic());
+
+		// c. Spotlight
+	m_terrainShader.SetVec3("spotlight.position", spotlight->GetPosition());
+	m_terrainShader.SetVec3("spotlight.direction", spotlight->GetDirection());
+	m_terrainShader.SetVec3("spotlight.diffuse", spotlight->GetDiffuse());
+	m_terrainShader.SetVec3("spotlight.specular", spotlight->GetSpecular());
+	m_terrainShader.SetFloat("spotlight.constant", spotlight->GetConstant());
+	m_terrainShader.SetFloat("spotlight.linear", spotlight->GetLinear());
+	m_terrainShader.SetFloat("spotlight.quadratic", spotlight->GetQuadratic());
+	m_terrainShader.SetFloat("spotlight.cutOff", glm::cos(glm::radians(spotlight->GetCutOff())));
+	m_terrainShader.SetFloat("spotlight.outerCutOff", glm::cos(glm::radians(spotlight->GetOuterCutOff())));
+
+	// Draw the terrain
 	glBindVertexArray(m_VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_VBO[ELEMENT_BUFFER]);
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
