@@ -1,5 +1,11 @@
 #include "Game.h"
 
+std::vector<SDL_Event>& GetFrameEvents()
+{
+	static std::vector<SDL_Event> frame_events;
+	return frame_events;
+}
+
 Game::Game() :
 	m_deltaTime(0.0f),
 	m_gameState(GameState::PLAY),
@@ -39,6 +45,7 @@ void Game::InitMeshes()
 	m_terrain.InitTerrain("res/Shaders/TerrainVertexShader.vs", "res/Shaders/TerrainFragmentShader.fs");
 	m_terrain.CreateTerrainWithPerlinNoise();
 
+	m_weapon.Init("res/Models3D/Rifle/M24_R_Low_Poly_Version_obj.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
 	//m_aircraft.Init("res/Models3D/Walkyrie/object.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
 	//m_asteroid.Init("res/Models3D/Rock/rock.obj", m_camera, "res/Shaders/InstancingVert.vs", "res/Shaders/InstancingFrag.fs", true);
 }
@@ -52,7 +59,7 @@ void Game::InitLights()
 	m_pointLight.SetPosition(glm::vec3(-39.0f, -143.0f, 44.0f));
 	m_pointLight.SetLightColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
-	m_spotlight.Configure(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, 22.5f, 25.0f);
+	m_spotlight.Configure(glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, 22.5f, 25.0f);
 }
 
 void Game::GameLoop()
@@ -67,11 +74,14 @@ void Game::GameLoop()
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		ProcessInput();
-		Update();
-		m_camera.UpdateLookAt();
+		SDL_Event _event;
+		while (SDL_PollEvent(&_event) != 0)
+		{
+			GetFrameEvents().push_back(_event);
+		}
 
-		//m_aircraft.Draw(m_camera);
+		ProcessInput(GetFrameEvents());
+		Update();
 
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
@@ -110,40 +120,28 @@ void Game::GameLoop()
 		glDisable(GL_CULL_FACE);
 
 		m_terrain.Draw(m_camera, &m_dirLight, &m_pointLight, &m_spotlight);
+		//m_aircraft.Draw(m_camera, glm::vec3(30.0f, -140.0f, 40.0f), glm::vec3(1.0f), 0.0f, glm::vec3(0.2f, 0.2f, 0.2f));
 
 		Renderer::GetInstance().GetComponent(SKYBOX).Draw(m_camera);
 
 		SDL_GL_SwapWindow(Renderer::GetInstance().GetAppWindow());
 		SDL_Delay(1);
+
+		GetFrameEvents().clear();
 	}
 }
 
 void Game::Update()
 {
-#pragma region // CAMERA_MOVEMENT
-	if (m_bCamMovements[CAM_FORWARD] == true)
-		m_camera.MoveForward(m_deltaTime);
-	if (m_bCamMovements[CAM_BACKWARD] == true)
-		m_camera.MoveBackward(m_deltaTime);
-	if (m_bCamMovements[CAM_LEFT] == true)
-		m_camera.StrafeLeft(m_deltaTime);
-	if (m_bCamMovements[CAM_RIGHT] == true)
-		m_camera.StrafeRight(m_deltaTime);
-	if (m_bCamMovements[CAM_RISE] == true)
-		m_camera.Rise(m_deltaTime);
-	if (m_bCamMovements[CAM_FALL] == true)
-		m_camera.Fall(m_deltaTime);
-#pragma endregion
-
+	m_camera.UpdateLookAt();
+	m_player.Update(m_weapon, m_camera, m_deltaTime, GetFrameEvents());
 }
 
-void Game::ProcessInput()
+void Game::ProcessInput(static std::vector<SDL_Event>& events)
 {
-	SDL_Event m_event;
-
-	while (SDL_PollEvent(&m_event))
+	for (auto i = events.begin(); i != events.end(); ++i)
 	{
-		switch (m_event.type)
+		switch (i->type)
 		{
 		case SDL_QUIT:
 			m_gameState = GameState::EXIT;
@@ -152,7 +150,7 @@ void Game::ProcessInput()
 			// KEYBOARD_INPUT
 		case SDL_KEYDOWN:
 		{
-			switch (m_event.key.keysym.sym)
+			switch (i->key.keysym.sym)
 			{
 			case SDLK_ESCAPE:
 				m_gameState = GameState::EXIT;
@@ -160,30 +158,6 @@ void Game::ProcessInput()
 
 			case SDLK_SPACE:
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				break;
-
-			case SDLK_w:
-				m_bCamMovements[CAM_FORWARD] = true;
-				break;
-
-			case SDLK_s:
-				m_bCamMovements[CAM_BACKWARD] = true;
-				break;
-
-			case SDLK_a:
-				m_bCamMovements[CAM_LEFT] = true;
-				break;
-
-			case SDLK_d:
-				m_bCamMovements[CAM_RIGHT] = true;
-				break;
-
-			case SDLK_r:
-				m_bCamMovements[CAM_RISE] = true;
-				break;
-
-			case SDLK_f:
-				m_bCamMovements[CAM_FALL] = true;
 				break;
 
 			default: break;
@@ -194,34 +168,10 @@ void Game::ProcessInput()
 
 		case SDL_KEYUP:
 		{
-			switch (m_event.key.keysym.sym)
+			switch (i->key.keysym.sym)
 			{
 			case SDLK_SPACE:
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				break;
-
-			case SDLK_w:
-				m_bCamMovements[CAM_FORWARD] = false;
-				break;
-
-			case SDLK_s:
-				m_bCamMovements[CAM_BACKWARD] = false;
-				break;
-
-			case SDLK_a:
-				m_bCamMovements[CAM_LEFT] = false;
-				break;
-
-			case SDLK_d:
-				m_bCamMovements[CAM_RIGHT] = false;
-				break;
-
-			case SDLK_r:
-				m_bCamMovements[CAM_RISE] = false;
-				break;
-
-			case SDLK_f:
-				m_bCamMovements[CAM_FALL] = false;
 				break;
 
 			case SDLK_z:
@@ -236,13 +186,6 @@ void Game::ProcessInput()
 			break;
 		}
 		// KEYBOARD_INPUT END
-
-
-		case SDL_MOUSEMOTION:
-		{
-			m_camera.MouseUpdate(glm::vec2(m_event.motion.x, m_event.motion.y), m_deltaTime);
-			break;
-		}
 
 		default:
 			break;

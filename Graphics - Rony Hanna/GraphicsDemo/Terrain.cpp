@@ -22,9 +22,7 @@ Terrain::Terrain() :
 // Description: Destructor that deallocates allocated memory on the heap 
 // -------------------
 Terrain::~Terrain()
-{
-
-}
+{}
 
 // -------------------
 // Author: Rony Hanna
@@ -326,7 +324,7 @@ float Terrain::GetHeightOfTerrain(float _X, float _Z)
 
 // -------------------
 // Author: Rony Hanna
-// Description: Mathematical function used to find the height of a triangle the player is currently on
+// Description: Helper function used to find the height of a triangle the player is currently on
 // -------------------
 float Terrain::BarryCentric(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec2 pos)
 {

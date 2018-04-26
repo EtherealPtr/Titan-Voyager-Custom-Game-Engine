@@ -34,11 +34,11 @@ void Model::Init(GLchar* path, Camera& camera, char* vs, char* fs, bool instanci
 	loadModel(path);
 }
 
-void Model::Draw(Camera& cam)
+void Model::Draw(Camera& cam, glm::vec3& pos, glm::vec3& rot, float amountOfRotation, glm::vec3& scale, bool bDrawRelativeToCamera)
 {
 	for (GLuint i = 0; i < meshes.size(); ++i)
 	{
-		meshes[i].Draw(cam, m_shader, false);
+		meshes[i].Draw(cam, m_shader, false, pos, rot, amountOfRotation, scale, bDrawRelativeToCamera);
 	}
 }
 

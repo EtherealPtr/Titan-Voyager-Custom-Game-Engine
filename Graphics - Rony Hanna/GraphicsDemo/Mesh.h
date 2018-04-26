@@ -15,6 +15,7 @@
 #include "Camera.h"
 #include <cstdlib>>
 #include <ctime>
+#include "Transformation.h"
 
 struct MeshVertex 
 {
@@ -49,10 +50,12 @@ public:
 	glm::mat4* m_modelMatricesIns;
 	GLuint m_vao;
 
-	void Draw(Camera camera, Shader program, bool instancing);
+	void SetTransform(Transform& transform) { m_transform = transform; }
+	void Draw(Camera& camera, Shader program, bool instancing, glm::vec3& pos = glm::vec3(1.0f), glm::vec3& rot = glm::vec3(1.0f), float amountOfRotation = 1.0f, glm::vec3& scale = glm::vec3(1.0f), bool bDrawRelativeToCamera = false);
 
 private:
 	GLuint m_vbo, m_ebo;
+	Transform m_transform;
 
 	void CreateMesh(bool instancing);
 };

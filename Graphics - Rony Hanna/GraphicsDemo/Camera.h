@@ -29,6 +29,7 @@ public:
 	void SetCameraPos(glm::vec3 pos)		{ m_cameraPos = pos; }
 	void SetCameraView(glm::vec3 view)		{ m_cameraForward = view; }
 	void SetCameraUpVector(glm::vec3 up)	{ m_cameraUpVector = up; }
+	void SetCameraSpeed(float cameraSpeed)  { m_cameraSpeed = cameraSpeed; }
 
 	glm::mat4& GetProjectionMatrix()		{ return m_projection; }
 	glm::mat4& GetViewMatrix()				{ return m_view; }
@@ -36,6 +37,7 @@ public:
 	glm::vec3& GetCameraForward()			{ return m_cameraForward; }
 	glm::vec3& GetCameraUpVector()			{ return m_cameraUpVector; }
 	glm::vec3& GetCameraRightVector()		{ return m_cameraRight; }
+	float& GetCameraSpeed()					{ return m_cameraSpeed; }
 
 private:
 	glm::mat4 m_projection;

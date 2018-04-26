@@ -10,6 +10,8 @@
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
+#include "Player.h"
+#include "Input.h"
 
 class Game
 {
@@ -22,7 +24,7 @@ public:
 private:
 	void InitMeshes();
 	void InitLights();
-	void ProcessInput();
+	void ProcessInput(static std::vector<SDL_Event>&);
 	void GameLoop();
 	void Update();
 
@@ -41,10 +43,13 @@ private:
 private:
 	Model m_asteroid;
 	Model m_aircraft;
+	Model m_weapon;
 	Terrain m_terrain;
 	DirectionalLight m_dirLight;
 	PointLight m_pointLight;
 	SpotLight m_spotlight;
+	Player m_player;
+	Input m_inputHandler;
 
 private:
 	bool m_spaceScene;

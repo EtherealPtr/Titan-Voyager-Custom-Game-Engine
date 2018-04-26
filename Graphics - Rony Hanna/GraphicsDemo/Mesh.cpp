@@ -8,14 +8,25 @@ Mesh::Mesh(std::vector<MeshVertex> vertices, std::vector<GLuint> indices, std::v
 	CreateMesh(instancing);
 }
 
-void Mesh::Draw(Camera camera, Shader shaderProgram, bool instancing)
+void Mesh::Draw(Camera& camera, Shader shaderProgram, bool instancing, glm::vec3& pos, glm::vec3& rot, float amountOfRotation, glm::vec3& scale, bool bDrawRelativeToCamera)
 {
 	shaderProgram.ActivateProgram();
 
 	glm::mat4 model(1.0f);
-	glm::mat4 translation = glm::translate(glm::vec3(0.0f, -150.0f, 0.0f));
-	glm::mat4 scaleMat = glm::scale(glm::vec3(0.2f, 0.2f, 0.2f));
-	model = translation * scaleMat;
+	glm::mat4 translation = glm::translate(pos);
+	glm::mat4 rotation = glm::rotate(amountOfRotation, rot);
+	glm::mat4 scaleMat = glm::scale(scale);
+
+	if (bDrawRelativeToCamera)
+	{
+		glm::mat4 invViewMat = glm::inverse(camera.GetViewMatrix());
+		model = invViewMat * translation * rotation * scaleMat;
+	}
+	else
+	{
+		model = translation * rotation * scaleMat;
+	}
+
 	shaderProgram.SetMat4("model", model);
 
 	unsigned int diffuseNr = 1;
@@ -56,6 +67,7 @@ void Mesh::Draw(Camera camera, Shader shaderProgram, bool instancing)
 
 	glBindVertexArray(0);
 
+	// Unbind textures 
 	for (GLuint i = 0; i < m_textures.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
