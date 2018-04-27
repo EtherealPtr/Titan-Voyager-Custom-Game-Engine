@@ -2,7 +2,6 @@
 #ifndef __GAME_H__
 #define __GAME_H__
 
-#include <iostream>
 #include "Renderer.h"
 #include "Camera.h"
 #include "Model.h"
@@ -11,7 +10,8 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "Player.h"
-#include "Input.h"
+#include "Physics.h"
+#include "Debugger.h"
 
 class Game
 {
@@ -24,7 +24,7 @@ public:
 private:
 	void InitMeshes();
 	void InitLights();
-	void ProcessInput(static std::vector<SDL_Event>&);
+	void ProcessInput(std::vector<SDL_Event>&);
 	void GameLoop();
 	void Update();
 
@@ -49,7 +49,8 @@ private:
 	PointLight m_pointLight;
 	SpotLight m_spotlight;
 	Player m_player;
-	Input m_inputHandler;
+	Physics m_physics;
+	Debugger m_debugger;
 
 private:
 	bool m_spaceScene;

@@ -91,7 +91,7 @@ void Animation::PlayIdleFPS(Model& gun, Camera& cam, float dt)
 {
 	if (m_defWeaponZOffset <= -2.5f)
 	{
-		m_defWeaponZOffset += 1.0f * dt;
+		m_defWeaponZOffset += 1.5f * dt;
 
 		if (m_defWeaponZOffset >= -2.5f)
 			m_defWeaponZOffset = -2.5f;

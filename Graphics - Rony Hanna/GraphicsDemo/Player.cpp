@@ -8,8 +8,10 @@ Player::~Player()
 {
 }
 
-void Player::Update(Model& weapon, Camera& cam, float dt, static std::vector<SDL_Event> events)
+void Player::Update(Model& weapon, Camera& cam, float dt, std::vector<SDL_Event> events)
 {
+	ProcessInput(cam, dt, events);
+
 #pragma region // CAMERA_MOVEMENT
 	if (m_bCamMovements[CAM_FORWARD])
 		cam.MoveForward(dt);
@@ -25,8 +27,6 @@ void Player::Update(Model& weapon, Camera& cam, float dt, static std::vector<SDL
 		cam.Fall(dt);
 #pragma endregion
 
-	ProcessInput(cam, dt, events);
-
 	if (m_walking)
 	{
 		m_animationComponent.PlayWalkFPS(weapon, cam, dt);
@@ -41,7 +41,7 @@ void Player::Update(Model& weapon, Camera& cam, float dt, static std::vector<SDL
 	}
 }
 
-void Player::ProcessInput(Camera& cam, float dt, static std::vector<SDL_Event> events)
+void Player::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)
 {
 	for (auto i = events.begin(); i != events.end(); ++i)
 	{
@@ -142,27 +142,6 @@ void Player::ProcessInput(Camera& cam, float dt, static std::vector<SDL_Event> e
 			break;
 		}
 		// KEYBOARD_INPUT END
-
-		case SDL_MOUSEMOTION:
-		{
-			cam.MouseUpdate(glm::vec2(i->motion.x, i->motion.y), dt);
-			break;
-		}
-
-		case SDL_MOUSEBUTTONDOWN:
-		{
-			switch (i->button.button)
-			{
-			case SDL_BUTTON_LEFT:
-				break;
-
-			case SDL_BUTTON_RIGHT:
-				break;
-
-			default: break;
-			}
-			break;
-		}
 
 		default:
 			break;

@@ -44,8 +44,10 @@ private:
 	SDL_Surface* m_pImage;
 
 	float m_cellSpacing, m_fTerrainHeight;
-	float m_terrainHeight;
+	float m_terrainLength;
 	float m_terrainWidth;
+	float m_terrainXPos;
+	float m_terrainZPos;
 
 	std::vector<std::vector<float> > m_vHeights;
 	std::vector<unsigned int> m_indices;

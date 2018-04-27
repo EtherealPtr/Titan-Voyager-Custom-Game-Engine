@@ -12,8 +12,8 @@ public:
 	Player();
 	~Player();
 
-	void ProcessInput(Camera& cam, float dt, static std::vector<SDL_Event> events);
-	void Update(Model& weapon, Camera& cam, float dt, static std::vector<SDL_Event> events);
+	void ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events);
+	void Update(Model& weapon, Camera& cam, float dt, std::vector<SDL_Event> events);
 
 	void SetSprinting(bool sprinting) { m_sprinting = sprinting; }
 	void SetWalking(bool walking) { m_walking = walking; }

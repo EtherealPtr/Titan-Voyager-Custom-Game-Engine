@@ -11,10 +11,12 @@
 // -------------------
 Terrain::Terrain() :
 	m_fTerrainHeight(70.0f), m_cellSpacing(2.7f),
-	m_terrainHeight(256), m_terrainWidth(256),
-	m_model(1.0f)
+	m_terrainLength(256), m_terrainWidth(256),
+	m_model(1.0f),
+	m_terrainXPos(0.0f),
+	m_terrainZPos(0.0f)
 {
-	m_model = glm::translate(glm::vec3(-150.0f, -200.0f, -70.0f));
+	m_model = glm::translate(glm::vec3(m_terrainXPos, 0.0f, m_terrainZPos));
 }
 
 // -------------------
@@ -265,7 +267,7 @@ void Terrain::CreateTerrainWithPerlinNoise()
 // -------------------
 glm::vec3 Terrain::CalculateNormal(unsigned int x, unsigned int z)
 {
-	if (x >= 0 && x < m_terrainWidth - 1 && z >= 0 && z < m_terrainHeight - 1)
+	if (x >= 0 && x < m_terrainWidth - 1 && z >= 0 && z < m_terrainLength - 1)
 	{
 		float heightL = GetHeightOfTerrain((float)x - 1, (float)z);
 		float heightR = GetHeightOfTerrain((float)x + 1, (float)z);
@@ -288,13 +290,18 @@ float Terrain::GetHeightOfTerrain(float _X, float _Z)
 {
 	float result = 0.0f;
 
-	float terrainX = _X, terrainZ = _Z;
-	float gridSquareLength = m_terrainHeight / ((float)m_terrainWidth - 1);
+	float terrainX = _X - m_terrainXPos;
+	float terrainZ = _Z - m_terrainZPos;
+
+	// calculate length of grid square
+	float gridSquareLength = m_terrainLength * m_cellSpacing / ((float)m_terrainWidth - 1);
+
+	// Check which grid square the player is in
 	int gridX = (int)std::floor(terrainX / gridSquareLength);
 	int gridZ = (int)std::floor(terrainZ / gridSquareLength);
 
 	// Check if position is on the terrain
-	if (gridX >= m_terrainWidth - 1 || gridZ >= m_terrainHeight - 1 || gridX < 0 || gridZ < 0)
+	if (gridX >= m_terrainWidth - 1 || gridZ >= m_terrainLength - 1 || gridX < 0 || gridZ < 0)
 	{
 		return 0.0f;
 	}

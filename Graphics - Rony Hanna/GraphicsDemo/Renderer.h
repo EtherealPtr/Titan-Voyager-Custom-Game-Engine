@@ -20,6 +20,9 @@ public:
 		return instance;
 	}
 
+	int GetWindowWidth()  { return m_screenWidth; }
+	int GetWindowHeight() { return m_screenHeight; }
+
 	Renderer(Renderer const&) = delete;
 	void operator=(Renderer const&) = delete;
 

@@ -1,5 +1,4 @@
 #include "GameObject.h"
-#include <string>
 
 GameObject::GameObject()
 {
@@ -93,7 +92,7 @@ void GameObject::CreateGameObj(std::vector<Vertex> verts, GLuint numOfVertices, 
 
 	if (bInstancing)
 	{
-		// Do some instancing stuff for the basic shapes here in the future
+		// Note to self: Optimize rendering by doing some instancing stuff for the basic shapes here in the future
 	}
 
 	glBindVertexArray(0);
