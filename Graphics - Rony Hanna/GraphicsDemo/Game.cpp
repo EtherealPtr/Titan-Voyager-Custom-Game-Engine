@@ -22,6 +22,7 @@ void Game::Run()
 {
 	InitMeshes();
 	InitLights();
+	InitDebugger();
 	GameLoop();
 }
 
@@ -42,8 +43,6 @@ void Game::InitMeshes()
 	Renderer::GetInstance().InitMesh(SPHERE, "earth", ++id, defShaders, glm::vec3(0.0f, 0.0f, -60.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(12.0f, 12.0f, 12.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "cubeTex", ++id, defShaders, glm::vec3(50.0f, 0.0f, 50.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
-	m_debugger.Init();
-
 	m_terrain.InitTerrain("res/Shaders/TerrainVertexShader.vs", "res/Shaders/TerrainFragmentShader.fs");
 	m_terrain.CreateTerrainWithPerlinNoise();
 
@@ -62,6 +61,11 @@ void Game::InitLights()
 	m_pointLight.SetLightColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
 	m_spotlight.Configure(glm::vec3(3.0f, 3.0f, 3.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.09f, 0.032f, 22.5f, 25.0f);
+}
+
+void Game::InitDebugger()
+{
+	m_debugger.Init(m_camera);
 }
 
 void Game::GameLoop()
@@ -85,10 +89,10 @@ void Game::GameLoop()
 		ProcessInput(GetFrameEvents());
 		Update();
 
+		// Remove this in the future
 		if (m_physics.GetDebugRayCastDraw())
 		{
-			m_debugger.PrepareRayDebugger(m_physics.GetRay().pos, m_physics.GetRay().dir, m_camera);
-			m_debugger.DrawRay(m_camera);
+			m_debugger.DrawRay(m_physics.GetRay().pos, m_physics.GetRay().dir, m_camera);
 		}
 
 		glEnable(GL_CULL_FACE);

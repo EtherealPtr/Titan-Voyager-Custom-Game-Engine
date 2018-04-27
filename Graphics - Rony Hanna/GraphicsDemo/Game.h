@@ -24,6 +24,7 @@ public:
 private:
 	void InitMeshes();
 	void InitLights();
+	void InitDebugger();
 	void ProcessInput(std::vector<SDL_Event>&);
 	void GameLoop();
 	void Update();

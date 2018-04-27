@@ -13,9 +13,8 @@ public:
 	Debugger();
 	~Debugger();
 
-	void Init();
-	void PrepareRayDebugger(glm::vec3& ray, glm::vec3& rayDir, Camera& cam);
-	void DrawRay(Camera& cam);
+	void Init(Camera& cam);
+	void DrawRay(glm::vec3& rayPos, glm::vec3& rayDir, Camera& cam);
 
 private:
 	Camera m_camera;
