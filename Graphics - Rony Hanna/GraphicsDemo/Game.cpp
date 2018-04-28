@@ -12,6 +12,7 @@ Game::Game() :
 	m_spaceScene(false)
 {
 	m_camera.InitCameraPerspective(80.0f, 1440.0f / 900.0f, 0.1f, 5000.0f);
+	m_cameraHUD.InitCameraOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 0.0f, 100.0f);
 }
 
 Game::~Game()
@@ -32,6 +33,7 @@ void Game::InitMeshes()
 	std::vector<char*> defShaders{ "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs" };
 	std::vector<char*> skyboxShaders{ "res/Shaders/SkyboxVertexShader.vs", "res/Shaders/SkyboxFragmentShader.fs" };
 	std::vector<char*> normalMappingShaders{ "res/Shaders/NormalMapping.vs", "res/Shaders/NormalMapping.fs" };
+	std::vector<char*> hudShaders{ "res/Shaders/HUD.vs", "res/Shaders/HUD.fs" };
 
 	Renderer::GetInstance().InitMesh(QUAD, "saturnRings", ++id, defShaders, glm::vec3(200.0f, 160.0f, -500.0f), glm::vec3(-65.0f, 0.0f, 0.0f), glm::vec3(330.0f, 330.0f, 330.0f));
 	Renderer::GetInstance().InitMesh(CUBE, "cubeTex", ++id, normalMappingShaders, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), "cubeTexNormalMap");
@@ -41,7 +43,7 @@ void Game::InitMeshes()
 	Renderer::GetInstance().InitMesh(SPHERE, "mercury", ++id, defShaders, glm::vec3(50.0f, 45.0f, -60.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(4.56f, 4.56f, 4.56f));
 	Renderer::GetInstance().InitMesh(SPHERE, "neptune", ++id, defShaders, glm::vec3(-200.0f, -70.0f, -180.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(40.0f, 40.0f, 40.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "earth", ++id, defShaders, glm::vec3(0.0f, 0.0f, -60.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(12.0f, 12.0f, 12.0f));
-	Renderer::GetInstance().InitMesh(SPHERE, "cubeTex", ++id, defShaders, glm::vec3(50.0f, 0.0f, 50.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	Renderer::GetInstance().InitMesh(QUAD, "crossHair", ++id, hudShaders, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
 	m_terrain.InitTerrain("res/Shaders/TerrainVertexShader.vs", "res/Shaders/TerrainFragmentShader.fs");
 	m_terrain.CreateTerrainWithPerlinNoise();
@@ -98,11 +100,10 @@ void Game::GameLoop()
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 
-		m_spotlight.SetPosition(glm::vec3(m_camera.GetCameraPos().x, m_camera.GetCameraPos().y, m_camera.GetCameraPos().z));
-		m_spotlight.SetDirection(glm::vec3(m_camera.GetCameraForward().x, m_camera.GetCameraForward().y, m_camera.GetCameraForward().z));
+		//m_spotlight.SetPosition(glm::vec3(m_camera.GetCameraPos().x, m_camera.GetCameraPos().y, m_camera.GetCameraPos().z));
+		//m_spotlight.SetDirection(glm::vec3(m_camera.GetCameraForward().x, m_camera.GetCameraForward().y, m_camera.GetCameraForward().z));
 
-		Renderer::GetInstance().GetComponent(LIGHT_BULB).GetTransformComponent().SetPos(glm::vec3(50.0f, m_terrain.GetHeightOfTerrain(50.0f, 50.0f), 50.0f));
-		Renderer::GetInstance().GetComponent(LIGHT_BULB).Draw(m_camera);
+		Renderer::GetInstance().GetComponent(FPS_CROSSHAIR).Draw(m_cameraHUD);
 
 		if (m_spaceScene)
 		{

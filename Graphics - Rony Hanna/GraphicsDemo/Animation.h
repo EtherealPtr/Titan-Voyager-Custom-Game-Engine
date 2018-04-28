@@ -21,6 +21,7 @@ private:
 	float m_defWeaponYOffset;
 	bool weaponMoveUp;
 	bool weaponMoveForward;
+	float m_idleYOffset;
 };
 
 #endif // !__ANIMATION_H__

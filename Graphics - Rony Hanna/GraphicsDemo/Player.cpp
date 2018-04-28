@@ -10,6 +10,12 @@ Player::~Player()
 
 void Player::Update(Model& weapon, Camera& cam, float dt, std::vector<SDL_Event> events)
 {
+	if (!IsPlayerWalking())
+	{
+		m_walking = false;
+		m_sprinting = false;
+	}
+
 	ProcessInput(cam, dt, events);
 
 #pragma region // CAMERA_MOVEMENT
@@ -39,6 +45,12 @@ void Player::Update(Model& weapon, Camera& cam, float dt, std::vector<SDL_Event>
 	{
 		m_animationComponent.PlayIdleFPS(weapon, cam, dt);
 	}
+}
+
+// Function that checks if the camera (FPS character) is moving 
+bool Player::IsPlayerWalking()
+{
+	return m_bCamMovements[CAM_FORWARD] || m_bCamMovements[CAM_BACKWARD] || m_bCamMovements[CAM_LEFT] || m_bCamMovements[CAM_RIGHT];
 }
 
 void Player::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)
@@ -81,8 +93,13 @@ void Player::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)
 				break;
 
 			case SDLK_LSHIFT:
-				cam.SetCameraSpeed(30.0f);
-				m_sprinting = true;
+				// Only sprint if the player is already walking 
+				if (IsPlayerWalking())
+				{
+					cam.SetCameraSpeed(30.0f);
+					m_sprinting = true;
+				}
+
 				m_walking = false;
 				break;
 
@@ -98,22 +115,18 @@ void Player::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)
 			{
 			case SDLK_w:
 				m_bCamMovements[CAM_FORWARD] = false;
-				m_walking = false;
 				break;
 
 			case SDLK_s:
 				m_bCamMovements[CAM_BACKWARD] = false;
-				m_walking = false;
 				break;
 
 			case SDLK_a:
 				m_bCamMovements[CAM_LEFT] = false;
-				m_walking = false;
 				break;
 
 			case SDLK_d:
 				m_bCamMovements[CAM_RIGHT] = false;
-				m_walking = false;
 				break;
 
 			case SDLK_r:
@@ -127,11 +140,11 @@ void Player::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)
 			case SDLK_LSHIFT:
 				m_sprinting = false;
 
-				if (m_bCamMovements[CAM_FORWARD] || m_bCamMovements[CAM_BACKWARD] || m_bCamMovements[CAM_LEFT] || m_bCamMovements[CAM_RIGHT])
+				if (IsPlayerWalking())
 				{
 					m_walking = true;
 				}
-
+			
 				cam.SetCameraSpeed(20.0f);
 
 				break;

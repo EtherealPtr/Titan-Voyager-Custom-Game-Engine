@@ -29,13 +29,12 @@ private:
 	void GameLoop();
 	void Update();
 
-	Camera m_camera;
 
 private:
 	enum { CAM_FORWARD, CAM_BACKWARD, CAM_LEFT, CAM_RIGHT, CAM_RISE, CAM_FALL, TOTAL_CAM_MOVES };
 	bool m_bCamMovements[TOTAL_CAM_MOVES];
 	
-	enum { SATURN_RINGS = 1, SPACE_CUBE, SKYBOX, SATURN, MARS, MERCURY, NEPTUNE, EARTH, LIGHT_BULB };
+	enum { SATURN_RINGS = 1, SPACE_CUBE, SKYBOX, SATURN, MARS, MERCURY, NEPTUNE, EARTH, FPS_CROSSHAIR };
 	
 	enum class GameState { MAIN_MENU = 100, PLAY, EXIT, TOTAL_STATES };
 	GameState m_gameState;
@@ -52,6 +51,8 @@ private:
 	Player m_player;
 	Physics m_physics;
 	Debugger m_debugger;
+	Camera m_camera;
+	Camera m_cameraHUD;
 
 private:
 	bool m_spaceScene;

@@ -24,10 +24,6 @@ void Engine::LoadApplicationResources()
 {
 	bool bUnitTest;
 
-	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/wall.jpg", "wall");
-	assert(bUnitTest);
-	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/mario.png", "mario");
-	assert(bUnitTest);
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/cubeTex.png", "cubeTex");
 	assert(bUnitTest);
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/cubeTex_NormalMap.png", "cubeTexNormalMap");
@@ -43,6 +39,8 @@ void Engine::LoadApplicationResources()
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/earth.jpg", "earth");
 	assert(bUnitTest);
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/saturn_rings.png", "saturnRings");
+	assert(bUnitTest);
+	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/crossHair.png", "crossHair");
 	assert(bUnitTest);
 
 	// Terrain textures

@@ -116,7 +116,7 @@ bool Physics::RaySphere(Camera& cam, glm::vec3 RayDirWorld, double SphereRadius,
 
 void Physics::CheckCollision(Camera& cam, Terrain& terrain)
 {
-	m_collision = RaySphere(cam, m_ray.dir, 3.0f, 50.0f, terrain.GetHeightOfTerrain(50.0f, 50.0f), 50.0f);
+	m_collision = RaySphere(cam, m_ray.dir, 3.0f, 50.0f, terrain.GetHeightOfTerrain(50.0f, 50.0f) + 25.0f, 50.0f);
 
 	if (m_collision)
 	{

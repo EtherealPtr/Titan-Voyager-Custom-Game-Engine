@@ -22,6 +22,7 @@ void Texture::GenerateTexture(char* textureId)
 	int h = ResourceManager::GetInstance().GetImageHeight(textureId);
 
 	glGenTextures(1, &m_texture);
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 
 	// Texture wrapping

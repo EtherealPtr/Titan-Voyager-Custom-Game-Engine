@@ -18,8 +18,7 @@ public:
 	void SetSprinting(bool sprinting) { m_sprinting = sprinting; }
 	void SetWalking(bool walking) { m_walking = walking; }
 
-	bool& GetSprinting() { return m_sprinting; }
-	bool& GetWalking() { return m_walking; }
+	bool IsPlayerWalking();
 
 private:
 	enum { CAM_FORWARD, CAM_BACKWARD, CAM_LEFT, CAM_RIGHT, CAM_RISE, CAM_FALL, TOTAL_CAM_MOVES };
