@@ -5,7 +5,7 @@
 #include "Camera.h"
 #include "Dependencies/SDL2/include/SDL.h"
 #include <vector>
-#include "Terrain.h"
+#include "Enemy.h"
 
 struct Ray
 {
@@ -19,8 +19,8 @@ public:
 	Physics();
 	~Physics();
 
-	void ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events, Terrain& terrain);
-	void Update(Camera& cam, float dt, std::vector<SDL_Event> events, Terrain& terrain);
+	void ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events);
+	void Update(Camera& cam, float dt, std::vector<SDL_Event> events, std::vector<Enemy*> enemies);
 
 	Ray CastRayFromMouse(Camera& cam);
 	Ray CastRayFromWeapon(Camera& cam);
@@ -30,7 +30,7 @@ public:
 
 	bool GetDebugRayCastDraw() { return m_debugRayCastDraw; }
 
-	void CheckCollision(Camera& cam, Terrain& terrain);
+	void CheckCollision(Camera& cam, std::vector<Enemy*> enemies);
 	bool OnHit();
 
 private:

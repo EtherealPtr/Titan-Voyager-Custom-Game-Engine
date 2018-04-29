@@ -42,7 +42,9 @@ void Engine::LoadApplicationResources()
 	assert(bUnitTest);
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/crossHair.png", "crossHair");
 	assert(bUnitTest);
-
+	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/enemy01.jpg", "enemySphere");
+	assert(bUnitTest);
+	
 	// Terrain textures
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/soil01.jpg", "soil");
 	assert(bUnitTest);

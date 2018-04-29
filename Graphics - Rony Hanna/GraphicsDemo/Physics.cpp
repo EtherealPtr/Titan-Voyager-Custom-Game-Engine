@@ -5,26 +5,27 @@
 Physics::Physics() :
 	m_mouseX(0.0f),
 	m_mouseY(0.0f),
-	m_castRay(false)
+	m_castRay(false),
+	m_collision(false)
 {
 }
 
 Physics::~Physics()
 {}
 
-void Physics::Update(Camera& cam, float dt, std::vector<SDL_Event> events, Terrain& terrain)
+void Physics::Update(Camera& cam, float dt, std::vector<SDL_Event> events, std::vector<Enemy*> enemies)
 {
-	ProcessInput(cam, dt, events, terrain);
+	ProcessInput(cam, dt, events);
 
 	if (m_castRay)
 	{
 		m_debugRayCastDraw = true;
 		m_ray = CastRayFromWeapon(cam);
-		CheckCollision(cam, terrain);
+		CheckCollision(cam, enemies);
 	}
 }
 
-void Physics::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events, Terrain& terrain)
+void Physics::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)
 {
 	for (auto i = events.begin(); i != events.end(); ++i)
 	{
@@ -132,9 +133,12 @@ bool Physics::RaySphere(Camera& cam, glm::vec3 RayDirWorld, double SphereRadius,
 	return false;
 }
 
-void Physics::CheckCollision(Camera& cam, Terrain& terrain)
+void Physics::CheckCollision(Camera& cam, std::vector<Enemy*> enemies)
 {
-	m_collision = RaySphere(cam, m_ray.dir, 3.0f, 50.0f, terrain.GetHeightOfTerrain(50.0f, 50.0f) + 25.0f, 50.0f);
+	for (auto i = enemies.begin(); i != enemies.end(); ++i)
+	{
+		m_collision = RaySphere(cam, m_ray.dir, 3.0f, (*i)->GetPos().x, (*i)->GetPos().y, (*i)->GetPos().z);
+	}
 
 	if (m_collision)
 	{
@@ -144,6 +148,6 @@ void Physics::CheckCollision(Camera& cam, Terrain& terrain)
 
 bool Physics::OnHit()
 {
-	printf("Hello");
-	return false;
+	printf("Hello ");
+	return true;
 }
