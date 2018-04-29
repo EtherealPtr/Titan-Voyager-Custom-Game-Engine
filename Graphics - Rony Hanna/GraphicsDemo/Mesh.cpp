@@ -28,6 +28,8 @@ void Mesh::Draw(Camera& camera, Shader shaderProgram, bool instancing, glm::vec3
 	}
 
 	shaderProgram.SetMat4("model", model);
+	shaderProgram.SetVec3("lightPos", glm::vec3(camera.GetCameraPos().x, camera.GetCameraPos().y + 5.0f, camera.GetCameraPos().z));
+	shaderProgram.SetVec3("viewPos", glm::vec3(camera.GetCameraPos().x, camera.GetCameraPos().y, camera.GetCameraPos().z));
 
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;

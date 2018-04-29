@@ -13,6 +13,8 @@ uniform vec3 viewPos;
 
 void main()
 {
+	vec4 texColor = texture(meshTexture, vertexUv);
+
 	float ambientFactor = 0.3f;
 	vec3 lightColor = vec3(0.5f, 0.972f, 0.905f);
 	vec3 ambient = ambientFactor * lightColor;
@@ -21,13 +23,11 @@ void main()
 	vec3 lightDir = normalize(lightPos - fragPos);
 
 	float diff = max(dot(norm, lightDir), 0.0f);
-	vec3 diffuse = diff * lightColor;
-	vec4 texColor = texture(meshTexture, vertexUv); 
+	vec3 diffuse = diff * lightColor;	 
 
 	float specularFactor = 0.5f;
 	vec3 viewDir = normalize(viewPos - fragPos);
 	vec3 reflectDir = reflect(-lightDir, norm);
-
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
 	vec3 specular = specularFactor * spec * lightColor;
 

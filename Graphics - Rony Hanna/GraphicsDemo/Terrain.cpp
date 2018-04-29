@@ -374,6 +374,7 @@ void Terrain::Draw(Camera& _cam, DirectionalLight* directionLight, PointLight* l
 	m_terrainShader.SetVec3("dirLight.ambient", directionLight->GetAmbient());
 	m_terrainShader.SetVec3("dirLight.diffuse", directionLight->GetDiffuse());
 	m_terrainShader.SetVec3("dirLight.specular", directionLight->GetSpecular());
+	m_terrainShader.SetVec3("dirLight.lightColour", directionLight->GetColour());
 
 		// b. Some light bulbs
 	m_terrainShader.SetVec3("pointLight.position", lamp->GetPos()); 

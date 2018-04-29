@@ -9,7 +9,7 @@ std::vector<SDL_Event>& GetFrameEvents()
 Game::Game() :
 	m_deltaTime(0.0f),
 	m_gameState(GameState::PLAY),
-	m_spaceScene(false)
+	m_spaceScene(true)
 {
 	m_camera.InitCameraPerspective(80.0f, 1440.0f / 900.0f, 0.1f, 5000.0f);
 	m_cameraHUD.InitCameraOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 0.0f, 100.0f);
@@ -57,6 +57,7 @@ void Game::InitLights()
 {
 	m_dirLight.Configure(glm::vec3(0.01f, 0.01f, 0.01f), glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(0.5f, 0.5f, 0.5f));
 	m_dirLight.SetDirection(glm::vec3(0.2f, 1.0f, 0.5f));
+	m_dirLight.SetColour(glm::vec3(0.97f, 0.88f, 0.70f));
 
 	m_pointLight.Configure(glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.014f, 0.0007f);
 	m_pointLight.SetPosition(glm::vec3(-39.0f, 50.0f, 44.0f));
@@ -69,7 +70,6 @@ void Game::InitDebugger()
 {
 	m_debugger.Init(m_camera);
 }
-
 void Game::GameLoop()
 {
 	float lastFrame = 0.0;
@@ -134,7 +134,7 @@ void Game::GameLoop()
 		glDisable(GL_CULL_FACE);
 
 		m_terrain.Draw(m_camera, &m_dirLight, &m_pointLight, &m_spotlight);
-		//m_aircraft.Draw(m_camera, glm::vec3(30.0f, -140.0f, 40.0f), glm::vec3(1.0f), 0.0f, glm::vec3(0.2f, 0.2f, 0.2f));
+		//m_aircraft.Draw(m_camera, glm::vec3(100.0f, 0.0f, 40.0f), glm::vec3(1.0f), 0.0f, glm::vec3(0.2f, 0.2f, 0.2f));
 
 		Renderer::GetInstance().GetComponent(SKYBOX).Draw(m_camera);
 

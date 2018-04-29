@@ -4,7 +4,8 @@
 
 Physics::Physics() :
 	m_mouseX(0.0f),
-	m_mouseY(0.0f)
+	m_mouseY(0.0f),
+	m_castRay(false)
 {
 }
 
@@ -14,6 +15,13 @@ Physics::~Physics()
 void Physics::Update(Camera& cam, float dt, std::vector<SDL_Event> events, Terrain& terrain)
 {
 	ProcessInput(cam, dt, events, terrain);
+
+	if (m_castRay)
+	{
+		m_debugRayCastDraw = true;
+		m_ray = CastRayFromWeapon(cam);
+		CheckCollision(cam, terrain);
+	}
 }
 
 void Physics::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events, Terrain& terrain)
@@ -29,19 +37,29 @@ void Physics::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events,
 			cam.MouseUpdate(glm::vec2(i->motion.x, i->motion.y), dt);
 			break;
 		}
-
+		
 		case SDL_MOUSEBUTTONDOWN:
 		{
 			switch (i->button.button)
 			{
 			case SDL_BUTTON_LEFT:
-				m_debugRayCastDraw = true;
-				m_ray = CastRayFromWeapon(cam);
-				CheckCollision(cam, terrain);
-
+				m_castRay = true;
 				break;
 
 			case SDL_BUTTON_RIGHT:			
+				break;
+
+			default: break;
+			}
+			break;
+		}
+
+		case SDL_MOUSEBUTTONUP:
+		{
+			switch (i->button.button)
+			{
+			case SDL_BUTTON_LEFT:
+				m_castRay = false;
 				break;
 
 			default: break;

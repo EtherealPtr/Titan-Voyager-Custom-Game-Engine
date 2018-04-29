@@ -39,6 +39,7 @@ private:
 	float m_mouseY;
 	bool m_debugRayCastDraw;
 	bool m_collision;
+	bool m_castRay;
 };
 
 #endif // !__PHYSICS_H__

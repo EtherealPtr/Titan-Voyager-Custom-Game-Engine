@@ -7,6 +7,8 @@ struct DirectionalLight
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
+	
+	vec3 lightColour;
 };
 
 struct PointLight
@@ -109,9 +111,9 @@ vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir
 	float spec = pow(max(dot(viewDir, reflectDirection), 0.0f), 32);
 	
 	// Add results
-	vec3 ambient = light.ambient * totalColour.rgb;
-	vec3 diffuse = light.diffuse * totalColour.rgb;
-	vec3 specular = light.specular * totalColour.rgb;
+	vec3 ambient = light.ambient * dirLight.lightColour;
+	vec3 diffuse = light.diffuse * dirLight.lightColour;
+	vec3 specular = light.specular * dirLight.lightColour;
 	
 	return (ambient + diffuse + specular);
 }
