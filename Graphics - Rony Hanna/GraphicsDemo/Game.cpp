@@ -44,12 +44,12 @@ void Game::InitMeshes()
 	Renderer::GetInstance().InitMesh(SPHERE, "neptune", ++id, defShaders, glm::vec3(-200.0f, -70.0f, -180.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(40.0f, 40.0f, 40.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "earth", ++id, defShaders, glm::vec3(0.0f, 0.0f, -60.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(12.0f, 12.0f, 12.0f));
 	Renderer::GetInstance().InitMesh(QUAD, "crossHair", ++id, hudShaders, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-	Renderer::GetInstance().InitMesh(SPHERE, "enemySphere", ++id, defShaders, glm::vec3(40.0f, 0.0f, 40.0f), glm::vec3(0.0f, 90.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
 	m_terrain.InitTerrain("res/Shaders/TerrainVertexShader.vs", "res/Shaders/TerrainFragmentShader.fs");
 	m_terrain.CreateTerrainWithPerlinNoise();
-	Enemy* enemy01 = new Enemy;
+	Enemy* enemy01 = new Enemy(m_camera);
 	m_enemies.push_back(enemy01);
+	m_enemies.at(0)->InitMesh();
 	m_weapon.Init("res/Models3D/Rifle/M24_R_Low_Poly_Version_obj.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
 	//m_aircraft.Init("res/Models3D/Walkyrie/object.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
 	//m_asteroid.Init("res/Models3D/Rock/rock.obj", m_camera, "res/Shaders/InstancingVert.vs", "res/Shaders/InstancingFrag.fs", true);
@@ -72,6 +72,7 @@ void Game::InitDebugger()
 {
 	m_debugger.Init(m_camera);
 }
+
 void Game::GameLoop()
 {
 	float lastFrame = 0.0;
@@ -107,19 +108,6 @@ void Game::GameLoop()
 
 		Renderer::GetInstance().GetComponent(FPS_CROSSHAIR).Draw(m_cameraHUD);
 
-		// Update enemies
-		for (auto i = m_enemies.begin(); i != m_enemies.end(); ++i)
-		{
-			(*i)->Seek(m_camera, m_deltaTime);
-			float x = (*i)->GetPos().x;
-			float z = (*i)->GetPos().z;
-			float y = m_terrain.GetHeightOfTerrain((*i)->GetPos().x, (*i)->GetPos().z) + 5.0f;
-
-			(*i)->SetPos(glm::vec3(x, y, z));
-			Renderer::GetInstance().GetComponent(ENEMY01).GetTransformComponent().SetPos((*i)->GetPos());
-			Renderer::GetInstance().GetComponent(ENEMY01).Draw(m_camera, glm::vec3(x, y - 2.0f, z));
-		}
-
 		if (m_spaceScene)
 		{
 			Renderer::GetInstance().GetComponent(SPACE_CUBE).Draw(m_camera, glm::vec3(0.0f, 0.0f, 0.0f), true);
@@ -142,9 +130,9 @@ void Game::GameLoop()
 
 			Renderer::GetInstance().GetComponent(EARTH).GetTransformComponent().GetRot().y += 2.0f * m_deltaTime;
 			Renderer::GetInstance().GetComponent(EARTH).Draw(m_camera);
+			
+			//m_asteroid.DrawInstanced(m_camera);
 		}
-
-		//m_asteroid.DrawInstanced(m_camera);
 
 		glDisable(GL_CULL_FACE);
 
@@ -165,6 +153,15 @@ void Game::Update()
 	m_camera.UpdateLookAt();
 	m_camera.GetCameraPos().y = m_terrain.GetHeightOfTerrain(m_camera.GetCameraPos().x, m_camera.GetCameraPos().z) + 10.0f;
 	m_player.Update(m_weapon, m_camera, m_deltaTime, GetFrameEvents());
+
+	// Update enemies
+	for (auto i = m_enemies.begin(); i != m_enemies.end(); ++i)
+	{
+		(*i)->Seek(m_camera, m_deltaTime);
+		(*i)->Update(m_terrain, m_camera);
+		(*i)->Draw();
+	}
+
 	m_physics.Update(m_camera, m_deltaTime, GetFrameEvents(), m_enemies);
 }
 

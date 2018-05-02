@@ -4,19 +4,25 @@
 
 #include "Model.h"
 #include "Camera.h"
+#include "Terrain.h"
 
 class Enemy
 {
 public:
-	Enemy();
+	Enemy(Camera& cam);
 	~Enemy();
 
-	void SetPos(glm::vec3& pos) { m_pos = pos; }
+	void InitMesh();
+	void Draw();
+	void Update(Terrain& terrain, Camera& cam);
+	void SetPos(glm::vec3& pos);
 	glm::vec3& GetPos() { return m_pos; }
 
 	void Seek(Camera& target, float dt);
 
 private:
+	Camera m_camera;
+	Model m_model;
 	glm::vec3 m_pos;
 	glm::vec3 m_velocity;
 	float m_maximumSpeed;
