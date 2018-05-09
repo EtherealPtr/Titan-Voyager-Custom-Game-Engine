@@ -22,6 +22,7 @@ Game::~Game()
 void Game::Run()
 {
 	InitMeshes();
+	InitParticleSystem();
 	InitLights();
 	InitDebugger();
 	GameLoop();
@@ -50,7 +51,7 @@ void Game::InitMeshes()
 	Enemy* enemy01 = new Enemy(m_camera);
 	m_enemies.push_back(enemy01);
 	m_enemies.at(0)->InitMesh();
-	m_weapon.Init("res/Models3D/Rifle/M24_R_Low_Poly_Version_obj.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
+	m_weapon.Init("res/Models3D/Rifle/M24_R.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
 	//m_aircraft.Init("res/Models3D/Walkyrie/object.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
 	//m_asteroid.Init("res/Models3D/Rock/rock.obj", m_camera, "res/Shaders/InstancingVert.vs", "res/Shaders/InstancingFrag.fs", true);
 }
@@ -71,6 +72,11 @@ void Game::InitLights()
 void Game::InitDebugger()
 {
 	m_debugger.Init(m_camera);
+}
+
+void Game::InitParticleSystem()
+{
+	m_particleSystem.Init("res/Shaders/Particle System Shaders/VertexShader.vs", "res/Shaders/Particle System Shaders/FragmentShader.fs", 3); 
 }
 
 void Game::GameLoop()
@@ -138,6 +144,8 @@ void Game::GameLoop()
 
 		m_terrain.Draw(m_camera, &m_dirLight, &m_pointLight, &m_spotlight);
 		//m_aircraft.Draw(m_camera, glm::vec3(100.0f, 0.0f, 40.0f), glm::vec3(1.0f), 0.0f, glm::vec3(0.2f, 0.2f, 0.2f));
+
+	    m_particleSystem.Render(m_camera, m_deltaTime);
 
 		Renderer::GetInstance().GetComponent(SKYBOX).Draw(m_camera);
 

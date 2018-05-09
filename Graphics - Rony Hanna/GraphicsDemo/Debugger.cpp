@@ -1,4 +1,4 @@
-// Note to self: Review this file and optimize where possible in the future  
+// Note to self: Review this file and optimize where possible in the future if needed
 #include "Debugger.h"
 #include <vector>
 
@@ -33,7 +33,8 @@ void Debugger::DrawRay(glm::vec3& rayPos, glm::vec3& rayDir, Camera& cam)
 {
 	m_shader.ActivateProgram();
 
-	float vertices[] = {
+	float vertices[] = 
+	{
 		rayPos.x, rayPos.y, rayPos.z,
 		rayPos.x, rayPos.y + 0.1f, rayPos.z,
 		(rayDir.x * 50.0f) + rayPos.x, (rayDir.y * 50.0f) + rayPos.y, (rayDir.z * 50.0f) + rayPos.z
