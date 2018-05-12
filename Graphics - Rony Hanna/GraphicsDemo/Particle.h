@@ -14,8 +14,9 @@ public:
 	~Particle();
 
 	glm::vec3 GetPos() { return m_position; }
+	glm::vec4 GetCol() { return m_color; }
 
-	void Update(float deltaTime);
+	bool Update(float deltaTime);
 
 private:
 	glm::vec3 m_position;

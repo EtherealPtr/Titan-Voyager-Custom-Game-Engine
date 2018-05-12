@@ -11,6 +11,7 @@ Game::Game() :
 	m_gameState(GameState::PLAY),
 	m_spaceScene(false)
 {
+	srand(static_cast<unsigned int>(time(NULL)));
 	m_camera.InitCameraPerspective(80.0f, 1440.0f / 900.0f, 0.1f, 5000.0f);
 	m_cameraHUD.InitCameraOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 0.0f, 100.0f);
 }
@@ -76,7 +77,9 @@ void Game::InitDebugger()
 
 void Game::InitParticleSystem()
 {
-	m_particleSystem.Init("res/Shaders/Particle System Shaders/VertexShader.vs", "res/Shaders/Particle System Shaders/FragmentShader.fs", 3); 
+	m_particleSystem.Init("res/Shaders/Particle System Shaders/VertexShader.vs", 
+						  "res/Shaders/Particle System Shaders/GeometryShader.geom", 
+						  "res/Shaders/Particle System Shaders/FragmentShader.fs", 50); 
 }
 
 void Game::GameLoop()

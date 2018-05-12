@@ -15,14 +15,14 @@ public:
 	ParticleEmitter();
 	~ParticleEmitter();
 
-	void Init(char* vs, char* fs, int numberOfParticles);
+	void Init(char* vs, char* gs, char* fs, int numberOfParticles);
 	void Render(Camera& camera, float dt);
 
 	std::vector<Particle>& GetParticle() { return m_particles; }
 	std::vector<glm::vec3>& GetPos() { return m_position; }
 
 private:
-	enum { VERTEX_VB, TEXTURE_VB, TOTAL_BUFFERS };
+	enum { VERTEX_VB, COLOR_VB, TOTAL_BUFFERS };
 
 	Transform m_transform;
 	GLuint m_vao, m_vbo[TOTAL_BUFFERS], m_textureID;
