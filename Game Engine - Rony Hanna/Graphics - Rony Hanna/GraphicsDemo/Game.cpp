@@ -11,6 +11,7 @@ Game::Game() :
 	m_gameState(GameState::PLAY),
 	m_spaceScene(false)
 {
+	srand(static_cast<unsigned int>(time(NULL)));
 	m_camera.InitCameraPerspective(80.0f, 1440.0f / 900.0f, 0.1f, 5000.0f);
 	m_cameraHUD.InitCameraOrthographic(-10.0f, 10.0f, -10.0f, 10.0f, 0.0f, 100.0f);
 }
@@ -22,6 +23,7 @@ Game::~Game()
 void Game::Run()
 {
 	InitMeshes();
+	InitParticleSystem();
 	InitLights();
 	InitDebugger();
 	GameLoop();
@@ -47,10 +49,12 @@ void Game::InitMeshes()
 
 	m_terrain.InitTerrain("res/Shaders/TerrainVertexShader.vs", "res/Shaders/TerrainFragmentShader.fs");
 	m_terrain.CreateTerrainWithPerlinNoise();
+
 	Enemy* enemy01 = new Enemy(m_camera);
 	m_enemies.push_back(enemy01);
 	m_enemies.at(0)->InitMesh();
-	m_weapon.Init("res/Models3D/Rifle/M24_R_Low_Poly_Version_obj.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
+
+	m_weapon.Init("res/Models3D/Rifle/M24_R.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
 	//m_aircraft.Init("res/Models3D/Walkyrie/object.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
 	//m_asteroid.Init("res/Models3D/Rock/rock.obj", m_camera, "res/Shaders/InstancingVert.vs", "res/Shaders/InstancingFrag.fs", true);
 }
@@ -71,6 +75,13 @@ void Game::InitLights()
 void Game::InitDebugger()
 {
 	m_debugger.Init(m_camera);
+}
+
+void Game::InitParticleSystem()
+{
+	m_particleSystem.Init("res/Shaders/Particle System Shaders/VertexShader.vs", 
+						  "res/Shaders/Particle System Shaders/GeometryShader.geom", 
+						  "res/Shaders/Particle System Shaders/FragmentShader.fs", 25); 
 }
 
 void Game::GameLoop()
@@ -138,6 +149,8 @@ void Game::GameLoop()
 
 		m_terrain.Draw(m_camera, &m_dirLight, &m_pointLight, &m_spotlight);
 		//m_aircraft.Draw(m_camera, glm::vec3(100.0f, 0.0f, 40.0f), glm::vec3(1.0f), 0.0f, glm::vec3(0.2f, 0.2f, 0.2f));
+		
+	    m_particleSystem.Render(m_camera, m_deltaTime, glm::vec3(m_camera.GetCameraPos().x + 1.7f, m_camera.GetCameraPos().y, m_camera.GetCameraPos().z + 1.0f));
 
 		Renderer::GetInstance().GetComponent(SKYBOX).Draw(m_camera);
 

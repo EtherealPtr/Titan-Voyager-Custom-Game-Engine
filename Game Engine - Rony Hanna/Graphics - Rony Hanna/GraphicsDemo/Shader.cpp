@@ -84,6 +84,44 @@ GLuint Shader::CreateProgram(char* vertexShaderFile, char* fragmentShaderFile)
 	return m_program;
 }
 
+GLuint Shader::CreateProgram(char* vertexShader, char* geomShader, char* fragmentShader)
+{
+	int LinkingResult = 0;
+
+	// Read shader files and save their IDs
+	std::string VertexShaderID = LoadShaderFromFile(vertexShader);
+	std::string GeomShaderID = LoadShaderFromFile(geomShader);
+	std::string FragmentShaderID = LoadShaderFromFile(fragmentShader);
+
+	GLuint VertexShader = CreateShader(GL_VERTEX_SHADER, VertexShaderID);
+	GLuint GeometryShader = CreateShader(GL_GEOMETRY_SHADER, GeomShaderID);
+	GLuint FragmentShader = CreateShader(GL_FRAGMENT_SHADER, FragmentShaderID);
+
+	// Creates program, attach shaders, and link shaders
+	m_program = glCreateProgram();
+	glAttachShader(m_program, VertexShader);
+	glAttachShader(m_program, GeometryShader);
+	glAttachShader(m_program, FragmentShader);
+
+	glLinkProgram(m_program);
+
+#pragma region ERROR_HANDLING
+	{
+		int programStatus = 0;
+		char infoLogBuffer[512];
+		glGetProgramiv(m_program, GL_LINK_STATUS, &programStatus);
+
+		if (!programStatus)
+		{
+			glGetProgramInfoLog(m_program, 512, NULL, infoLogBuffer);
+			std::cerr << "SHADER ERROR: Unable to link shader program.\n" << infoLogBuffer << "\n";
+		}
+	}
+#pragma endregion // ERROR_HANDLING
+
+	return m_program;
+}
+
 // -------------------
 // Author: Rony Hanna
 // Description: Function that reads an external shader file
@@ -110,7 +148,7 @@ std::string Shader::LoadShaderFromFile(char* shaderFile)
 
 // -------------------
 // Author: Rony Hanna
-// Description: Function that creates a shader
+// Description: Function that creates and compiles a shader
 // -------------------
 GLuint Shader::CreateShader(GLenum shaderType, std::string source)
 {

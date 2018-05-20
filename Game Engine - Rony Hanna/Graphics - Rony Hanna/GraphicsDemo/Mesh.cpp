@@ -103,7 +103,6 @@ void Mesh::CreateMesh(bool instancing)
 		unsigned int amount = 25000;
 		glm::mat4* m_modelMatricesIns;
 		m_modelMatricesIns = new glm::mat4[amount];
-		srand(static_cast<unsigned int>(time(NULL)));
 		float radius = 250.0f;
 		float offset = 25.0f;
 

@@ -13,6 +13,7 @@
 #include "Physics.h"
 #include "Debugger.h"
 #include "Enemy.h"
+#include "ParticleEmitter.h"
 
 class Game
 {
@@ -26,6 +27,7 @@ private:
 	void InitMeshes();
 	void InitLights();
 	void InitDebugger();
+	void InitParticleSystem();
 	void ProcessInput(std::vector<SDL_Event>&);
 	void GameLoop();
 	void Update();
@@ -54,6 +56,7 @@ private:
 	Debugger m_debugger;
 	Camera m_camera;
 	Camera m_cameraHUD;
+	ParticleEmitter m_particleSystem;
 	std::vector<Enemy*> m_enemies;
 
 private:

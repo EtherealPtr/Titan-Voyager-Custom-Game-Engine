@@ -28,6 +28,12 @@
     <Filter Include="Source Files\AI">
       <UniqueIdentifier>{cb237d4a-e015-4309-a924-0fd301368361}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Particle System">
+      <UniqueIdentifier>{5268f8fd-47eb-4479-9754-49d12c67f1ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Particle System">
+      <UniqueIdentifier>{536ff087-0936-4e80-bad0-11f149a17526}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -98,6 +104,12 @@
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Source Files\Particle System</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEmitter.cpp">
+      <Filter>Source Files\Particle System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +184,12 @@
     </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Header Files\Particle System</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEmitter.h">
+      <Filter>Header Files\Particle System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

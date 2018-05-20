@@ -15,6 +15,7 @@ public:
 	~Shader();
 
 	GLuint CreateProgram(char* vertexShader, char* fragmentShader);
+	GLuint CreateProgram(char* vertexShader, char* geomShader, char* fragmentShader);
 
 	inline void ActivateProgram() { glUseProgram(m_program); }
 	inline void DeactivateProgram() { glUseProgram(0); }
