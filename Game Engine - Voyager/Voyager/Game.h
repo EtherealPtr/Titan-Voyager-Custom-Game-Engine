@@ -45,7 +45,7 @@ private:
 	float m_deltaTime;
 
 private:
-	Model m_asteroid, m_aircraft, m_weapon;
+	Model m_asteroid, m_aircraft;
 	Terrain m_terrain;
 	DirectionalLight m_dirLight;
 	PointLight m_pointLight;

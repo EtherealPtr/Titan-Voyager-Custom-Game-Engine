@@ -13,7 +13,7 @@ Enemy::~Enemy()
 
 void Enemy::InitMesh()
 {
-	m_model.Init("res/Models3D/Monster/M24_R.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
+	m_model.Init("res/Models3D/Sci-fi_AssaultRifle/AssaultRifle.dae", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
 }
 
 void Enemy::Draw()

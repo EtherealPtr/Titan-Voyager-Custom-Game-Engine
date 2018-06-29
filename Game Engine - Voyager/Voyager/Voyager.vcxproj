@@ -38,6 +38,7 @@
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -68,6 +69,7 @@
     <ClInclude Include="Transformation.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Vertices.h" />
+    <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

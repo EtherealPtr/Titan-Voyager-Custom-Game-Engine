@@ -1,11 +1,9 @@
 #include "Player.h"
 #include "Renderer.h"
 #include "Utils.h"
+#include "Dependencies/SDL2/include/SDL.h"
 
 Player::Player() :
-	m_ammoCount(35),
-	m_fireTimer(0.0f),
-	m_fireRate(0.12f),
 	m_jumpHeight(50.0f),
 	m_upwardSpeed(0.0f),
 	m_health(100),
@@ -15,7 +13,15 @@ Player::Player() :
 Player::~Player()
 {}
 
-void Player::Update(Model& weapon, Camera& cam, Terrain& terrain, float dt, std::vector<SDL_Event> events)
+void Player::Init(Camera& cam)
+{
+	m_assaultRifle.Init("res/Models3D/Sci-fi_AssaultRifle/AssaultRifle.dae", cam, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs");
+	m_sniperRifle.Init("res/Models3D/Sci-fi_SniperRifle/SniperRifle.obj", cam, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs");
+	m_currWeapon = m_assaultRifle;
+	m_usingAR = true;
+}
+
+void Player::Update(Camera& cam, Terrain& terrain, float dt, std::vector<SDL_Event> events)
 {
 	if (!IsPlayerWalking())
 	{
@@ -46,40 +52,28 @@ void Player::Update(Model& weapon, Camera& cam, Terrain& terrain, float dt, std:
 		// Proceed to playing one of the following animations: Walking - Sprinting - Idle
 		if (m_walking)
 		{
-			m_animationComponent.PlayWalkFPS(weapon, cam, dt);
+			m_currWeapon.GetAnimComponent().PlayWalkFPS(m_currWeapon.GetModel(), cam, dt);
 		}
 		else if (m_sprinting)
 		{
-			m_animationComponent.PlaySprintFPS(weapon, cam, dt);
+			m_currWeapon.GetAnimComponent().PlaySprintFPS(m_currWeapon.GetModel(), cam, dt);
 		}
 		else 
 		{
-			m_animationComponent.PlayIdleFPS(weapon, cam, dt);
+			m_currWeapon.GetAnimComponent().PlayIdleFPS(m_currWeapon.GetModel(), cam, dt);
 		}
 	}
 
 	// Check if player is firing
 	if (m_firing && !m_reloading)
 	{
-		Fire(weapon, cam, dt);
-
-		if (m_fireTimer < 0.02f)
-		{
-			// Play muzzle flash effect (render textured quad in eye space in front of weapon)
-			glm::mat4 model(1.0f);
-			glm::mat4 translation = glm::translate(glm::vec3(0.9f, -1.4f, -6.5f));
-			glm::mat4 rotation = glm::rotate(Utils::GetInstance().RandomNumBetweenTwo(1.0f, 360.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-			glm::mat4 scaleMat = glm::scale(glm::vec3(Utils::GetInstance().RandomNumBetweenTwo(2.0f, 2.5f), Utils::GetInstance().RandomNumBetweenTwo(2.0f, 2.5f), 1.0f));
-			glm::mat4 invViewMat = glm::inverse(cam.GetViewMatrix());
-			model = invViewMat * translation * rotation * scaleMat;
-			Renderer::GetInstance().GetComponent(12).Draw(model, cam, glm::vec3(0.0f, 0.0f, 0.0f));
-		}
+		m_currWeapon.Fire(m_currWeapon.GetModel(), cam, dt, m_firing, m_reloading);
 	}
 
 	// Check if player is reloading
 	if (m_reloading)
 	{
-		Reload(weapon, cam, dt);
+		m_currWeapon.Reload(m_currWeapon.GetModel(), cam, dt, m_reloading);
 	}
 
 	// Check if player is jumping
@@ -102,49 +96,24 @@ void Player::Update(Model& weapon, Camera& cam, Terrain& terrain, float dt, std:
 	}
 }
 
-void Player::Fire(Model& weapon, Camera& cam, float dt)
-{
-	m_fireTimer += dt;
-	m_animationComponent.PlayIdleFPS(weapon, cam, dt);
-
-	if (m_fireTimer > m_fireRate)
-	{
-		m_animationComponent.PlayFireFPS(weapon, cam, dt);
-
-		--m_ammoCount;
-
-		if (m_ammoCount <= 0)
-		{
-			m_ammoCount = 0;
-			m_firing = false;
-			m_reloading = true;
-		}
-
-		m_fireTimer = 0.0f;
-	}
-	else
-	{
-		m_muzzleFlash = false; 
-	}
-}
-
-void Player::Reload(Model& weapon, Camera& cam, float dt)
-{
-	m_animationComponent.PlayReloadFPS(weapon, cam, dt);
-	m_reloadTimer += 0.4f * dt;
- 
-	if (m_reloadTimer >= 1.0f)
-	{
-		m_ammoCount = 35;
-		m_reloadTimer = 0.0f;
-		m_reloading = false;
-	}
-}
-
 // Function that checks if the camera (FPS character) is moving 
 bool Player::IsPlayerWalking()
 {
 	return m_bCamMovements[CAM_FORWARD] || m_bCamMovements[CAM_BACKWARD] || m_bCamMovements[CAM_LEFT] || m_bCamMovements[CAM_RIGHT];
+}
+
+void Player::Switch()
+{
+	if (m_usingAR)
+	{
+		m_usingAR = false;
+		m_currWeapon = m_sniperRifle;
+	}
+	else
+	{
+		m_usingAR = true;
+		m_currWeapon = m_assaultRifle;
+	}
 }
 
 void Player::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)
@@ -179,11 +148,11 @@ void Player::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)
 				break;
 
 			case SDLK_r:
-				m_bCamMovements[CAM_RISE] = true;
+				//m_bCamMovements[CAM_RISE] = true;
 				break;
 
 			case SDLK_f:
-				m_bCamMovements[CAM_FALL] = true;
+				//m_bCamMovements[CAM_FALL] = true;
 				break;
 
 			case SDLK_SPACE:
@@ -234,12 +203,16 @@ void Player::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)
 				break;
 
 			case SDLK_r:
-				m_bCamMovements[CAM_RISE] = false;
+				//m_bCamMovements[CAM_RISE] = false;
 				m_reloading = true;
 				break;
 
 			case SDLK_f:
-				m_bCamMovements[CAM_FALL] = false;
+				//m_bCamMovements[CAM_FALL] = false;
+				break;
+
+			case SDLK_q:
+				Switch();
 				break;
 
 			case SDLK_LSHIFT:

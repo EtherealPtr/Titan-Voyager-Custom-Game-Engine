@@ -5,6 +5,7 @@ const float WEAPON_ROTATION_190_DEG = 3.31613f;
 Animation::Animation() :
 	m_defWeaponRotation(WEAPON_ROTATION_190_DEG),
 	m_defWeaponZOffset(-2.5f),
+	m_originalWeaponZOffset(m_defWeaponZOffset),
 	m_defWeaponYOffset(-2.0f),
 	m_idleYOffset(-2.0f),
 	weaponMoveForward(false),
@@ -13,6 +14,12 @@ Animation::Animation() :
 
 Animation::~Animation()
 {}
+
+void Animation::SetWeaponZOffset(float zOffset)
+{
+	m_originalWeaponZOffset = zOffset;
+	m_defWeaponZOffset = zOffset;
+}
 
 void Animation::PlaySprintFPS(Model& weapon, Camera& cam, float dt)
 {
@@ -51,8 +58,8 @@ void Animation::PlaySprintFPS(Model& weapon, Camera& cam, float dt)
 
 void Animation::PlayWalkFPS(Model& weapon, Camera& cam, float dt)
 {
-	const float MAX_Z_OFFSET = -2.9f;
-	const float MIN_Z_OFFSET = -2.5f;
+	const float MAX_Z_OFFSET = m_originalWeaponZOffset - 0.4f;
+	const float MIN_Z_OFFSET = m_originalWeaponZOffset;
 	m_defWeaponYOffset = -2.5f;
 
 	// Rotate the weapon back to 190 degrees if it isn't at 190 degrees 

@@ -58,7 +58,8 @@ void Game::InitMeshes()
 	m_enemies.push_back(enemy01);
 	m_enemies.at(0)->InitMesh();
 
-	m_weapon.Init("res/Models3D/Rifle/M24_R.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
+	m_player.Init(m_camera);
+
 	//m_aircraft.Init("res/Models3D/Walkyrie/object.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
 	//m_asteroid.Init("res/Models3D/Rock/rock.obj", m_camera, "res/Shaders/InstancingVert.vs", "res/Shaders/InstancingFrag.fs", true);
 }
@@ -189,7 +190,7 @@ void Game::GameLoop()
 
 		// Text updates
 		// [0] : Ammo [1] : Health
-		m_texts[0].SetText(std::to_string(m_player.GetAmmoCount()));
+		m_texts[0].SetText(std::to_string(m_player.GetCurrWeapon().GetAmmoCount()));
 		m_texts[0].Render();
 		
 		m_texts[1].SetText(std::to_string(m_player.GetHealth()));
@@ -206,7 +207,7 @@ void Game::Update()
 {
 	m_camera.UpdateLookAt();
 
-	m_player.Update(m_weapon, m_camera, m_terrain, m_deltaTime, GetFrameEvents());
+	m_player.Update(m_camera, m_terrain, m_deltaTime, GetFrameEvents());
 
 	// Update enemies
 	for (auto i = m_enemies.begin(); i != m_enemies.end(); ++i)
