@@ -11,18 +11,24 @@ public:
 	~Weapon();
 
 	void Init(GLchar* path, Camera& camera, char* vs, char* fs);
-
+	void Configure(int maxAmmo, float fireRate, float reloadTime);
 	void Fire(Model& weapon, Camera& cam, float dt, bool& firing, bool& reloading);
 	void Reload(Model& weapon, Camera& cam, float dt, bool& reloading);
 
-	void SetAmmoCount(int maxAmmo) { m_maxAmmo = maxAmmo; }
+	inline void SetMaxAmmo(int maxAmmo) { m_maxAmmo = maxAmmo; }
 	inline int GetAmmoCount() { return m_ammoCount; }
+
+	inline void SetFireRate(float fireRate) { m_fireRate = fireRate; }
+	inline float GetFireRate() { return m_fireRate; }
+
+	inline void SetReloadTime(float reloadTime) { m_maxReloadTimer = reloadTime; }
+	inline float GetReloadTime() { return m_maxReloadTimer; }
 
 	inline Animation& GetAnimComponent() { return m_animator; }
 	inline Model& GetModel() { return m_model; }
 
 private:
-	float m_fireTimer, m_fireRate, m_reloadTimer;
+	float m_currFireRateTime, m_fireRate, m_currReloadTime, m_maxReloadTimer;
 	int m_ammoCount, m_maxAmmo;
 	Animation m_animator;
 	Model m_model;

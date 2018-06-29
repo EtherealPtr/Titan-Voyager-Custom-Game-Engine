@@ -11,12 +11,24 @@ Player::Player() :
 {}
 
 Player::~Player()
-{}
+{
+	delete m_assaultRifle;
+	m_assaultRifle = nullptr;
+
+	delete m_sniperRifle;
+	m_sniperRifle = nullptr;
+}
 
 void Player::Init(Camera& cam)
 {
-	m_assaultRifle.Init("res/Models3D/Sci-fi_AssaultRifle/AssaultRifle.dae", cam, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs");
-	m_sniperRifle.Init("res/Models3D/Sci-fi_SniperRifle/SniperRifle.obj", cam, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs");
+	m_assaultRifle = new Weapon();
+	m_assaultRifle->Init("res/Models3D/Sci-fi_AssaultRifle/AssaultRifle.dae", cam, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs");
+	m_assaultRifle->Configure(35, 0.12f, 1.0f);
+
+	m_sniperRifle = new Weapon();
+	m_sniperRifle->Init("res/Models3D/Sci-fi_SniperRifle/SniperRifle.obj", cam, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs");
+	m_sniperRifle->Configure(7, 1.0f, 1.5f);
+
 	m_currWeapon = m_assaultRifle;
 	m_usingAR = true;
 }
@@ -52,28 +64,28 @@ void Player::Update(Camera& cam, Terrain& terrain, float dt, std::vector<SDL_Eve
 		// Proceed to playing one of the following animations: Walking - Sprinting - Idle
 		if (m_walking)
 		{
-			m_currWeapon.GetAnimComponent().PlayWalkFPS(m_currWeapon.GetModel(), cam, dt);
+			m_currWeapon->GetAnimComponent().PlayWalkFPS(m_currWeapon->GetModel(), cam, dt);
 		}
 		else if (m_sprinting)
 		{
-			m_currWeapon.GetAnimComponent().PlaySprintFPS(m_currWeapon.GetModel(), cam, dt);
+			m_currWeapon->GetAnimComponent().PlaySprintFPS(m_currWeapon->GetModel(), cam, dt);
 		}
 		else 
 		{
-			m_currWeapon.GetAnimComponent().PlayIdleFPS(m_currWeapon.GetModel(), cam, dt);
+			m_currWeapon->GetAnimComponent().PlayIdleFPS(m_currWeapon->GetModel(), cam, dt);
 		}
 	}
 
 	// Check if player is firing
 	if (m_firing && !m_reloading)
 	{
-		m_currWeapon.Fire(m_currWeapon.GetModel(), cam, dt, m_firing, m_reloading);
+		m_currWeapon->Fire(m_currWeapon->GetModel(), cam, dt, m_firing, m_reloading);
 	}
 
 	// Check if player is reloading
 	if (m_reloading)
 	{
-		m_currWeapon.Reload(m_currWeapon.GetModel(), cam, dt, m_reloading);
+		m_currWeapon->Reload(m_currWeapon->GetModel(), cam, dt, m_reloading);
 	}
 
 	// Check if player is jumping
@@ -107,11 +119,15 @@ void Player::Switch()
 	if (m_usingAR)
 	{
 		m_usingAR = false;
+		m_sniperRifle->GetAnimComponent().SetWeaponZOffset(-4.0f);
+		m_sniperRifle->GetAnimComponent().SetSprintWeaponZOffset(-2.5f);
 		m_currWeapon = m_sniperRifle;
 	}
 	else
 	{
 		m_usingAR = true;
+		m_assaultRifle->GetAnimComponent().SetWeaponZOffset(-2.5f);
+		m_assaultRifle->GetAnimComponent().SetSprintWeaponZOffset(-2.5f);
 		m_currWeapon = m_assaultRifle;
 	}
 }

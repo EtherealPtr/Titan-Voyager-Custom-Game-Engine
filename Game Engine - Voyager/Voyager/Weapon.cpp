@@ -3,11 +3,12 @@
 #include "Renderer.h"
 
 Weapon::Weapon() :
-	m_maxAmmo(35),
-	m_ammoCount(35),
-	m_fireTimer(0.0f),
-	m_fireRate(0.12f),
-	m_reloadTimer(0.0f)
+	m_maxAmmo(0),
+	m_ammoCount(0),
+	m_currFireRateTime(0.0f),
+	m_fireRate(0.0f),
+	m_currReloadTime(0.0f),
+	m_maxReloadTimer(0.0f)
 {}
 
 Weapon::~Weapon()
@@ -18,12 +19,21 @@ void Weapon::Init(GLchar* path, Camera& camera, char* vs, char* fs)
 	m_model.Init(path, camera, vs, fs, false);
 }
 
+void Weapon::Configure(int maxAmmo, float fireRate, float reloadTime)
+{
+	m_maxAmmo = maxAmmo;
+	m_fireRate = fireRate;
+	m_maxReloadTimer = reloadTime;
+	m_currFireRateTime = m_fireRate;
+	m_ammoCount = m_maxAmmo;
+}
+
 void Weapon::Fire(Model& weapon, Camera& cam, float dt, bool& firing, bool& reloading)
 {
-	m_fireTimer += dt;
+	m_currFireRateTime += dt;
 	m_animator.PlayIdleFPS(weapon, cam, dt);
 
-	if (m_fireTimer > m_fireRate)
+	if (m_currFireRateTime > m_fireRate)
 	{
 		m_animator.PlayFireFPS(weapon, cam, dt);
 
@@ -45,19 +55,19 @@ void Weapon::Fire(Model& weapon, Camera& cam, float dt, bool& firing, bool& relo
 		model = invViewMat * translation * rotation * scaleMat;
 		Renderer::GetInstance().GetComponent(12).Draw(model, cam, glm::vec3(0.0f, 0.0f, 0.0f));
 
-		m_fireTimer = 0.0f;
+		m_currFireRateTime = 0.0f;
 	}
 }
 
 void Weapon::Reload(Model& weapon, Camera& cam, float dt, bool& reloading)
 {
 	m_animator.PlayReloadFPS(weapon, cam, dt);
-	m_reloadTimer += 0.4f * dt;
+	m_currReloadTime += 0.4f * dt;
 
-	if (m_reloadTimer >= 1.0f)
+	if (m_currReloadTime >= m_maxReloadTimer)
 	{
 		m_ammoCount = m_maxAmmo;
-		m_reloadTimer = 0.0f;
+		m_currReloadTime = 0.0f;
 		reloading = false;
 	}
 }

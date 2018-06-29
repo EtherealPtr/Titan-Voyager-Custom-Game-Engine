@@ -20,10 +20,12 @@ public:
 
 	void SetWeaponZOffset(float zOffset);
 	void SetWeaponYOffset(float yOffset) { m_defWeaponYOffset = yOffset; }
+	void SetSprintWeaponZOffset(float zOffset) { m_sprintWeaponZOffset = zOffset; }
 
 private:
 	float m_defWeaponRotation;
 	float m_defWeaponZOffset;
+	float m_sprintWeaponZOffset;
 	float m_originalWeaponZOffset;
 	float m_defWeaponYOffset;
 	bool weaponMoveUp;

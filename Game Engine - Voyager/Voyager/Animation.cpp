@@ -5,7 +5,8 @@ const float WEAPON_ROTATION_190_DEG = 3.31613f;
 Animation::Animation() :
 	m_defWeaponRotation(WEAPON_ROTATION_190_DEG),
 	m_defWeaponZOffset(-2.5f),
-	m_originalWeaponZOffset(m_defWeaponZOffset),
+	m_originalWeaponZOffset(-2.5f),
+	m_sprintWeaponZOffset(-2.5f),
 	m_defWeaponYOffset(-2.0f),
 	m_idleYOffset(-2.0f),
 	weaponMoveForward(false),
@@ -53,7 +54,7 @@ void Animation::PlaySprintFPS(Model& weapon, Camera& cam, float dt)
 		}
 	}
 
-	weapon.Draw(cam, glm::vec3(1.7f, m_defWeaponYOffset, m_defWeaponZOffset), glm::vec3(0.0f, 1.0f, 0.0f), m_defWeaponRotation, glm::vec3(1.0f, 1.0f, 1.0f), true);
+	weapon.Draw(cam, glm::vec3(1.7f, m_defWeaponYOffset, m_sprintWeaponZOffset), glm::vec3(0.0f, 1.0f, 0.0f), m_defWeaponRotation, glm::vec3(1.0f, 1.0f, 1.0f), true);
 }
 
 void Animation::PlayWalkFPS(Model& weapon, Camera& cam, float dt)
@@ -99,19 +100,19 @@ void Animation::PlayWalkFPS(Model& weapon, Camera& cam, float dt)
 void Animation::PlayIdleFPS(Model& weapon, Camera& cam, float dt)
 {
 	// Bring weapon back to original Z position
-	if (m_defWeaponZOffset <= -2.5f)
+	if (m_defWeaponZOffset <= m_originalWeaponZOffset)
 	{
 		m_defWeaponZOffset += 1.5f * dt;
 
-		if (m_defWeaponZOffset >= -2.5f)
-			m_defWeaponZOffset = -2.5f;
+		if (m_defWeaponZOffset >= m_originalWeaponZOffset)
+			m_defWeaponZOffset = m_originalWeaponZOffset;
 	}
 	else
 	{
 		m_defWeaponZOffset -= 1.5f * dt;
 
-		if (m_defWeaponZOffset <= -2.5f)
-			m_defWeaponZOffset = -2.5f;
+		if (m_defWeaponZOffset <= m_originalWeaponZOffset)
+			m_defWeaponZOffset = m_originalWeaponZOffset;
 	}
 
 	// Rotate the weapon back to 190 degrees if it isn't at 190 degrees 

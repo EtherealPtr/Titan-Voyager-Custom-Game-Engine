@@ -20,7 +20,7 @@ public:
 	inline bool IsPlayerJumping() { return m_jumping; }
 	inline bool IsPlayerFiring() { return m_muzzleFlash; }
 	inline Animation& GetAnimationComponent() { return m_animationComponent; }
-	inline Weapon& GetCurrWeapon() { return m_currWeapon; }
+	inline Weapon& GetCurrWeapon() { return *m_currWeapon; }
 	void Switch();
 
 private:
@@ -33,7 +33,7 @@ private:
 
 	Animation m_animationComponent;
 	Physics m_physicsComponent;
-	Weapon m_currWeapon, m_assaultRifle, m_sniperRifle;
+	Weapon* m_currWeapon, *m_assaultRifle, *m_sniperRifle;
 };
 
 #endif // !__PLAYER_H__
