@@ -1,0 +1,686 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 30.08.2016 23:56:31
+
+newmtl mid
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.1569 0.4745 0.8706
+	Kd 0.5333 0.5333 0.5333
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__3_Mix.jpg
+	map_Kd mapps\Map__3_Mix.jpg
+	map_bump mapps\mid bump.jpg
+	bump mapps\mid bump.jpg
+
+newmtl mid_side
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.1569 0.4745 0.8706
+	Kd 0.5333 0.5333 0.5333
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__25_Mix.jpg
+	map_Kd mapps\Map__25_Mix.jpg
+	map_bump -bm 0.5500 mapps\Map__65_Normal Bump.jpg
+
+newmtl mid_bumped
+	Ns 87.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5333 0.5333 0.5333
+	Kd 0.5333 0.5333 0.5333
+	Ks 0.3240 0.3240 0.3240
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__19_Mix.jpg
+	map_Kd mapps\Map__19_Mix.jpg
+	map_bump -bm 0.3000 mapps\Map__21_Normal Bump.jpg
+
+newmtl rear_front_top
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.1569 0.4745 0.8706
+	Kd 0.5333 0.5333 0.5333
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__3_Mix.jpg
+	map_Kd mapps\Map__3_Mix.jpg
+	map_bump mapps\rear front bump.jpg
+	bump mapps\rear front bump.jpg
+
+newmtl rear_front_bottom
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.1569 0.4745 0.8706
+	Kd 0.5333 0.5333 0.5333
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__3_Mix.jpg
+	map_Kd mapps\Map__3_Mix.jpg
+	map_bump mapps\rear bottom.jpg
+	bump mapps\rear bottom.jpg
+
+newmtl rear_bottom
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.1569 0.4745 0.8706
+	Kd 0.5333 0.5333 0.5333
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__3_Mix.jpg
+	map_Kd mapps\Map__3_Mix.jpg
+	map_bump mapps\rear bottom 2.jpg
+	bump mapps\rear bottom 2.jpg
+
+newmtl rear__top
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.1569 0.4745 0.8706
+	Kd 0.5333 0.5333 0.5333
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__3_Mix.jpg
+	map_Kd mapps\Map__3_Mix.jpg
+	map_bump mapps\rear bump.jpg
+	bump mapps\rear bump.jpg
+
+newmtl rear_bump
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.1569 0.4745 0.8706
+	Kd 0.5333 0.5333 0.5333
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__46_Mix.jpg
+	map_Kd mapps\Map__46_Mix.jpg
+	map_bump -bm 0.5500 mapps\Map__48_Normal Bump.jpg
+
+newmtl def_bump
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.1569 0.4745 0.8706
+	Kd 0.5333 0.5333 0.5333
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__77_Mix.jpg
+	map_Kd mapps\Map__77_Mix.jpg
+	map_bump mapps\nurnies_01.jpg
+	bump mapps\nurnies_01.jpg
+
+newmtl horiz
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5882 0.5882 0.5882
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__139_Mix.jpg
+	map_Kd mapps\Map__139_Mix.jpg
+
+newmtl horiz_flat
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5882 0.5882 0.5882
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\outer_Mix.jpg
+	map_Kd mapps\outer_Mix.jpg
+
+newmtl horiz_light
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 1.0000 1.0000 1.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.6824 1.0000
+
+newmtl wert_top
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5882 0.5882 0.5882
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__143_Mix.jpg
+	map_Kd mapps\Map__143_Mix.jpg
+
+newmtl top_bump
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5882 0.5882 0.5882
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__143_Mix.jpg
+	map_Kd mapps\Map__143_Mix.jpg
+	map_bump mapps\nurnies_01.jpg
+	bump mapps\nurnies_01.jpg
+
+newmtl wert_light
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5882 0.5882 0.5882
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__143_Mix.jpg
+	map_Kd mapps\Map__143_Mix.jpg
+	map_Ke mapps\Map__146_Mask.jpg
+	map_bump mapps\tube bump.jpg
+	bump mapps\tube bump.jpg
+
+newmtl base
+	Ns 21.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5882 0.5882 0.5882
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.4770 0.4770 0.4770
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__126_Mix.jpg
+	map_Kd mapps\Map__126_Mix.jpg
+
+newmtl ext
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5882 0.5882 0.5882
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__126_Mix.jpg
+	map_Kd mapps\Map__126_Mix.jpg
+
+newmtl panels
+	Ns 21.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5882 0.5882 0.5882
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.4770 0.4770 0.4770
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__126_Mix.jpg
+	map_Kd mapps\Map__126_Mix.jpg
+
+newmtl hyd
+	Ns 11.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.3216 0.3216 0.3216
+	Kd 0.3216 0.3216 0.3216
+	Ks 0.4373 0.4373 0.4373
+	Ke 0.0000 0.0000 0.0000
+
+newmtl noir
+	Ns 21.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5882 0.5882 0.5882
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.1620 0.1620 0.1620
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__126_Mix.jpg
+	map_Kd mapps\Map__126_Mix.jpg
+
+newmtl glow_sim
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 1.0000 1.0000 1.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__137_Gradient Ramp.jpg
+	map_Kd mapps\Map__137_Gradient Ramp.jpg
+	map_Ke mapps\Map__137_Gradient Ramp.jpg
+
+newmtl glow_hip
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 1.0000 1.0000 1.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__138_Gradient Ramp.jpg
+	map_Kd mapps\Map__138_Gradient Ramp.jpg
+	map_Ke mapps\Map__138_Gradient Ramp.jpg
+
+newmtl panels_small
+	Ns 23.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5882 0.5882 0.5882
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.3870 0.3870 0.3870
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__130_Mix.jpg
+	map_Kd mapps\Map__130_Mix.jpg
+
+newmtl front_bump
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5882 0.5882 0.5882
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__143_Mix.jpg
+	map_Kd mapps\Map__143_Mix.jpg
+	map_bump -bm 0.5500 mapps\Map__144_Normal Bump.jpg
+
+newmtl front
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.4392 0.4392 0.4392
+	Kd 0.4392 0.4392 0.4392
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__94_Mix.jpg
+	map_Kd mapps\Map__94_Mix.jpg
+	map_bump mapps\head front bump.jpg
+	bump mapps\head front bump.jpg
+
+newmtl center
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.3843 0.3843 0.3843
+	Kd 0.3843 0.3843 0.3843
+	Ks 0.1960 0.2040 0.2180
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\head_dark_center_Mix.jpg
+	map_Kd mapps\head_dark_center_Mix.jpg
+	map_bump mapps\bodybump.jpg
+	bump mapps\bodybump.jpg
+
+newmtl glass
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\glass 01.jpg
+	map_Kd mapps\glass 01.jpg
+	map_Ke mapps\glass 01.jpg
+
+newmtl head_lights
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 1.0000 1.0000 1.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.4078 0.7137 1.0000
+
+newmtl details__20
+	Ns 33.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.4667 0.4667 0.4667
+	Kd 0.4667 0.4667 0.4667
+	Ks 0.1620 0.1620 0.1620
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__111_Mix.jpg
+	map_Kd mapps\Map__111_Mix.jpg
+
+newmtl head_base
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.4392 0.4392 0.4392
+	Kd 0.4392 0.4392 0.4392
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__3_Mix.jpg
+	map_Kd mapps\Map__3_Mix.jpg
+	map_bump mapps\head bunp.jpg
+	bump mapps\head bunp.jpg
+
+newmtl details__2
+	Ns 18.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.1843 0.0000 0.0000
+	Kd 0.1843 0.0000 0.0000
+	Ks 0.3506 0.2141 0.0000
+	Ke 0.0000 0.0000 0.0000
+
+newmtl details__3
+	Ns 32.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.2118 0.2431 0.1882
+	Kd 0.2118 0.2431 0.1882
+	Ks 0.2588 0.2518 0.1624
+	Ke 0.0000 0.0000 0.0000
+
+newmtl details__4
+	Ns 32.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.1490 0.1647 0.1765
+	Kd 0.1490 0.1647 0.1765
+	Ks 1.1256 1.1206 1.0857
+	Ke 0.0000 0.0000 0.0000
+
+newmtl details__1
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.2706 0.2863 0.2941
+	Kd 0.5333 0.5333 0.5333
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\det_dirt__1_Mix.jpg
+	map_Kd mapps\det_dirt__1_Mix.jpg
+
+newmtl blue_light
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.7490 0.8196 1.0000
+	Kd 0.7490 0.8196 1.0000
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.3490 0.4549 1.0000
+
+newmtl red_light
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 1.0000 0.0000 0.0000
+	Kd 1.0000 0.0000 0.0000
+	Ks 0.0000 0.0000 0.0000
+	Ke 1.0000 0.0000 0.0000
+
+newmtl color_default
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Paint Blue.jpg
+	map_Kd mapps\Paint Blue.jpg
+
+newmtl details__5
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.3098 0.3294 0.3451
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.3255 0.3118 0.2725
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\detdirt__5_Mix.jpg
+	map_Kd mapps\detdirt__5_Mix.jpg
+
+newmtl top_light
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 1.0000 1.0000 1.0000
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\det_dirt__1_Mix.jpg
+	map_Kd mapps\det_dirt__1_Mix.jpg
+	map_Ke mapps\Map__123_Mask.jpg
+
+newmtl yellow_light
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 1.0000 0.9412 0.7843
+	Kd 1.0000 0.9412 0.7843
+	Ks 0.0000 0.0000 0.0000
+	Ke 1.0000 0.6824 0.0000
+
+newmtl holder
+	Ns 21.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5882 0.5882 0.5882
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.4770 0.4770 0.4770
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__126_Mix.jpg
+	map_Kd mapps\Map__126_Mix.jpg
+
+newmtl white_light
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 1.0000 1.0000 1.0000
+	Kd 1.0000 1.0000 1.0000
+	Ks 0.0000 0.0000 0.0000
+	Ke 1.0000 1.0000 1.0000
+
+newmtl sides
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.4392 0.4392 0.4392
+	Kd 0.4392 0.4392 0.4392
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__87_Mix.jpg
+	map_Kd mapps\Map__87_Mix.jpg
+	map_bump mapps\nurnies_01.jpg
+	bump mapps\nurnies_01.jpg
+
+newmtl bumped
+	Ns 87.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5333 0.5333 0.5333
+	Kd 0.5333 0.5333 0.5333
+	Ks 0.3240 0.3240 0.3240
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__19_Mix.jpg
+	map_Kd mapps\Map__19_Mix.jpg
+	map_bump -bm 0.3000 mapps\Map__21_Normal Bump.jpg
+
+newmtl gun__1
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.3098 0.3294 0.3451
+	Kd 0.3098 0.3294 0.3451
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\detdirt__5_Mix.jpg
+	map_Kd mapps\detdirt__5_Mix.jpg
+
+newmtl metal
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.3882 0.3882 0.3882
+	Kd 0.3882 0.3882 0.3882
+	Ks 0.7830 0.7830 0.7830
+	Ke 0.0000 0.0000 0.0000
+
+newmtl centerbox
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\outer_Mix.jpg
+	map_Kd mapps\outer_Mix.jpg
+
+newmtl default
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka mapps\Map__152_Mix.jpg
+	map_Kd mapps\Map__152_Mix.jpg
