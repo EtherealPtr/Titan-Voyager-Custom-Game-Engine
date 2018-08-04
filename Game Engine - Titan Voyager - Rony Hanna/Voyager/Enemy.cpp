@@ -7,17 +7,23 @@
 Enemy::Enemy(Camera& cam) :
 	m_pos(Utils::GetInstance().RandomNumBetweenTwo(50.0f, 450.0f), 0.0f, Utils::GetInstance().RandomNumBetweenTwo(0.0f, 450.0f)),
 	m_maximumSpeed(15.0f),
+	m_maximumDroneSpeed(100.0f),
 	m_velocity(glm::vec3(1.0f, 1.0f, 1.0f)),
 	m_camera(cam),
 	m_health(100),
-	m_dead(false),
+	m_blastRadius(0.01f),
 	m_distance(0.0f),
+	m_shootDuration(0.0f),
 	m_attackDistance(125.0f),
+	m_evadeDurationCounter(0.0f),
+	m_damageTakenDuration(0.0f),
+	m_dead(false),
 	m_takingDamage(false),
 	m_evade(false),
-	m_damageTakenDuration(0.0f),
-	m_evadeDurationCounter(0.0f),
-	m_evadeRight(false)
+	m_evadeRight(false),
+	m_fire(false),
+	m_droneStatus(true),
+	m_dronePos(m_pos)
 {
 	m_particleEffect.Init("res/Shaders/Particle System Shaders/VertexShader.vs",
 						  "res/Shaders/Particle System Shaders/GeometryShader.geom",
@@ -27,13 +33,47 @@ Enemy::Enemy(Camera& cam) :
 Enemy::~Enemy()
 {}
 
-void Enemy::Draw(short int id)
+void Enemy::Draw(short int enemyId, short int enemyDroneId, short int enemyDroneBlastId)
 {
 	if (!m_dead)
 	{
-		Renderer::GetInstance().GetComponent(id).SetTransform(m_pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-		m_particleEffect.Render(m_camera, m_deltaTime, glm::vec3(m_pos.x - 1.7f, m_pos.y + 4.5f, m_pos.z - 0.4f)); 
-		Renderer::GetInstance().GetComponent(id).Draw(m_camera, glm::vec3(0.0f, 0.0f, 0.0f), false, Player::GetInstance().GetSpotLight());
+		// Update the enemy's transform and particle system every frame
+		Renderer::GetInstance().GetComponent(enemyId).SetTransform(m_pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+		m_particleEffect.Render(m_camera, m_deltaTime, glm::vec3(m_pos.x - 1.7f, m_pos.y + 4.5f, m_pos.z - 0.4f));
+		Renderer::GetInstance().GetComponent(enemyId).Draw(m_camera, glm::vec3(0.0f, 0.0f, 0.0f), false, Player::GetInstance().GetSpotLight());
+
+		// Check if a small drone has been fired by the enemy
+		if (m_droneActive)
+		{
+			// Update the small drone's transform per frame
+			Renderer::GetInstance().GetComponent(enemyDroneId).SetTransform(m_dronePos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.25f, 0.25f, 0.25f));
+			Renderer::GetInstance().GetComponent(enemyDroneId).Draw(m_camera);
+		}
+
+		// Check if the small drone has reached its desired destination where it is about to explode
+		if (m_droneSelfDestruct)
+		{
+			// Increase the explosion radius
+			m_blastRadius += 5.0f * m_deltaTime;
+			
+			if (m_blastRadius < 7.0f)
+			{
+				// Disable culling so that player can see from within the explosion
+				glDisable(GL_CULL_FACE);
+
+				// Update explosion blast 
+				Renderer::GetInstance().GetComponent(enemyDroneBlastId).SetTransform(m_oldPlayerPos, glm::vec3(m_blastRadius * 20, m_blastRadius * 20, m_blastRadius * 20), glm::vec3(m_blastRadius));
+				Renderer::GetInstance().GetComponent(enemyDroneBlastId).Draw(m_camera);
+
+				// Re-enable culling
+				glEnable(GL_CULL_FACE);
+			}
+			else
+			{
+				m_droneSelfDestruct = false;
+				m_blastRadius = 0.01f;
+			}
+		}
 	}
 }
 
@@ -125,6 +165,25 @@ void Enemy::Update(Terrain& terrain, Camera& cam, float dt)
 				m_evadeDurationCounter = 0.0f;
 			}
 		}
+
+		if (m_shootDuration > 1.0f)
+		{
+			m_shootDuration = 0.0f;
+
+			// Check if the enemy unit is not firing already
+			if (!m_fire)
+				m_fire = true;
+		}
+		else
+		{
+			m_shootDuration += Utils::GetInstance().RandomNumBetweenTwo(0.1f, 0.5f) * dt;
+		}
+
+		if (m_fire)
+		{
+			m_dronePos.y = terrain.GetHeightOfTerrain(m_dronePos.x, m_dronePos.z) + 10.0f;
+			Fire(cam, terrain, dt);
+		}
 	}
 }
 
@@ -134,12 +193,19 @@ void Enemy::ReduceHealth(int amount)
 	m_takingDamage = true;
 }
 
+// Function that finds the distance between two vectors
 inline float Enemy::CalcDistance(glm::vec3& enemyPos, glm::vec3& playerPos)
 {
 	return sqrt(powf(enemyPos.x - playerPos.x, 2.0f) + powf(enemyPos.y - playerPos.y, 2.0f) + powf(enemyPos.z - playerPos.z, 2.0f));
 }
 
-void Enemy::Seek(Camera& target, float dt)
+// Function that finds the distance between two vectors without taking the y-axis into consideration (XZ plane only)
+inline float Enemy::CalcDistanceNoHeight(glm::vec3& enemyPos, glm::vec3& playerPos)
+{
+	return sqrt(powf(enemyPos.x - playerPos.x, 2.0f) + powf(enemyPos.z - playerPos.z, 2.0f));
+}
+
+void Enemy::Seek(Camera& target, const float dt)
 {
 	glm::vec3 desiredVelocity = target.GetCameraPos() - m_pos;
 	desiredVelocity = glm::normalize(desiredVelocity);
@@ -151,7 +217,7 @@ void Enemy::Seek(Camera& target, float dt)
 	m_pos += steering * dt;
 }
 
-void Enemy::Flee(Camera& target, float dt)
+void Enemy::Flee(Camera& target, const float dt)
 {
 	glm::vec3 desiredVelocity = target.GetCameraPos() - m_pos;
 	desiredVelocity = glm::normalize(desiredVelocity);
@@ -161,4 +227,46 @@ void Enemy::Flee(Camera& target, float dt)
 	steering = glm::clamp(steering, -m_maximumSpeed, m_maximumSpeed);
 
 	m_pos -= steering * dt;
+}
+
+void Enemy::Fire(Camera& target, Terrain& terrain, const float dt)
+{
+	// Check if the drone has just been fired
+	if (m_droneStatus)
+	{
+		// Set the drone's position equal to the big sphere enemy position
+		m_dronePos = m_pos;
+
+		// Store the old player's position and set the drone active to true for rendering purposes
+		m_oldPlayerPos = target.GetCameraPos();
+		m_droneActive = true;
+
+		// Set drone's status to false so that the player position is only retrieved once
+		m_droneStatus = false;
+	}
+
+	// Travel to the old player position 
+	glm::vec3 desiredVelocity = m_oldPlayerPos - m_dronePos;
+	desiredVelocity = glm::normalize(desiredVelocity);
+	desiredVelocity *= m_maximumDroneSpeed;
+
+	glm::vec3 steering = desiredVelocity - m_velocity;
+	steering = glm::clamp(steering, -m_maximumDroneSpeed, m_maximumDroneSpeed);
+
+	m_dronePos += steering * dt;
+
+	// Check if the drone reached the old player's position
+	float dist = CalcDistanceNoHeight(m_dronePos, m_oldPlayerPos);
+
+	if (dist <= 3)
+	{
+		// Drone self-destruct 
+		m_droneSelfDestruct = true;
+
+		// Recycle the drone for future use
+		m_fire = false;
+		m_droneStatus = true;
+		m_dronePos = m_pos;
+		m_dronePos.y = -999.0f;
+	}
 }

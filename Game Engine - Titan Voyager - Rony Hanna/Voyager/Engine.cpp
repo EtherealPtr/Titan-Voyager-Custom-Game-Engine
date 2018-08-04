@@ -34,6 +34,8 @@ void Engine::LoadApplicationResources()
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/SniperScope.png", "sniperScope"); assert(bUnitTest);
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/RedOrb.png", "redOrb"); assert(bUnitTest);
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/Camouflage.jpg", "clothTex"); assert(bUnitTest);
+	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/shockwave.png", "shockwave"); assert(bUnitTest);
+	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/drone.jpg", "drone"); assert(bUnitTest);
 
 	// Terrain textures
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/soil01.jpg", "soil"); assert(bUnitTest);
@@ -44,18 +46,12 @@ void Engine::LoadApplicationResources()
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/blendMap.png", "blendMap"); assert(bUnitTest);
 
 	std::vector<char*> skyboxFaces;
-	skyboxFaces.push_back("res/Textures/Skyboxes/PlanetX/right.png");
-	skyboxFaces.push_back("res/Textures/Skyboxes/PlanetX/left.png");
-	skyboxFaces.push_back("res/Textures/Skyboxes/PlanetX/top.png");
-	skyboxFaces.push_back("res/Textures/Skyboxes/PlanetX/bottom.png");
-	skyboxFaces.push_back("res/Textures/Skyboxes/PlanetX/front.png");
-	skyboxFaces.push_back("res/Textures/Skyboxes/PlanetX/back.png");
-	//skyboxFaces.push_back("res/Textures/Skyboxes/Space/right.jpg");
-	//skyboxFaces.push_back("res/Textures/Skyboxes/Space/left.jpg");
-	//skyboxFaces.push_back("res/Textures/Skyboxes/Space/top.jpg");
-	//skyboxFaces.push_back("res/Textures/Skyboxes/Space/bottom.jpg");
-	//skyboxFaces.push_back("res/Textures/Skyboxes/Space/front.jpg");
-	//skyboxFaces.push_back("res/Textures/Skyboxes/Space/back.jpg");
+	skyboxFaces.push_back("res/Textures/Skyboxes/TitanMoon/right.png");
+	skyboxFaces.push_back("res/Textures/Skyboxes/TitanMoon/left.png");
+	skyboxFaces.push_back("res/Textures/Skyboxes/TitanMoon/top.png");
+	skyboxFaces.push_back("res/Textures/Skyboxes/TitanMoon/bottom.png");
+	skyboxFaces.push_back("res/Textures/Skyboxes/TitanMoon/front.png");
+	skyboxFaces.push_back("res/Textures/Skyboxes/TitanMoon/back.png");
 
 	// Review this (make into a loop)
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(0), "skybox");  assert(bUnitTest);
@@ -64,12 +60,6 @@ void Engine::LoadApplicationResources()
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(3), "skybox3"); assert(bUnitTest);
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(4), "skybox4"); assert(bUnitTest);
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(5), "skybox5"); assert(bUnitTest);
-	//bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(6), "skybox6"); assert(bUnitTest);
-	//bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(7), "skybox7"); assert(bUnitTest);
-	//bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(8), "skybox8"); assert(bUnitTest);
-	//bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(9), "skybox9"); assert(bUnitTest);
-	//bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(10), "skybox10"); assert(bUnitTest);
-	//bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(11), "skybox11"); assert(bUnitTest);
 
 	ResourceManager::GetInstance().SetSkyboxTextureIDs();
 }

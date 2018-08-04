@@ -19,6 +19,7 @@ Game::Game() :
 
 Game::~Game()
 {
+	// Deallocate all enemies stored on the heap (or freestore)
 	for (auto i = m_enemies.begin(); i != m_enemies.end(); ++i)
 	{
 		delete *i;
@@ -42,6 +43,7 @@ void Game::InitMeshes()
 {
 	int id = 0;
 	std::vector<char*> defShader{ "res/Shaders/DefaultVertexShader.vs", "res/Shaders/DefaultFragmentShader.fs" };
+	std::vector<char*> unlitShader{ "res/Shaders/Unlit.vs", "res/Shaders/Unlit.fs" };
 	std::vector<char*> skyboxShader{ "res/Shaders/SkyboxVertexShader.vs", "res/Shaders/SkyboxFragmentShader.fs" };
 	std::vector<char*> normalMappingShader{ "res/Shaders/NormalMapping.vs", "res/Shaders/NormalMapping.fs" };
 	std::vector<char*> hudShader{ "res/Shaders/HUD.vs", "res/Shaders/HUD.fs" };
@@ -49,6 +51,7 @@ void Game::InitMeshes()
 	std::vector<char*> enemyShader{ "res/Shaders/EnemyVertexShader.vs", "res/Shaders/EnemyFragmentShader.fs" };
 	std::vector<char*> postProcessingShader{ "res/Shaders/PostProcessingVertexShader.vs", "res/Shaders/PostProcessingFragmentShader.fs" };
 
+	// Initialize the meshes
 	Renderer::GetInstance().InitMesh(QUAD, "saturnRings", ++id, defShader, glm::vec3(200.0f, 360.0f, -700.0f), glm::vec3(-65.0f, 0.0f, 0.0f), glm::vec3(640.0f, 640.0f, 640.0f));
 	Renderer::GetInstance().InitMesh(CUBE, "cubeTex", ++id, normalMappingShader, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f), "cubeTexNormalMap");
 	Renderer::GetInstance().InitMesh(CUBE, "skybox", ++id, skyboxShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(3000.0f, 3000.0f, 3000.0f));
@@ -59,6 +62,8 @@ void Game::InitMeshes()
 	Renderer::GetInstance().InitMesh(QUAD, "muzzleFlash", ++id, muzzleFlashShader, glm::vec3(2.0f, -2.5f, -2.5f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 	Renderer::GetInstance().InitMesh(QUAD, "sniperScope", ++id, hudShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 1.0f));
 	Renderer::GetInstance().InitMesh(QUAD, "cubeTex", ++id, postProcessingShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f));
+	Renderer::GetInstance().InitMesh(SPHERE, "drone", ++id, unlitShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	Renderer::GetInstance().InitMesh(SPHERE, "shockwave", ++id, unlitShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 5.0f, 5.0f));
 
 	// Enemy ID registeration [100, 110] inclusively 
 	id = 100;
@@ -69,7 +74,7 @@ void Game::InitMeshes()
 		m_enemies.push_back(enemy);
 	}
 
-	// Init game models
+	// Initialize game models
 	m_terrain.InitTerrain("res/Shaders/TerrainVertexShader.vs", "res/Shaders/TerrainFragmentShader.fs");
 	m_terrain.CreateTerrainWithPerlinNoise();
 
@@ -90,22 +95,11 @@ void Game::InitMeshes()
 		// Set rock's position, rotation, and scale
 		switch (i)
 		{
-		case 0: 
-			mountainRock.SetTransform(glm::vec3(30.0f, 60.0f, 15.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, glm::vec3(20.0f, 36.0f, 20.0f));
-			break;
-		case 1:
-			mountainRock.SetTransform(glm::vec3(512.0f, 63.0f, 15.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, glm::vec3(20.0f, 36.0f, 20.0f));
-			break;
-		case 2:
-			mountainRock.SetTransform(glm::vec3(750.0f, 63.0f, 15.0f), glm::vec3(0.0f, 1.0f, 0.0f), 100.0f, glm::vec3(20.0f, 36.0f, 20.0f));
-			break;
-		case 3:
-			mountainRock.SetTransform(glm::vec3(30.0f, 60.0f, 750.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, glm::vec3(20.0f, 36.0f, 20.0f));
-			break;
-		case 4:
-			mountainRock.SetTransform(glm::vec3(750.0f, 63.0f, 750.0f), glm::vec3(0.0f, 1.0f, 0.0f), 100.0f, glm::vec3(20.0f, 36.0f, 20.0f));
-			break;
-
+		case 0: mountainRock.SetTransform(glm::vec3(30.0f, 60.0f, 15.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, glm::vec3(20.0f, 36.0f, 20.0f)); break;
+		case 1: mountainRock.SetTransform(glm::vec3(512.0f, 63.0f, 15.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, glm::vec3(20.0f, 36.0f, 20.0f)); break;
+		case 2: mountainRock.SetTransform(glm::vec3(750.0f, 63.0f, 15.0f), glm::vec3(0.0f, 1.0f, 0.0f), 100.0f, glm::vec3(20.0f, 36.0f, 20.0f)); break;
+		case 3: mountainRock.SetTransform(glm::vec3(30.0f, 60.0f, 750.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, glm::vec3(20.0f, 36.0f, 20.0f)); break;
+		case 4: mountainRock.SetTransform(glm::vec3(750.0f, 63.0f, 750.0f), glm::vec3(0.0f, 1.0f, 0.0f), 100.0f, glm::vec3(20.0f, 36.0f, 20.0f)); break;
 		default: break;
 		}
 		
@@ -249,14 +243,6 @@ void Game::RenderScene()
 	Renderer::GetInstance().GetComponent(SATURN).GetTransformComponent().GetRot().y += 2.0f * m_deltaTime;
 	Renderer::GetInstance().GetComponent(SATURN).Draw(m_camera, glm::vec3(-700.0f, 700.0f, 0.0f));
 
-	// Draw enemy units
-	int enemyId = 100;
-	for (auto i : m_enemies)
-	{
-		(*i).Draw(enemyId);
-		++enemyId;
-	}
-
 	m_asteroid.DrawInstanced(m_camera);
 
 	glDisable(GL_CULL_FACE);
@@ -267,8 +253,17 @@ void Game::RenderScene()
 	Renderer::GetInstance().GetComponent(SKYBOX).GetTransformComponent().GetRot().y += 0.5f * m_deltaTime;
 	Renderer::GetInstance().GetComponent(SKYBOX).Draw(m_camera);
 
+	// Draw enemy units
+	int enemyId = 100;
+	for (auto enemy : m_enemies)
+	{
+		(*enemy).Draw(enemyId, ENEMY_DRONE, ENEMY_BLAST);
+		++enemyId;
+	}
+
+
 	// Text updates
-	// [0] : Ammo [1] : Health
+	// [0] : Ammo, [1] : Health
 	m_texts[0].SetText(std::to_string(Player::GetInstance().GetCurrWeapon().GetAmmoCount()));
 	m_texts[0].Render();
 

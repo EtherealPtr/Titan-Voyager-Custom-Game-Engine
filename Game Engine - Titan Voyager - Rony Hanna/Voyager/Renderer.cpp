@@ -123,7 +123,7 @@ void Renderer::RenderObjects(Camera cam)
 
 // -------------------
 // Author: Rony Hanna
-// Description: Function that creates a game object using a shape factory
+// Description: Function that creates a game object using a shape factory code pattern
 // -------------------
 void Renderer::InitMesh(GLuint meshType, char* textureId, int objId, std::vector<char*> shaders, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale, char* normalMapping, bool bIsInstancing)
 {
