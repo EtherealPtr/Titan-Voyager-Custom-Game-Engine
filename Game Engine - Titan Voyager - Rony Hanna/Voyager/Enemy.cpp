@@ -17,12 +17,14 @@ Enemy::Enemy(Camera& cam) :
 	m_attackDistance(125.0f),
 	m_evadeDurationCounter(0.0f),
 	m_damageTakenDuration(0.0f),
+	m_attackDamage(10.0f),
 	m_dead(false),
 	m_takingDamage(false),
 	m_evade(false),
 	m_evadeRight(false),
 	m_fire(false),
 	m_droneStatus(true),
+	m_damageToken(true),
 	m_dronePos(m_pos)
 {
 	m_particleEffect.Init("res/Shaders/Particle System Shaders/VertexShader.vs",
@@ -64,14 +66,28 @@ void Enemy::Draw(short int enemyId, short int enemyDroneId, short int enemyDrone
 				// Update explosion blast 
 				Renderer::GetInstance().GetComponent(enemyDroneBlastId).SetTransform(m_oldPlayerPos, glm::vec3(m_blastRadius * 20, m_blastRadius * 20, m_blastRadius * 20), glm::vec3(m_blastRadius));
 				Renderer::GetInstance().GetComponent(enemyDroneBlastId).Draw(m_camera);
+				
+				// Check if enemy can damage and player is caught within the growing blast
+				if (m_damageToken && Physics::GetInstance().PointInSphere(m_camera, m_oldPlayerPos, (m_blastRadius * 4)))
+				{
+					// Inflict damage on player
+					Physics::GetInstance().OnPlayerHit(m_attackDamage);
+
+					// Take away the enemy's damage token
+					m_damageToken = false;
+				}
 
 				// Re-enable culling
 				glEnable(GL_CULL_FACE);
 			}
 			else
 			{
+				// Restart blast properties
 				m_droneSelfDestruct = false;
 				m_blastRadius = 0.01f;
+
+				// Restore the enemy's token
+				m_damageToken = true;
 			}
 		}
 	}

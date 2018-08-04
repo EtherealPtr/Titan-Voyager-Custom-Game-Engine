@@ -67,7 +67,7 @@ void Game::InitMeshes()
 
 	// Enemy ID registeration [100, 110] inclusively 
 	id = 100;
-	for (unsigned int i = 0; i < 10; ++i)
+	for (unsigned int i = 0; i < 1; ++i)
 	{
 		Renderer::GetInstance().InitMesh(SPHERE, "enemySphere", id++, enemyShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 		Enemy* enemy = new Enemy(m_camera);
@@ -260,7 +260,6 @@ void Game::RenderScene()
 		(*enemy).Draw(enemyId, ENEMY_DRONE, ENEMY_BLAST);
 		++enemyId;
 	}
-
 
 	// Text updates
 	// [0] : Ammo, [1] : Health

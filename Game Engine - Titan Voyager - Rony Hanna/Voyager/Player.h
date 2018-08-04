@@ -26,14 +26,15 @@ public:
 	void Update(Camera& cam, Terrain& terrain, float dt, std::vector<SDL_Event> events);
 	void Switch();
 
-	inline int GetHealth()					  { return m_health; }
-	inline bool IsPlayerJumping()		      { return m_jumping; }
-	inline bool IsPlayerFiring()		      { return m_muzzleFlash; }
-	inline bool IsPlayerAiming()		      { return m_sniperAiming; }
-	inline bool IsPlayerWalking();
-	inline Animation& GetAnimationComponent() { return m_animationComponent; }
-	inline Weapon& GetCurrWeapon()			  { return *m_currWeapon; }
-	inline SpotLight* GetSpotLight()		  { return m_spotLight;}
+	void ReduceHealth(float amount)		{ m_health -= amount; }
+	int GetHealth()						{ return m_health; }
+	bool IsPlayerJumping()				{ return m_jumping; }
+	bool IsPlayerFiring()				{ return m_muzzleFlash; }
+	bool IsPlayerAiming()				{ return m_sniperAiming; }
+	bool IsPlayerWalking();
+	Animation& GetAnimationComponent()	{ return m_animationComponent; }
+	Weapon& GetCurrWeapon()				{ return *m_currWeapon; }
+	SpotLight* GetSpotLight()			{ return m_spotLight;}
 
 private:
 	Player();

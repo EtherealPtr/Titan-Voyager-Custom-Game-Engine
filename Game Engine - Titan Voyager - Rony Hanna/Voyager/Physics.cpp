@@ -16,8 +16,7 @@ Physics::~Physics()
 void Physics::Update(Camera& cam, float dt, std::vector<SDL_Event> events, std::vector<Enemy*>& enemies)
 {
 	ProcessInput(cam, dt, events);
-	//PointInSphere(cam, enemies);
-	
+
 	// Check if ray casting is true
 	if (m_castRay)
 	{
@@ -42,7 +41,7 @@ void Physics::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)
 			cam.MouseUpdate(glm::vec2(i->motion.x, i->motion.y), dt);
 			break;
 		}
-		
+
 		//case SDL_MOUSEBUTTONDOWN:
 		//{
 		//	switch (i->button.button)
@@ -146,31 +145,32 @@ void Physics::CheckRaySphereCollision(Camera& cam, std::vector<Enemy*> enemies)
 		// Check if the ray is colliding with the sphere
 		if (m_collision)
 		{
-			// Pass in the value the iterator is pointing to to the OnHit() function
-			OnHit((*i));
+			// Pass in the value the iterator is pointing to to the OnEnemyHit() function
+			OnEnemyHit((*i));
 		}
 	}
 }
 
-inline void Physics::OnHit(Enemy* enemy)
+inline void Physics::OnEnemyHit(Enemy* enemy)
 {
 	enemy->ReduceHealth(Player::GetInstance().GetCurrWeapon().GetDamage());
 }
 
-bool Physics::PointInSphere(Camera& cam, std::vector<Enemy*>& enemies)
+ void Physics::OnPlayerHit(float damage)
 {
-	for (auto i = enemies.begin(); i != enemies.end(); ++i)
+	Player::GetInstance().ReduceHealth(damage);
+}
+
+bool Physics::PointInSphere(Camera& cam, glm::vec3& other, float radius)
+{
+	// Calculate distance between player and center of circle
+	float distanceSq = std::pow(cam.GetCameraPos().x - other.x, 2) + std::pow(cam.GetCameraPos().y - other.y, 2) + std::pow(cam.GetCameraPos().z - other.z, 2);
+
+	// Check if the player is within the radius (if radius is bigger than point is inside circle) 
+	if (distanceSq < (radius * radius))
 	{
-		float distanceSq = std::pow(cam.GetCameraPos().x - (*i)->GetPos().x, 2) +
-						   std::pow(cam.GetCameraPos().y - (*i)->GetPos().y, 2) +
-						   std::pow(cam.GetCameraPos().z - (*i)->GetPos().z, 2);
-
-		if (distanceSq < (10 * 10))
-		{
-			printf("Hello");
-			return true;
-		}
-
-		return false;
+		return true;
 	}
+
+	return false;
 }

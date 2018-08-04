@@ -25,17 +25,19 @@ public:
 	}
 
 	Physics(Physics const&) = delete;
+
 	void operator=(Physics const&) = delete;
 
 	void ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events);
 	void Update(Camera& cam, float dt, std::vector<SDL_Event> events, std::vector<Enemy*>& enemies);
 
-	inline void CastRay()				{ m_castRay = true; }
-	inline Ray& GetRay()				{ return m_ray; }
-	inline bool GetDebugRayCastDraw()   { return m_debugRayCastDraw; }
-	inline float GetGravity()			{ return m_gravity; }
-	inline void OnHit(Enemy* enemy);
-	bool PointInSphere(Camera& cam, std::vector<Enemy*>& enemies);
+	void CastRay()					{ m_castRay = true; }
+	Ray& GetRay()					{ return m_ray; }
+	bool GetDebugRayCastDraw()		{ return m_debugRayCastDraw; }
+	float GetGravity()				{ return m_gravity; }
+	void OnEnemyHit(Enemy* enemy);
+	void OnPlayerHit(float damage);
+	bool PointInSphere(Camera& cam, glm::vec3&, float radius);
 
 private:
 	Physics();

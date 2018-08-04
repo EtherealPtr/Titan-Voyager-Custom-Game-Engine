@@ -25,16 +25,21 @@ public:
 
 	void SetAttackDistance(float attkDistance) { m_attackDistance = attkDistance; }
 	float GetAttackDistance() { return m_attackDistance; }
+	void SetAttackDamage(float attkDmg) { m_attackDamage = attkDmg; }
+	float GetAttackDamage() { return m_attackDamage; }
 
 private:
 	Camera m_camera;
 	Model m_model;
 	glm::vec3 m_pos, m_velocity, m_fireDir, m_dronePos, m_oldPlayerPos;
+ 
 	float m_maximumSpeed, m_maximumDroneSpeed;
+	float m_attackDamage;
 	float m_deltaTime;
 	float m_distance, m_attackDistance, m_damageTakenDuration, m_evadeDurationCounter, m_shootDuration, m_blastRadius;
 	int m_health;
 	bool m_dead, m_withinAttackRange, m_takingDamage, m_evade, m_evadeRight, m_droneStatus, m_droneActive, m_fire, m_droneSelfDestruct;
+	bool m_damageToken;
 	ParticleEmitter m_particleEffect;
 
 	// Private functions
