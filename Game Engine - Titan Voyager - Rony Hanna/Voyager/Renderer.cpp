@@ -100,9 +100,6 @@ bool Renderer::InitSDLAndOpenGL()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
-	SDL_SetRelativeMouseMode(SDL_TRUE);
-	SDL_CaptureMouse(SDL_TRUE);
-
 	glClearColor(0.137255f, 0.137255f, 0.556863f, 1.0f);
 
 	return true;

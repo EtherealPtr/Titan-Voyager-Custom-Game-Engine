@@ -9,7 +9,7 @@ std::vector<SDL_Event>& GetFrameEvents()
 
 Game::Game() :
 	m_deltaTime(0.0f),
-	m_gameState(GameState::PLAY),
+	m_gameState(GameState::MAIN_MENU),
 	m_sniperScope(false)
 {
 	srand(static_cast<unsigned int>(time(NULL)));
@@ -27,8 +27,8 @@ Game::~Game()
 	}
 }
 
-void Game::Run()  
-{      
+void Game::Run()
+{
 	InitMeshes();
 	InitLights();
 	//InitDebugger();
@@ -64,10 +64,12 @@ void Game::InitMeshes()
 	Renderer::GetInstance().InitMesh(QUAD, "cubeTex", ++id, postProcessingShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(10.0f, 10.0f, 10.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "drone", ++id, unlitShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "shockwave", ++id, unlitShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 5.0f, 5.0f));
+	Renderer::GetInstance().InitMesh(QUAD, "mainMenu", ++id, hudShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f));
+	Renderer::GetInstance().InitMesh(QUAD, "indicator", ++id, hudShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f));
 
 	// Enemy ID registeration [100, 110] inclusively 
 	id = 100;
-	for (unsigned int i = 0; i < 1; ++i)
+	for (unsigned int i = 0; i < 10; ++i)
 	{
 		Renderer::GetInstance().InitMesh(SPHERE, "enemySphere", id++, enemyShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 		Enemy* enemy = new Enemy(m_camera);
@@ -80,7 +82,7 @@ void Game::InitMeshes()
 
 	m_asteroid.Init("res/Models3D/Rock/LowPolyRock.dae", m_camera, "res/Shaders/InstancingVert.vs", "res/Shaders/InstancingFrag.fs", true);
 
-	m_flagPole.Init("res/Models3D/FlagPole/Pole.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false); 
+	m_flagPole.Init("res/Models3D/FlagPole/Pole.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
 	m_flagPole.SetSpotlight(true);
 
 	for (auto i = 0; i < 5; ++i)
@@ -102,7 +104,7 @@ void Game::InitMeshes()
 		case 4: mountainRock.SetTransform(glm::vec3(750.0f, 63.0f, 750.0f), glm::vec3(0.0f, 1.0f, 0.0f), 100.0f, glm::vec3(20.0f, 36.0f, 20.0f)); break;
 		default: break;
 		}
-		
+
 		// Store newly created mountain rock in vector
 		m_mountainRocks.push_back(mountainRock);
 	}
@@ -177,16 +179,26 @@ void Game::GameLoop()
 
 		ProcessInput(GetFrameEvents());
 
-		m_framebuffer.ActivateFramebuffer();
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		Update();
-		RenderScene();
+		if (m_gameState == GameState::MAIN_MENU)
+		{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			UpdateMenu();
+			Renderer::GetInstance().GetComponent(INDICATOR).Draw(m_cameraHUD);
+			Renderer::GetInstance().GetComponent(MAIN_MENU).Draw(m_cameraHUD);
+		}
+		else
+		{
+			m_framebuffer.ActivateFramebuffer();
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			UpdateGame();
+			RenderScene();
 
-		m_framebuffer.DeactivateFramebuffer();
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).Draw(m_cameraHUD, glm::vec3(0.0f, 0.0f, 0.0f), false, nullptr, true, m_framebuffer.GetColorBufferTexture());
-		Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).GetShaderComponent().ActivateProgram();
-		Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).GetShaderComponent().SetBool("thunderstormEffect", false);
+			m_framebuffer.DeactivateFramebuffer();
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).Draw(m_cameraHUD, glm::vec3(0.0f, 0.0f, 0.0f), false, nullptr, true, m_framebuffer.GetColorBufferTexture());
+			Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).GetShaderComponent().ActivateProgram();
+			Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).GetShaderComponent().SetBool("thunderstormEffect", false);
+		}
 
 		SDL_GL_SwapWindow(Renderer::GetInstance().GetAppWindow());
 		SDL_Delay(1);
@@ -246,7 +258,7 @@ void Game::RenderScene()
 	m_asteroid.DrawInstanced(m_camera);
 
 	glDisable(GL_CULL_FACE);
-	
+
 	//m_terrain.SetFog(m_atmosphere.GetDayTime() <= 0.15f ? true : false);
 	m_terrain.Draw(m_camera, &m_dirLight, &m_pointLight, Player::GetInstance().GetSpotLight());
 
@@ -270,7 +282,7 @@ void Game::RenderScene()
 	m_texts[1].Render();
 }
 
-void Game::Update()
+void Game::UpdateGame()
 {
 	m_camera.UpdateLookAt();
 	Player::GetInstance().Update(m_camera, m_terrain, m_deltaTime, GetFrameEvents());
@@ -333,6 +345,14 @@ void Game::Update()
 	GetFrameEvents().clear();
 }
 
+void Game::UpdateMenu()
+{
+	//SDL_SetRelativeMouseMode(SDL_TRUE);
+	//SDL_CaptureMouse(SDL_TRUE);
+
+	GetFrameEvents().clear();
+}
+
 void Game::ProcessInput(std::vector<SDL_Event>& events)
 {
 	for (auto i = events.begin(); i != events.end(); ++i)
@@ -384,6 +404,9 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 
 		case SDL_MOUSEMOTION:
 		{
+			int x, y;
+			SDL_GetMouseState(&x, &y);
+			printf("x = %d, y = %d\n", x, y);
 			break;
 		}
 		// KEYBOARD_INPUT END

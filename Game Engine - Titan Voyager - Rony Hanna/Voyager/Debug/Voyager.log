@@ -1,0 +1,9 @@
+﻿  Engine.cpp
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\player.h(29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+  Game.cpp
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\player.h(29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\game.cpp(169): warning C4244: 'initializing': conversion from 'Uint32' to 'float', possible loss of data
+  main.cpp
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\player.h(29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
+  Voyager.vcxproj -> D:\Users\Rony.han7006\Desktop\Graphics-Demo\Game Engine - Titan Voyager - Rony Hanna\Debug\Voyager.exe
