@@ -65,7 +65,7 @@ void Game::InitMeshes()
 	Renderer::GetInstance().InitMesh(SPHERE, "drone", ++id, unlitShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "shockwave", ++id, unlitShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 5.0f, 5.0f));
 	Renderer::GetInstance().InitMesh(QUAD, "mainMenu", ++id, hudShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f));
-	Renderer::GetInstance().InitMesh(QUAD, "indicator", ++id, hudShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+	Renderer::GetInstance().InitMesh(QUAD, "indicator", ++id, hudShader, glm::vec3(-10.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f));
 
 	// Enemy ID registeration [100, 110] inclusively 
 	id = 100;
@@ -347,9 +347,6 @@ void Game::UpdateGame()
 
 void Game::UpdateMenu()
 {
-	//SDL_SetRelativeMouseMode(SDL_TRUE);
-	//SDL_CaptureMouse(SDL_TRUE);
-
 	GetFrameEvents().clear();
 }
 
@@ -400,17 +397,57 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 			}
 
 			break;
-		}
+		} // KEYBOARD_INPUT END
 
-		case SDL_MOUSEMOTION:
+		if (m_gameState == GameState::MAIN_MENU)
 		{
-			int x, y;
-			SDL_GetMouseState(&x, &y);
-			printf("x = %d, y = %d\n", x, y);
-			break;
-		}
-		// KEYBOARD_INPUT END
+			case SDL_MOUSEMOTION:
+			{
+				SDL_GetMouseState(&m_mouseX, &m_mouseY);
 
+				if ((m_mouseX >= 1125.0f && m_mouseX <= 1285.0f) && (m_mouseY >= 380.0f && m_mouseY <= 435.0f))
+				{
+					Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(10.0f, 2.0f, 0.0f));
+				}
+				else if ((m_mouseX >= 1105.0f && m_mouseX <= 1300.0f) && (m_mouseY >= 485.0f && m_mouseY <= 540.0f))
+				{
+					Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(9.5f, -2.7f, 0.0f));
+				}
+				else if ((m_mouseX >= 1150.0f && m_mouseX <= 1265.0f) && (m_mouseY >= 588.0f && m_mouseY <= 639.0f))
+				{
+					Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(11.0f, -7.0f, 0.0f));
+				}
+
+				break;
+			}
+
+			case SDL_MOUSEBUTTONUP:
+			{
+				switch (i->button.button)
+				{
+				case SDL_BUTTON_LEFT:
+					 
+					// Check if the "Start" button was pressed
+					if ((m_mouseX >= 1125.0f && m_mouseX <= 1285.0f) && (m_mouseY >= 380.0f && m_mouseY <= 435.0f))
+					{
+						// Start game and lock mouse cursor
+						m_gameState = GameState::PLAY;
+						SDL_SetRelativeMouseMode(SDL_TRUE);
+						SDL_CaptureMouse(SDL_TRUE);
+					}
+					// Check if the "Exit" button was pressed
+					else if ((m_mouseX >= 1150.0f && m_mouseX <= 1265.0f) && (m_mouseY >= 588.0f && m_mouseY <= 639.0f))
+					{
+						m_gameState = GameState::EXIT;
+					}
+
+					break;
+
+				default: break;
+				}
+				break;
+			}
+		}
 		default:
 			break;
 		}

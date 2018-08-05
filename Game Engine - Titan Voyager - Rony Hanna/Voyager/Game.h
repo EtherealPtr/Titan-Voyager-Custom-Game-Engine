@@ -65,6 +65,7 @@ private:
 
 private:
 	bool m_sniperScope, m_zoom;
+	int m_mouseX, m_mouseY;
 };
 
 #endif // !__GAME_H__
