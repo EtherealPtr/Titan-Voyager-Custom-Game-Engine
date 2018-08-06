@@ -1,0 +1,97 @@
+﻿  Animation.cpp
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\dependencies\assimp\include\assimp\metadata.h(152): warning C4800: 'void *': forcing value to bool 'true' or 'false' (performance warning)
+  Atmosphere.cpp
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\dependencies\assimp\include\assimp\metadata.h(152): warning C4800: 'void *': forcing value to bool 'true' or 'false' (performance warning)
+Atmosphere.cpp(72): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  Audio.cpp
+  Camera.cpp
+  Cloth.cpp
+Cloth.cpp(25): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(27): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(37): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(39): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(41): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(44): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(47): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(50): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(56): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(58): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(60): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(63): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(66): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(69): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(80): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(82): warning C4018: '>=': signed/unsigned mismatch
+Cloth.cpp(104): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(106): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(231): warning C4018: '<': signed/unsigned mismatch
+Cloth.cpp(233): warning C4018: '<': signed/unsigned mismatch
+  ClothParticle.cpp
+  Constraint.cpp
+  Debugger.cpp
+  DirectionalLight.cpp
+  Enemy.cpp
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\dependencies\assimp\include\assimp\metadata.h(152): warning C4800: 'void *': forcing value to bool 'true' or 'false' (performance warning)
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\Player.h(29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+  Engine.cpp
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\dependencies\assimp\include\assimp\metadata.h(152): warning C4800: 'void *': forcing value to bool 'true' or 'false' (performance warning)
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\Player.h(29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+  Font.cpp
+Font.cpp(65): warning C4838: conversion from 'FT_Pos' to 'GLuint' requires a narrowing conversion
+  Framebuffer.cpp
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\dependencies\assimp\include\assimp\metadata.h(152): warning C4800: 'void *': forcing value to bool 'true' or 'false' (performance warning)
+  Game.cpp
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\dependencies\assimp\include\assimp\metadata.h(152): warning C4800: 'void *': forcing value to bool 'true' or 'false' (performance warning)
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\Player.h(29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+Game.cpp(170): warning C4244: 'initializing': conversion from 'Uint32' to 'float', possible loss of data
+  GameObject.cpp
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\dependencies\assimp\include\assimp\metadata.h(152): warning C4800: 'void *': forcing value to bool 'true' or 'false' (performance warning)
+  main.cpp
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\dependencies\assimp\include\assimp\metadata.h(152): warning C4800: 'void *': forcing value to bool 'true' or 'false' (performance warning)
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\Player.h(29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+  Mesh.cpp
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\dependencies\assimp\include\assimp\metadata.h(152): warning C4800: 'void *': forcing value to bool 'true' or 'false' (performance warning)
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\Player.h(29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+Mesh.cpp(170): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  Model.cpp
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\dependencies\assimp\include\assimp\metadata.h(152): warning C4800: 'void *': forcing value to bool 'true' or 'false' (performance warning)
+  Particle.cpp
+  ParticleEmitter.cpp
+ParticleEmitter.cpp(15): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+ParticleEmitter.cpp(66): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+  Compiling...
+  PerlinNoise.cpp
+  Physics.cpp
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\dependencies\assimp\include\assimp\metadata.h(152): warning C4800: 'void *': forcing value to bool 'true' or 'false' (performance warning)
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\Player.h(29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+Physics.cpp(39): warning C4244: '=': conversion from 'Sint32' to 'float', possible loss of data
+Physics.cpp(40): warning C4244: '=': conversion from 'Sint32' to 'float', possible loss of data
+  Player.cpp
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\dependencies\assimp\include\assimp\metadata.h(152): warning C4800: 'void *': forcing value to bool 'true' or 'false' (performance warning)
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\Player.h(29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+  PointLight.cpp
+  Renderer.cpp
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\dependencies\assimp\include\assimp\metadata.h(152): warning C4800: 'void *': forcing value to bool 'true' or 'false' (performance warning)
+  ResourceManager.cpp
+  Shader.cpp
+  Shape.cpp
+  SpotLight.cpp
+  Terrain.cpp
+  Texture.cpp
+  Utils.cpp
+Utils.cpp(6): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Weapon.cpp
+c:\users\rony hanna\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\dependencies\assimp\include\assimp\metadata.h(152): warning C4800: 'void *': forcing value to bool 'true' or 'false' (performance warning)
+SOIL.lib(SOIL.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:ICF' specification
+LINK : warning LNK4098: defaultlib 'MSVCRTD' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Generating code
+  44 of 3201 functions ( 1.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    24 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'SOIL.lib(image_DXT.obj)' or at 'C:\Users\Rony Hanna\Desktop\Graphics-Demo\Game Engine - Titan Voyager - Rony Hanna\Release\SOIL.pdb'; linking object as if no debug info
+SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'SOIL.lib(image_helper.obj)' or at 'C:\Users\Rony Hanna\Desktop\Graphics-Demo\Game Engine - Titan Voyager - Rony Hanna\Release\SOIL.pdb'; linking object as if no debug info
+SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'SOIL.lib(SOIL.obj)' or at 'C:\Users\Rony Hanna\Desktop\Graphics-Demo\Game Engine - Titan Voyager - Rony Hanna\Release\SOIL.pdb'; linking object as if no debug info
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'SOIL.pdb' was not found with 'SOIL.lib(stb_image_aug.obj)' or at 'C:\Users\Rony Hanna\Desktop\Graphics-Demo\Game Engine - Titan Voyager - Rony Hanna\Release\SOIL.pdb'; linking object as if no debug info
+  Voyager.vcxproj -> C:\Users\Rony Hanna\Desktop\Graphics-Demo\Game Engine - Titan Voyager - Rony Hanna\Release\Voyager.exe
+  Voyager.vcxproj -> C:\Users\Rony Hanna\Desktop\Graphics-Demo\Game Engine - Titan Voyager - Rony Hanna\Release\Voyager.pdb (Full PDB)

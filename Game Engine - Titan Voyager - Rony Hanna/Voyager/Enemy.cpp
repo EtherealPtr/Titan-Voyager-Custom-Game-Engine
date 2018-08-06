@@ -60,9 +60,6 @@ void Enemy::Draw(short int enemyId, short int enemyDroneId, short int enemyDrone
 			
 			if (m_blastRadius < 7.0f)
 			{
-				// Disable culling so that player can see from within the explosion
-				glDisable(GL_CULL_FACE);
-
 				// Update explosion blast 
 				Renderer::GetInstance().GetComponent(enemyDroneBlastId).SetTransform(m_oldPlayerPos, glm::vec3(m_blastRadius * 20, m_blastRadius * 20, m_blastRadius * 20), glm::vec3(m_blastRadius));
 				Renderer::GetInstance().GetComponent(enemyDroneBlastId).Draw(m_camera);
@@ -76,9 +73,6 @@ void Enemy::Draw(short int enemyId, short int enemyDroneId, short int enemyDrone
 					// Take away the enemy's damage token
 					m_damageToken = false;
 				}
-
-				// Re-enable culling
-				glEnable(GL_CULL_FACE);
 			}
 			else
 			{
@@ -248,7 +242,7 @@ void Enemy::Flee(Camera& target, const float dt)
 void Enemy::Fire(Camera& target, Terrain& terrain, const float dt)
 {
 	// Check if the drone has just been fired
-	if (m_droneStatus)
+	if (m_droneStatus && !m_droneSelfDestruct)
 	{
 		// Set the drone's position equal to the big sphere enemy position
 		m_dronePos = m_pos;
