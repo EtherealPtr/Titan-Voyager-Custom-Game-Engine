@@ -10,7 +10,8 @@ std::vector<SDL_Event>& GetFrameEvents()
 Game::Game() :
 	m_deltaTime(0.0f),
 	m_gameState(GameState::MAIN_MENU),
-	m_sniperScope(false)
+	m_sniperScope(false),
+	m_dataTransmitTimer(0.0f)
 {
 	srand(static_cast<unsigned int>(time(NULL)));
 	m_camera.InitCameraPerspective(80.0f, 1440.0f / 900.0f, 0.1f, 5000.0f);
@@ -65,7 +66,7 @@ void Game::InitMeshes()
 	Renderer::GetInstance().InitMesh(SPHERE, "drone", ++id, unlitShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 	Renderer::GetInstance().InitMesh(SPHERE, "shockwave", ++id, unlitShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 5.0f, 5.0f));
 	Renderer::GetInstance().InitMesh(QUAD, "mainMenu", ++id, hudShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f));
-	Renderer::GetInstance().InitMesh(QUAD, "indicator", ++id, hudShader, glm::vec3(-10.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+	Renderer::GetInstance().InitMesh(QUAD, "indicator", ++id, hudShader, glm::vec3(-30.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f));
 
 	// Enemy ID registeration [100, 110] inclusively 
 	id = 100;
@@ -143,6 +144,14 @@ void Game::InitText()
 	healthText.SetSpacing(0.79f);
 	healthText.SetPosition(glm::vec2(110.0f, 33.0f));
 	m_texts.push_back(healthText);
+
+	Text dataTransmissionText;
+	dataTransmissionText.Configure("res/Fonts/Roboto-BoldItalic.ttf");
+	dataTransmissionText.SetText("100%");
+	dataTransmissionText.SetScale(0.5f);
+	dataTransmissionText.SetSpacing(0.7f);
+	dataTransmissionText.SetPosition(glm::vec2(600.0f, 33.0f));
+	m_texts.push_back(dataTransmissionText);
 }
 
 void Game::InitMultiRenderTarget()
@@ -274,12 +283,15 @@ void Game::RenderScene()
 	}
 
 	// Text updates
-	// [0] : Ammo, [1] : Health
+	// [0] : Ammo, [1] : Health, [2] : Data transmission percentage
 	m_texts[0].SetText(std::to_string(Player::GetInstance().GetCurrWeapon().GetAmmoCount()));
 	m_texts[0].Render();
 
 	m_texts[1].SetText(std::to_string(Player::GetInstance().GetHealth()));
 	m_texts[1].Render();
+
+	m_texts[2].SetText("Data transfer: " + std::to_string((int)m_dataTransmitTimer) + "%");
+	m_texts[2].Render();
 }
 
 void Game::UpdateGame()
@@ -341,6 +353,9 @@ void Game::UpdateGame()
 			m_atmosphere.GetFlashTimer() = 0.0f;
 		}
 	}
+
+	// Update data transmitter 
+	m_dataTransmitTimer += 0.39f * m_deltaTime;
 
 	GetFrameEvents().clear();
 }

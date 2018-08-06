@@ -14,7 +14,6 @@ Enemy::Enemy(Camera& cam) :
 	m_blastRadius(0.01f),
 	m_distance(0.0f),
 	m_shootDuration(0.0f),
-	m_attackDistance(125.0f),
 	m_evadeDurationCounter(0.0f),
 	m_damageTakenDuration(0.0f),
 	m_attackDamage(10.0f),
@@ -99,16 +98,10 @@ void Enemy::Update(Terrain& terrain, Camera& cam, float dt)
 		m_pos.y = terrain.GetHeightOfTerrain(m_pos.x, m_pos.z) + 5.0f;
 		m_distance = CalcDistance(m_pos, cam.GetCameraPos());
 
-		// Check if enemy is within attack distance range
-		if (m_distance < m_attackDistance)
+		// Check if the player is getting too close, if so then run away, if not then move towards player
+		if (m_distance < 75.0f)
 		{
-			// Fire on the player 
-
-			// Check if the player is getting too close
-			if (m_distance < 75.0f)
-			{
-				Flee(cam, dt);
-			}
+			Flee(cam, dt);
 		}
 		else
 		{
