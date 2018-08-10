@@ -49,6 +49,13 @@ void Enemy::Draw(short int enemyId, short int enemyDroneId, short int enemyDrone
 			// Update the small drone's transform per frame
 			Renderer::GetInstance().GetComponent(enemyDroneId).SetTransform(m_dronePos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.25f, 0.25f, 0.25f));
 			Renderer::GetInstance().GetComponent(enemyDroneId).Draw(m_camera);
+
+			// Check if the player is colliding with the drone
+			if (Physics::GetInstance().PointInSphere(m_camera, m_dronePos, 2.0f))
+			{
+				// Inflict damage on player
+				Physics::GetInstance().OnPlayerHit(m_attackDamage);
+			}
 		}
 
 		// Check if the small drone has reached its desired destination where it is about to explode
@@ -83,6 +90,10 @@ void Enemy::Draw(short int enemyId, short int enemyDroneId, short int enemyDrone
 				m_damageToken = true;
 			}
 		}
+	}
+	else
+	{
+		Respawn();
 	}
 }
 
@@ -271,5 +282,18 @@ void Enemy::Fire(Camera& target, Terrain& terrain, const float dt)
 		m_droneStatus = true;
 		m_dronePos = m_pos;
 		m_dronePos.y = -999.0f;
+	}
+}
+
+void Enemy::Respawn()
+{
+	m_respawnTimer += 1.0f * m_deltaTime;
+
+	if (m_respawnTimer >= 10.0f)
+	{
+		m_respawnTimer = 0.0f;
+		m_pos = glm::vec3(Utils::GetInstance().RandomNumBetweenTwo(50.0f, 520.0f), 0.0f, Utils::GetInstance().RandomNumBetweenTwo(0.0f, 650.0f));
+		m_dead = false;
+		m_health = 100;
 	}
 }

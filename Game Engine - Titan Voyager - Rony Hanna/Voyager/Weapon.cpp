@@ -30,6 +30,11 @@ void Weapon::Configure(int maxAmmo, float fireRate, float reloadTime, int damage
 	m_damage = damage;
 }
 
+void Weapon::RestartWeapon()
+{
+	m_ammoCount = m_maxAmmo;
+}
+
 void Weapon::Update(Camera& cam, float dt)
 {
 	if (m_currFireRateTime > m_fireRate)

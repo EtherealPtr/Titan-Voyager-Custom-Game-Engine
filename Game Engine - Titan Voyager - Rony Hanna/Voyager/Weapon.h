@@ -15,6 +15,7 @@ public:
 	void Update(Camera& cam, float dt);
 	void Fire(Model& weapon, Camera& cam, float dt, bool& firing, bool& reloading);
 	void Reload(Model& weapon, Camera& cam, float dt, bool& reloading);
+	void RestartWeapon();
 
 	inline void SetMaxAmmo(int maxAmmo) { m_maxAmmo = maxAmmo; }
 	inline int GetMaxAmmoCount() { return m_maxAmmo; }

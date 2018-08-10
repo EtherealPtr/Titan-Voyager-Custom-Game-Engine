@@ -21,10 +21,10 @@ Game::Game() :
 Game::~Game()
 {
 	// Deallocate all enemies stored on the heap (or freestore)
-	for (auto i = m_enemies.begin(); i != m_enemies.end(); ++i)
+	for (auto& i : m_enemies)
 	{
-		delete *i;
-		*i = nullptr;
+		delete i;
+		i = nullptr;
 	}
 }
 
@@ -68,9 +68,9 @@ void Game::InitMeshes()
 	Renderer::GetInstance().InitMesh(QUAD, "mainMenu", ++id, hudShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f));
 	Renderer::GetInstance().InitMesh(QUAD, "indicator", ++id, hudShader, glm::vec3(-30.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f));
 
-	// Enemy ID registeration [100, 110] inclusively 
+	// Enemy ID registeration [100, 130] inclusively 
 	id = 100;
-	for (unsigned int i = 0; i < 10; ++i)
+	for (unsigned int i = 0; i < 1; ++i)
 	{
 		Renderer::GetInstance().InitMesh(SPHERE, "enemySphere", id++, enemyShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 		Enemy* enemy = new Enemy(m_camera);
@@ -276,9 +276,9 @@ void Game::RenderScene()
 
 	// Draw enemy units
 	int enemyId = 100;
-	for (auto enemy : m_enemies)
+	for (auto& enemy : m_enemies)
 	{
-		(*enemy).Draw(enemyId, ENEMY_DRONE, ENEMY_BLAST);
+		enemy->Draw(enemyId, ENEMY_DRONE, ENEMY_BLAST);
 		++enemyId;
 	}
 
@@ -298,6 +298,11 @@ void Game::UpdateGame()
 {
 	m_camera.UpdateLookAt();
 	Player::GetInstance().Update(m_camera, m_terrain, m_deltaTime, GetFrameEvents());
+	
+	if (Player::GetInstance().IsPlayerDead())
+	{
+		RestartGame();
+	}
 
 	if (Player::GetInstance().IsPlayerAiming())
 		m_sniperScope = true;
@@ -363,6 +368,12 @@ void Game::UpdateGame()
 void Game::UpdateMenu()
 {
 	GetFrameEvents().clear();
+}
+
+void Game::RestartGame()
+{
+	// Respawn the player
+	Player::GetInstance().Respawn(m_camera);
 }
 
 void Game::ProcessInput(std::vector<SDL_Event>& events)

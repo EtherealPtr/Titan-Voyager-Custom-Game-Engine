@@ -26,6 +26,8 @@ public:
 	void SetAttackDamage(float attkDmg) { m_attackDamage = attkDmg; }
 	float GetAttackDamage() { return m_attackDamage; }
 
+	void Respawn();
+
 private:
 	Camera m_camera;
 	Model m_model;
@@ -33,7 +35,7 @@ private:
  
 	float m_maximumSpeed, m_maximumDroneSpeed;
 	float m_attackDamage;
-	float m_deltaTime;
+	float m_deltaTime, m_respawnTimer;
 	float m_distance, m_damageTakenDuration, m_evadeDurationCounter, m_shootDuration, m_blastRadius;
 	int m_health;
 	bool m_dead, m_withinAttackRange, m_takingDamage, m_evade, m_evadeRight, m_droneStatus, m_droneActive, m_fire, m_droneSelfDestruct;

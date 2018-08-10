@@ -10,7 +10,8 @@ Player::Player() :
 	m_isInAir(false),
 	m_swapped(false),
 	m_sniperAiming(false),
-	m_toggleFlashlight(false)
+	m_toggleFlashlight(false),
+	m_dead(false)
 {}
 
 Player::~Player()
@@ -46,6 +47,12 @@ void Player::Init(Camera& cam, glm::vec3 initialPosition)
 
 void Player::Update(Camera& cam, Terrain& terrain, float dt, std::vector<SDL_Event> events)
 {
+	if (m_health <= 0)
+	{
+		m_dead = true;
+		return;
+	}
+
 	if (!IsPlayerWalking())
 	{
 		m_walking = false;
@@ -192,6 +199,16 @@ void Player::Switch()
 
 	m_swapping = true;
 	m_swapped = false;
+}
+
+void Player::Respawn(Camera& cam)
+{
+	m_dead = false;
+	m_health = 100;
+	cam.GetCameraPos() = glm::vec3(256.0f, 0.0f, 300.0f);
+	m_toggleFlashlight = false;
+	m_assaultRifle->RestartWeapon();
+	m_sniperRifle->RestartWeapon();
 }
 
 void Player::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)
