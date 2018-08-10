@@ -11,7 +11,8 @@ Game::Game() :
 	m_deltaTime(0.0f),
 	m_gameState(GameState::MAIN_MENU),
 	m_sniperScope(false),
-	m_dataTransmitTimer(0.0f)
+	m_dataTransmitTimer(0.0f),
+	m_enemyCount(1)
 {
 	srand(static_cast<unsigned int>(time(NULL)));
 	m_camera.InitCameraPerspective(80.0f, 1440.0f / 900.0f, 0.1f, 5000.0f);
@@ -70,7 +71,7 @@ void Game::InitMeshes()
 
 	// Enemy ID registeration [100, 130] inclusively 
 	id = 100;
-	for (unsigned int i = 0; i < 1; ++i)
+	for (unsigned int i = 0; i < 30; ++i)
 	{
 		Renderer::GetInstance().InitMesh(SPHERE, "enemySphere", id++, enemyShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 		Enemy* enemy = new Enemy(m_camera);
@@ -309,12 +310,23 @@ void Game::UpdateGame()
 	else
 		m_sniperScope = false;
 
-	// Update enemy units
-	int enemyId = 100;
-	for (auto i : m_enemies)
+	// Increase total number of enemies over time
+	m_enemySpawnTimer += 1.0f * m_deltaTime;
+
+	if (m_enemySpawnTimer >= 16.0f)
 	{
-		(*i).Update(m_terrain, m_camera, m_deltaTime);
-		++enemyId;
+		m_enemySpawnTimer = 0.0f;
+
+		if (m_enemyCount < 30)
+		{
+			++m_enemyCount;
+		}
+	}
+
+	// Update enemy units
+	for (unsigned int i = 0; i < m_enemyCount; ++i)
+	{
+		m_enemies.at(i)->Update(m_terrain, m_camera, m_deltaTime);
 	}
 
 	// Update physics component
@@ -360,7 +372,7 @@ void Game::UpdateGame()
 	}
 
 	// Update data transmitter 
-	m_dataTransmitTimer += 0.39f * m_deltaTime;
+	m_dataTransmitTimer += 0.59f * m_deltaTime;
 
 	GetFrameEvents().clear();
 }
@@ -372,8 +384,11 @@ void Game::UpdateMenu()
 
 void Game::RestartGame()
 {
-	// Respawn the player
+	// Respawn the player (reset position, ammo, health, flashlight)
 	Player::GetInstance().Respawn(m_camera);
+	m_dataTransmitTimer = 0.0f;
+	m_enemySpawnTimer = 0.0f;
+	m_enemyCount = 1;
 }
 
 void Game::ProcessInput(std::vector<SDL_Event>& events)

@@ -67,7 +67,8 @@ private:
 private:
 	bool m_sniperScope, m_zoom;
 	int m_mouseX, m_mouseY;
-	float m_dataTransmitTimer;
+	int m_enemyCount;
+	float m_dataTransmitTimer, m_enemySpawnTimer;
 };
 
 #endif // !__GAME_H__
