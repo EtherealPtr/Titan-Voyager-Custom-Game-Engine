@@ -32,7 +32,7 @@ void Player::Init(Camera& cam, glm::vec3 initialPosition)
 
 	m_assaultRifle = new Weapon();
 	m_assaultRifle->Init("res/Models3D/Sci-fi_AssaultRifle/AssaultRifle.dae", cam, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs");
-	m_assaultRifle->Configure(35, 0.12f, 1.0f, 25);
+	m_assaultRifle->Configure(35, 0.12f, 1.0f, 35);
 
 	m_sniperRifle = new Weapon();
 	m_sniperRifle->Init("res/Models3D/Sci-fi_SniperRifle/SniperRifle.obj", cam, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs");
@@ -203,10 +203,10 @@ void Player::Switch()
 
 void Player::Respawn(Camera& cam)
 {
+	m_toggleFlashlight = false;
 	m_dead = false;
 	m_health = 100;
 	cam.GetCameraPos() = glm::vec3(256.0f, 0.0f, 300.0f);
-	m_toggleFlashlight = false;
 	m_assaultRifle->RestartWeapon();
 	m_sniperRifle->RestartWeapon();
 }

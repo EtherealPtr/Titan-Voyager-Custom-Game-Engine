@@ -26,7 +26,8 @@ public:
 	void SetAttackDamage(float attkDmg) { m_attackDamage = attkDmg; }
 	float GetAttackDamage() { return m_attackDamage; }
 
-	void Respawn();
+	void SetDeath(bool isDead) { m_dead = isDead; }
+	bool GetDeath() { return m_dead; }
 
 private:
 	Camera m_camera;
@@ -35,7 +36,7 @@ private:
  
 	float m_maximumSpeed, m_maximumDroneSpeed;
 	float m_attackDamage;
-	float m_deltaTime, m_respawnTimer;
+	float m_deltaTime, m_currLifeTimer, m_respawnTimer;
 	float m_distance, m_damageTakenDuration, m_evadeDurationCounter, m_shootDuration, m_blastRadius;
 	int m_health;
 	bool m_dead, m_withinAttackRange, m_takingDamage, m_evade, m_evadeRight, m_droneStatus, m_droneActive, m_fire, m_droneSelfDestruct;
@@ -46,6 +47,7 @@ private:
 	void Seek(Camera& target, const float dt);
 	void Flee(Camera& target, const float dt);
 	void Fire(Camera& target, Terrain& terrain, const float dt);
+	void Respawn();
 };
 
 #endif // !__ENEMY_H__

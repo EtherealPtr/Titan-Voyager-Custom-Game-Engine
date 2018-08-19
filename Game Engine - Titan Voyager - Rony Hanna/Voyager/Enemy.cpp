@@ -17,6 +17,7 @@ Enemy::Enemy(Camera& cam) :
 	m_evadeDurationCounter(0.0f),
 	m_damageTakenDuration(0.0f),
 	m_attackDamage(10.0f),
+	m_currLifeTimer(0.0f),
 	m_dead(false),
 	m_takingDamage(false),
 	m_evade(false),
@@ -38,10 +39,21 @@ void Enemy::Draw(short int enemyId, short int enemyDroneId, short int enemyDrone
 {
 	if (!m_dead)
 	{
-		// Update the enemy's transform and particle system every frame
+		// Activate enemy's shader program
+		Renderer::GetInstance().GetComponent(enemyId).GetShaderComponent().ActivateProgram();
+
+		// Check if the enemy is taking damage, if so, make the enemy flash red
+		if (m_takingDamage)
+			Renderer::GetInstance().GetComponent(enemyId).GetShaderComponent().SetBool("damaged", true);
+		else
+			Renderer::GetInstance().GetComponent(enemyId).GetShaderComponent().SetBool("damaged", false);
+
+		// Update the enemy's transform and particle system every frame and draw the enemy
 		Renderer::GetInstance().GetComponent(enemyId).SetTransform(m_pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-		m_particleEffect.Render(m_camera, m_deltaTime, glm::vec3(m_pos.x - 1.7f, m_pos.y + 4.5f, m_pos.z - 0.4f));
 		Renderer::GetInstance().GetComponent(enemyId).Draw(m_camera, glm::vec3(0.0f, 0.0f, 0.0f), false, Player::GetInstance().GetSpotLight());
+
+		if (m_currLifeTimer >= 0.2f)
+			m_particleEffect.Render(m_camera, m_deltaTime, glm::vec3(m_pos.x - 1.7f, m_pos.y + 4.5f, m_pos.z - 0.4f));
 
 		// Check if a small drone has been fired by the enemy
 		if (m_droneActive)
@@ -93,6 +105,7 @@ void Enemy::Draw(short int enemyId, short int enemyDroneId, short int enemyDrone
 	}
 	else
 	{
+		m_currLifeTimer = 0.0f;
 		Respawn();
 	}
 }
@@ -102,12 +115,13 @@ void Enemy::Update(Terrain& terrain, Camera& cam, float dt)
 	// Check if this enemy is dead, otherwise update its properties
 	if (m_health <= 0)
 		m_dead = true;
-	else
+	else if (!m_dead)
 	{
 		m_deltaTime = dt;
 		m_camera = cam;
 		m_pos.y = terrain.GetHeightOfTerrain(m_pos.x, m_pos.z) + 5.0f;
 		m_distance = CalcDistance(m_pos, cam.GetCameraPos());
+		m_currLifeTimer += 0.1f * dt;
 
 		// Check if the player is getting too close, if so then run away, if not then move towards player
 		if (m_distance < 75.0f)
@@ -199,6 +213,11 @@ void Enemy::Update(Terrain& terrain, Camera& cam, float dt)
 			Fire(cam, terrain, dt);
 		}
 	}
+	else
+	{
+		m_pos.y = -999.0f;
+		m_dronePos.y = -999.0f;
+	}
 }
 
 void Enemy::ReduceHealth(int amount)
@@ -289,7 +308,7 @@ void Enemy::Respawn()
 {
 	m_respawnTimer += 1.0f * m_deltaTime;
 
-	if (m_respawnTimer >= 10.0f)
+	if (m_respawnTimer >= 15.0f)
 	{
 		m_respawnTimer = 0.0f;
 		m_pos = glm::vec3(Utils::GetInstance().RandomNumBetweenTwo(50.0f, 520.0f), 0.0f, Utils::GetInstance().RandomNumBetweenTwo(0.0f, 650.0f));

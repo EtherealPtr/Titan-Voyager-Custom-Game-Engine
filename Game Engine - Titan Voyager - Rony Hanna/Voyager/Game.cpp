@@ -150,8 +150,9 @@ void Game::InitText()
 	dataTransmissionText.Configure("res/Fonts/Roboto-BoldItalic.ttf");
 	dataTransmissionText.SetText("100%");
 	dataTransmissionText.SetScale(0.5f);
+	dataTransmissionText.SetColor(glm::vec3(0.137255f, 0.137255f, 0.556863f));
 	dataTransmissionText.SetSpacing(0.7f);
-	dataTransmissionText.SetPosition(glm::vec2(600.0f, 33.0f));
+	dataTransmissionText.SetPosition(glm::vec2(1050.0f, 840.0f));
 	m_texts.push_back(dataTransmissionText);
 }
 
@@ -277,9 +278,9 @@ void Game::RenderScene()
 
 	// Draw enemy units
 	int enemyId = 100;
-	for (auto& enemy : m_enemies)
+	for (unsigned int i = 0; i < m_enemyCount; ++i)
 	{
-		enemy->Draw(enemyId, ENEMY_DRONE, ENEMY_BLAST);
+		m_enemies.at(i)->Draw(enemyId, ENEMY_DRONE, ENEMY_BLAST);
 		++enemyId;
 	}
 
@@ -386,6 +387,13 @@ void Game::RestartGame()
 {
 	// Respawn the player (reset position, ammo, health, flashlight)
 	Player::GetInstance().Respawn(m_camera);
+	
+	// Restart existing enemy units
+	for (unsigned int i = 0; i < m_enemyCount; ++i)
+	{
+		m_enemies.at(i)->SetDeath(true);
+	}
+
 	m_dataTransmitTimer = 0.0f;
 	m_enemySpawnTimer = 0.0f;
 	m_enemyCount = 1;

@@ -57,9 +57,9 @@ void ParticleEmitter::Render(Camera& cam, float dt, glm::vec3 origin)
 
 			model = glm::translate(glm::vec3(m_transform.GetPos().x + 2.7f, m_transform.GetPos().y - 2.5f, m_transform.GetPos().z));
 
+			m_shader.SetMat4("model", model);
 			m_shader.SetMat4("view", cam.GetViewMatrix());
 			m_shader.SetMat4("projection", cam.GetProjectionMatrix());
-			m_shader.SetMat4("model", model);
 
 			glBindVertexArray(m_vao);
 			m_texture.ActivateTexture();
