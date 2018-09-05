@@ -197,7 +197,7 @@ void Game::GameLoop()
 			Renderer::GetInstance().GetComponent(INDICATOR).Draw(m_cameraHUD);
 			Renderer::GetInstance().GetComponent(MAIN_MENU).Draw(m_cameraHUD);
 		}
-		else
+		else if (m_gameState != GameState::EXIT)
 		{
 			m_framebuffer.ActivateFramebuffer();
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -387,7 +387,7 @@ void Game::UpdateGame()
 	}
 
 	// Update data transmitter 
-	m_dataTransmitTimer += 5.59f * m_deltaTime;
+	m_dataTransmitTimer += 0.59f * m_deltaTime;
 
 	// Check if win condition is met (if the data was sent in full and all enemies have been neutralized)
 	if (m_dataTransmitTimer >= 100)
@@ -433,6 +433,7 @@ void Game::RestartGame()
 	for (unsigned int i = 0; i < m_enemyCount; ++i)
 	{
 		m_enemies.at(i)->SetDeath(true);
+		m_enemies.at(i)->SetRespawnStatus(true);
 	}
 
 	m_dataTransmitTimer = 0.0f;
