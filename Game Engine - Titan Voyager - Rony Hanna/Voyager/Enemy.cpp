@@ -25,6 +25,7 @@ Enemy::Enemy(Camera& cam) :
 	m_fire(false),
 	m_droneStatus(true),
 	m_damageToken(true),
+	m_canRespawn(true),
 	m_dronePos(m_pos)
 {
 	m_particleEffect.Init("res/Shaders/Particle System Shaders/VertexShader.vs",
@@ -98,7 +99,7 @@ void Enemy::Draw(short int enemyId, short int enemyDroneId, short int enemyDrone
 				m_droneSelfDestruct = false;
 				m_blastRadius = 0.01f;
 
-				// Restore the enemy's token
+				// Restore the enemy's damage token
 				m_damageToken = true;
 			}
 		}
@@ -238,6 +239,11 @@ inline float Enemy::CalcDistanceNoHeight(glm::vec3& enemyPos, glm::vec3& playerP
 	return sqrt(powf(enemyPos.x - playerPos.x, 2.0f) + powf(enemyPos.z - playerPos.z, 2.0f));
 }
 
+void Enemy::SetRespawnStatus(bool canRespawn)
+{
+	m_canRespawn = canRespawn;
+}
+
 void Enemy::Seek(Camera& target, const float dt)
 {
 	glm::vec3 desiredVelocity = target.GetCameraPos() - m_pos;
@@ -306,13 +312,16 @@ void Enemy::Fire(Camera& target, Terrain& terrain, const float dt)
 
 void Enemy::Respawn()
 {
-	m_respawnTimer += 1.0f * m_deltaTime;
-
-	if (m_respawnTimer >= 15.0f)
+	if (m_canRespawn)
 	{
-		m_respawnTimer = 0.0f;
-		m_pos = glm::vec3(Utils::GetInstance().RandomNumBetweenTwo(50.0f, 520.0f), 0.0f, Utils::GetInstance().RandomNumBetweenTwo(0.0f, 650.0f));
-		m_dead = false;
-		m_health = 100;
+		m_respawnTimer += 1.0f * m_deltaTime;
+
+		if (m_respawnTimer >= 15.0f)
+		{
+			m_respawnTimer = 0.0f;
+			m_pos = glm::vec3(Utils::GetInstance().RandomNumBetweenTwo(50.0f, 520.0f), 0.0f, Utils::GetInstance().RandomNumBetweenTwo(0.0f, 650.0f));
+			m_dead = false;
+			m_health = 100;
+		}
 	}
 }

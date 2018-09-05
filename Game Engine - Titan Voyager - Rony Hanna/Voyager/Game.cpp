@@ -150,9 +150,9 @@ void Game::InitText()
 	dataTransmissionText.Configure("res/Fonts/Roboto-BoldItalic.ttf");
 	dataTransmissionText.SetText("100%");
 	dataTransmissionText.SetScale(0.5f);
-	dataTransmissionText.SetColor(glm::vec3(0.137255f, 0.137255f, 0.556863f));
+	dataTransmissionText.SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
 	dataTransmissionText.SetSpacing(0.7f);
-	dataTransmissionText.SetPosition(glm::vec2(1050.0f, 840.0f));
+	dataTransmissionText.SetPosition(glm::vec2(600.0f, 40.0f));
 	m_texts.push_back(dataTransmissionText);
 }
 
@@ -280,6 +280,8 @@ void Game::RenderScene()
 	int enemyId = 100;
 	for (unsigned int i = 0; i < m_enemyCount; ++i)
 	{
+		// Check if this enemy unit can respawn (if the data transfer is at 100, then this enemy cannot respawn anymore)
+		m_enemies.at(i)->SetRespawnStatus(m_dataTransmitTimer < 100 ? true : false);
 		m_enemies.at(i)->Draw(enemyId, ENEMY_DRONE, ENEMY_BLAST);
 		++enemyId;
 	}
@@ -292,7 +294,16 @@ void Game::RenderScene()
 	m_texts[1].SetText(std::to_string(Player::GetInstance().GetHealth()));
 	m_texts[1].Render();
 
-	m_texts[2].SetText("Data transfer: " + std::to_string((int)m_dataTransmitTimer) + "%");
+	if (m_dataTransmitTimer < 100)
+	{
+		m_texts[2].SetText("Data transfer: " + std::to_string((int)m_dataTransmitTimer) + "%");
+	}
+	else
+	{
+		m_texts[2].SetSpacing(0.7f);
+		m_texts[2].SetText("Data transferred! Defeat all remaining foes");
+	}
+
 	m_texts[2].Render();
 }
 
@@ -311,16 +322,19 @@ void Game::UpdateGame()
 	else
 		m_sniperScope = false;
 
-	// Increase total number of enemies over time
-	m_enemySpawnTimer += 1.0f * m_deltaTime;
-
-	if (m_enemySpawnTimer >= 16.0f)
+	if (m_dataTransmitTimer < 100)
 	{
-		m_enemySpawnTimer = 0.0f;
+		// Increase total number of enemies over time
+		m_enemySpawnTimer += 1.0f * m_deltaTime;
 
-		if (m_enemyCount < 30)
+		if (m_enemySpawnTimer >= 16.0f)
 		{
-			++m_enemyCount;
+			m_enemySpawnTimer = 0.0f;
+
+			if (m_enemyCount < 30)
+			{
+				++m_enemyCount;
+			}
 		}
 	}
 
@@ -373,7 +387,34 @@ void Game::UpdateGame()
 	}
 
 	// Update data transmitter 
-	m_dataTransmitTimer += 0.59f * m_deltaTime;
+	m_dataTransmitTimer += 5.59f * m_deltaTime;
+
+	// Check if win condition is met (if the data was sent in full and all enemies have been neutralized)
+	if (m_dataTransmitTimer >= 100)
+	{
+		bool m_endGame = false;
+
+		// Loop through the enemies 
+		for (unsigned int i = 0; i < m_enemyCount; ++i)
+		{
+			// Check if the enemy is dead and cannot be respawned
+			if (m_enemies.at(i)->GetDeath() && !m_enemies.at(i)->GetRespawnStatus())
+			{
+				m_endGame = true;
+			}
+			else
+			{
+				m_endGame = false;
+				break;
+			}
+		}
+
+		if (m_endGame)
+		{
+			FreeMouseCursor();
+			m_gameState = GameState::MAIN_MENU;
+		}
+	}
 
 	GetFrameEvents().clear();
 }
@@ -397,6 +438,18 @@ void Game::RestartGame()
 	m_dataTransmitTimer = 0.0f;
 	m_enemySpawnTimer = 0.0f;
 	m_enemyCount = 1;
+}
+
+void Game::FreezeMouseCursor()
+{
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+	SDL_CaptureMouse(SDL_TRUE);
+}
+
+void Game::FreeMouseCursor()
+{
+	SDL_SetRelativeMouseMode(SDL_FALSE);
+	SDL_CaptureMouse(SDL_FALSE);
 }
 
 void Game::ProcessInput(std::vector<SDL_Event>& events)
@@ -481,8 +534,8 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 					{
 						// Start game and lock mouse cursor
 						m_gameState = GameState::PLAY;
-						SDL_SetRelativeMouseMode(SDL_TRUE);
-						SDL_CaptureMouse(SDL_TRUE);
+						RestartGame();
+						FreezeMouseCursor();
 					}
 					// Check if the "Exit" button was pressed
 					else if ((m_mouseX >= 1150.0f && m_mouseX <= 1265.0f) && (m_mouseY >= 588.0f && m_mouseY <= 639.0f))

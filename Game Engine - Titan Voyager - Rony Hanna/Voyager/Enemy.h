@@ -29,9 +29,11 @@ public:
 	void SetDeath(bool isDead) { m_dead = isDead; }
 	bool GetDeath() { return m_dead; }
 
+	void SetRespawnStatus(bool canRespawn);
+	bool GetRespawnStatus() { return m_canRespawn; }
+
 private:
 	Camera m_camera;
-	Model m_model;
 	glm::vec3 m_pos, m_velocity, m_fireDir, m_dronePos, m_oldPlayerPos;
  
 	float m_maximumSpeed, m_maximumDroneSpeed;
@@ -39,7 +41,7 @@ private:
 	float m_deltaTime, m_currLifeTimer, m_respawnTimer;
 	float m_distance, m_damageTakenDuration, m_evadeDurationCounter, m_shootDuration, m_blastRadius;
 	int m_health;
-	bool m_dead, m_withinAttackRange, m_takingDamage, m_evade, m_evadeRight, m_droneStatus, m_droneActive, m_fire, m_droneSelfDestruct;
+	bool m_dead, m_withinAttackRange, m_takingDamage, m_evade, m_evadeRight, m_droneStatus, m_droneActive, m_fire, m_canRespawn, m_droneSelfDestruct;
 	bool m_damageToken;
 	ParticleEmitter m_particleEffect;
 

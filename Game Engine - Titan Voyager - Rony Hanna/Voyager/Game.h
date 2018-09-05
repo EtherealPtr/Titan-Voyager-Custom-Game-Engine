@@ -39,6 +39,8 @@ private:
 	void UpdateMenu();
 	void RenderScene();
 	void RestartGame();
+	void FreezeMouseCursor();
+	void FreeMouseCursor();
 
 private:
 	enum { CAM_FORWARD, CAM_BACKWARD, CAM_LEFT, CAM_RIGHT, CAM_RISE, CAM_FALL, TOTAL_CAM_MOVES };
