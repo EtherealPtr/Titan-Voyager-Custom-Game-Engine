@@ -68,6 +68,7 @@ void Game::InitMeshes()
 	Renderer::GetInstance().InitMesh(SPHERE, "shockwave", ++id, unlitShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 5.0f, 5.0f));
 	Renderer::GetInstance().InitMesh(QUAD, "mainMenu", ++id, hudShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f));
 	Renderer::GetInstance().InitMesh(QUAD, "indicator", ++id, hudShader, glm::vec3(-30.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f));
+	Renderer::GetInstance().InitMesh(QUAD, "aboutMenu", ++id, hudShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f));
 
 	// Enemy ID registeration [100, 130] inclusively 
 	id = 100;
@@ -196,6 +197,13 @@ void Game::GameLoop()
 			UpdateMenu();
 			Renderer::GetInstance().GetComponent(INDICATOR).Draw(m_cameraHUD);
 			Renderer::GetInstance().GetComponent(MAIN_MENU).Draw(m_cameraHUD);
+		}
+		else if (m_gameState == GameState::ABOUT)
+		{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			UpdateMenu();
+			Renderer::GetInstance().GetComponent(INDICATOR).Draw(m_cameraHUD);
+			Renderer::GetInstance().GetComponent(ABOUT).Draw(m_cameraHUD);
 		}
 		else if (m_gameState != GameState::EXIT)
 		{
@@ -453,6 +461,11 @@ void Game::FreeMouseCursor()
 	SDL_CaptureMouse(SDL_FALSE);
 }
 
+inline void Game::HideIndicator()
+{
+	Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(0.0f, 21.0f, 0.0f));
+}
+
 void Game::ProcessInput(std::vector<SDL_Event>& events)
 {
 	for (auto i = events.begin(); i != events.end(); ++i)
@@ -502,23 +515,43 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 			break;
 		} // KEYBOARD_INPUT END
 
-		if (m_gameState == GameState::MAIN_MENU)
+		if (m_gameState == GameState::MAIN_MENU || m_gameState == GameState::ABOUT)
 		{
 			case SDL_MOUSEMOTION:
 			{
 				SDL_GetMouseState(&m_mouseX, &m_mouseY);
 
-				if ((m_mouseX >= 1125.0f && m_mouseX <= 1285.0f) && (m_mouseY >= 380.0f && m_mouseY <= 435.0f))
+				// Check if the Main Menu is active
+				if (m_gameState == GameState::MAIN_MENU)
 				{
-					Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(10.0f, 2.0f, 0.0f));
+					if ((m_mouseX >= 1125.0f && m_mouseX <= 1285.0f) && (m_mouseY >= 380.0f && m_mouseY <= 435.0f))
+					{
+						Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(10.0f, 2.0f, 0.0f));
+					}
+					else if ((m_mouseX >= 1105.0f && m_mouseX <= 1300.0f) && (m_mouseY >= 485.0f && m_mouseY <= 540.0f))
+					{
+						Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(9.5f, -2.7f, 0.0f));
+					}
+					else if ((m_mouseX >= 1150.0f && m_mouseX <= 1265.0f) && (m_mouseY >= 588.0f && m_mouseY <= 639.0f))
+					{
+						Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(11.0f, -7.0f, 0.0f));
+					}
+					else
+					{
+						HideIndicator();
+					}
 				}
-				else if ((m_mouseX >= 1105.0f && m_mouseX <= 1300.0f) && (m_mouseY >= 485.0f && m_mouseY <= 540.0f))
+				// Otherwise, it is the about menu
+				else
 				{
-					Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(9.5f, -2.7f, 0.0f));
-				}
-				else if ((m_mouseX >= 1150.0f && m_mouseX <= 1265.0f) && (m_mouseY >= 588.0f && m_mouseY <= 639.0f))
-				{
-					Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(11.0f, -7.0f, 0.0f));
+					if ((m_mouseX >= 48 && m_mouseX <= 144) && (m_mouseY >= 800 && m_mouseY <= 867))
+					{
+						Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(-19.0f, -17.0f, 0.0f));
+					}
+					else
+					{
+						HideIndicator();
+					}
 				}
 
 				break;
@@ -529,19 +562,38 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 				switch (i->button.button)
 				{
 				case SDL_BUTTON_LEFT:
-					 
-					// Check if the "Start" button was pressed
-					if ((m_mouseX >= 1125.0f && m_mouseX <= 1285.0f) && (m_mouseY >= 380.0f && m_mouseY <= 435.0f))
+					// Check if the Main Menu is active
+					if (m_gameState == GameState::MAIN_MENU)
 					{
-						// Start game and lock mouse cursor
-						m_gameState = GameState::PLAY;
-						RestartGame();
-						FreezeMouseCursor();
+						// Check if the "Start" button was pressed
+						if ((m_mouseX >= 1125.0f && m_mouseX <= 1285.0f) && (m_mouseY >= 380.0f && m_mouseY <= 435.0f))
+						{
+							// Start game and lock mouse cursor
+							m_gameState = GameState::PLAY;
+							RestartGame();
+							FreezeMouseCursor();
+						}
+						// Check if the "About" button was pressed
+						else if ((m_mouseX >= 1105.0f && m_mouseX <= 1300.0f) && (m_mouseY >= 485.0f && m_mouseY <= 540.0f))
+						{
+							m_gameState = GameState::ABOUT;
+							HideIndicator();
+						}
+						// Check if the "Exit" button was pressed
+						else if ((m_mouseX >= 1150.0f && m_mouseX <= 1265.0f) && (m_mouseY >= 588.0f && m_mouseY <= 639.0f))
+						{
+							m_gameState = GameState::EXIT;
+						}
 					}
-					// Check if the "Exit" button was pressed
-					else if ((m_mouseX >= 1150.0f && m_mouseX <= 1265.0f) && (m_mouseY >= 588.0f && m_mouseY <= 639.0f))
+					// Otherwise, it is the about menu
+					else
 					{
-						m_gameState = GameState::EXIT;
+						// Check if the back button was pressed
+						if ((m_mouseX >= 48 && m_mouseX <= 144) && (m_mouseY >= 800 && m_mouseY <= 867))
+						{
+							m_gameState = GameState::MAIN_MENU;
+							HideIndicator();
+						}
 					}
 
 					break;
@@ -551,8 +603,8 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 				break;
 			}
 		}
-		default:
-			break;
+
+		default: break;
 		}
 	}
 }
