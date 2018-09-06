@@ -75,7 +75,7 @@ void Mesh::Draw(Camera& camera, Shader shaderProgram, bool instancing, glm::vec3
 
 	if (instancing)
 	{
-		glDrawElementsInstanced(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0, 12000);
+		glDrawElementsInstanced(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0, m_totalObjects);
 	}
 	else
 	{
@@ -115,7 +115,8 @@ void Mesh::CreateMesh(bool instancing)
 
 	if (instancing)
 	{
-		unsigned int amount = 12000;
+		m_totalObjects = 1200;
+		unsigned int amount = m_totalObjects;
 		m_modelMatricesIns = new glm::mat4[amount];
 		float radius = 400.0f;
 		float offset = 60.0f;
@@ -164,11 +165,11 @@ void Mesh::CreateMesh(bool instancing)
 
 			model = glm::translate(model, glm::vec3(_x, _y, _z));
 
-			float scale = (rand() % 20) / 100.0f + 0.1f;
+			float scale = (rand() % 25) / 100.0f + 0.4f;
 			model = glm::scale(model, glm::vec3(scale));
 
 			float rotAngle = (rand() % 360);
-			model = glm::rotate(model, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
+			model = glm::rotate(model, rotAngle, glm::vec3(0.5f, 0.7f, 0.9f));
 
 			m_modelMatricesIns[i] = model;
 		}

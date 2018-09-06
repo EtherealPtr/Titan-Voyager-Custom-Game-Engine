@@ -16,6 +16,7 @@
 #include "Framebuffer.h"
 #include "Atmosphere.h"
 #include "Cloth.h"
+#include "Audio.h"
 
 class Game
 {
@@ -33,6 +34,7 @@ private:
 	void InitMultiRenderTarget();
 	void InitCloth();
 	void InitPlayer();
+	void InitAudio();
 	void ProcessInput(std::vector<SDL_Event>&);
 	void GameLoop();
 	void UpdateGame();
@@ -64,6 +66,7 @@ private:
 	Camera m_camera, m_cameraHUD;
 	Framebuffer m_framebuffer;
 	Cloth m_flag;
+	Audio m_audio;
 	std::vector<Text> m_texts;
 	std::vector<Enemy*> m_enemies;
 

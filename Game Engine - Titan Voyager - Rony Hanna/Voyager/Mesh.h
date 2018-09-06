@@ -58,6 +58,7 @@ public:
 private:
 	GLuint m_vbo, m_ebo;
 	Transform m_transform;
+	float m_totalObjects;
 
 	void CreateMesh(bool instancing);
 };

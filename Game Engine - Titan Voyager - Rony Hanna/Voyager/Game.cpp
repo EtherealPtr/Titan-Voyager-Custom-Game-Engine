@@ -33,6 +33,7 @@ void Game::Run()
 {
 	InitMeshes();
 	InitLights();
+	InitAudio();
 	//InitDebugger();
 	InitText();
 	InitMultiRenderTarget();
@@ -171,6 +172,14 @@ void Game::InitCloth()
 void Game::InitPlayer()
 {
 	Player::GetInstance().Init(m_camera, glm::vec3(256.0f, 0.0f, 300.0f));
+}
+
+void Game::InitAudio()
+{
+	m_audio.Init();
+	m_audio.LoadAudioFile();
+	auto temp = m_audio.GetAudioChannel();
+	m_audio.GetAudioManager()->playSound(m_audio.GetSound(), 0, false, &temp);
 }
 
 void Game::GameLoop()
