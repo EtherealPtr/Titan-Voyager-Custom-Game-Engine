@@ -66,7 +66,6 @@ private:
 	Camera m_camera, m_cameraHUD;
 	Framebuffer m_framebuffer;
 	Cloth m_flag;
-	Audio m_audio;
 	std::vector<Text> m_texts;
 	std::vector<Enemy*> m_enemies;
 

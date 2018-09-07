@@ -5,7 +5,6 @@
 #include "Vertices.h"
 #include "Shader.h"
 #include "Texture.h"
-#include "Audio.h"
 #include "Animation.h"
 #include "Camera.h"
 #include "Dependencies/glew/include/GL/glew.h"
@@ -29,7 +28,6 @@ public:
 
 	Shader& GetShaderComponent()			{ return shaderComponent; }
 	Texture& GetTextureComponent()			{ return m_textureComponent; }
-	Audio& GetAudioComponent()				{ return m_audioComponent; }
 	Animation& GetAnimationComponent()		{ return m_animationComponent; }
 	Transform& GetTransformComponent()		{ return m_transform; }
 	
@@ -52,7 +50,6 @@ private:
 	Transform m_transform;
 	Shader shaderComponent;
 	Texture m_textureComponent;
-	Audio m_audioComponent;
 	Animation m_animationComponent;
 };
 

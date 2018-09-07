@@ -50,3 +50,10 @@ bool Audio::LoadAudioFile(char* file, char* nameId)
 
 	return true;
 }
+
+bool Audio::IsSoundPlaying()
+{
+	bool bIsPlaying;
+	m_pAudioChannel->isPlaying(&bIsPlaying);
+	return bIsPlaying;
+}

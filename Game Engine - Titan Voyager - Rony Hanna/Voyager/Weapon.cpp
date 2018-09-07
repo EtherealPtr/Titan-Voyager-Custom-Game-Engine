@@ -2,6 +2,7 @@
 #include "Utils.h"
 #include "Renderer.h"
 #include "Physics.h"
+#include "Audio.h"
 
 Weapon::Weapon() :
 	m_maxAmmo(0),
@@ -55,6 +56,7 @@ void Weapon::Fire(Model& weapon, Camera& cam, float dt, bool& firing, bool& relo
 	{
 		Physics::GetInstance().CastRay();
 		m_animator.PlayFireFPS(weapon, cam, dt);
+		Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("AR_Fire")->second, 0, false, Audio::GetInstance().GetAudioChannel());
 
 		--m_ammoCount;
 

@@ -176,10 +176,12 @@ void Game::InitPlayer()
 
 void Game::InitAudio()
 {
-	m_audio.Init();
-	m_audio.LoadAudioFile("res/Audio/Devils Never Cry.mp3", "MainMenuMusic");
-	auto temp = m_audio.GetAudioChannel();
-	m_audio.GetAudioManager()->playSound(m_audio.GetSoundsMap().find("MainMenuMusic")->second, 0, false, &temp);
+	Audio::GetInstance().Init(); 
+	Audio::GetInstance().LoadAudioFile("res/Audio/ButtonHovered.wav", "ButtonHovered");
+	Audio::GetInstance().LoadAudioFile("res/Audio/ButtonClicked.wav", "ButtonClicked");
+	Audio::GetInstance().LoadAudioFile("res/Audio/AR_Fired.wav", "AR_Fire");
+	Audio::GetInstance().LoadAudioFile("res/Audio/FlashLightOn.wav", "FlashOn");
+	Audio::GetInstance().LoadAudioFile("res/Audio/FlashLightOff.wav", "FlashOff");
 }
 
 void Game::GameLoop()
@@ -533,17 +535,33 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 				// Check if the Main Menu is active
 				if (m_gameState == GameState::MAIN_MENU)
 				{
+					// Check if the mouse is hovering over the START button
 					if ((m_mouseX >= 1125.0f && m_mouseX <= 1285.0f) && (m_mouseY >= 380.0f && m_mouseY <= 435.0f))
 					{
-						Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(10.0f, 2.0f, 0.0f));
+						if (Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().GetPos() != glm::vec3(10.0f, 2.0f, 0.0f))
+						{
+							Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("ButtonHovered")->second, 0, false, Audio::GetInstance().GetAudioChannel());
+							Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(10.0f, 2.0f, 0.0f));
+						}
 					}
+					// Check if the mouse is hovering over the ABOUT button
 					else if ((m_mouseX >= 1105.0f && m_mouseX <= 1300.0f) && (m_mouseY >= 485.0f && m_mouseY <= 540.0f))
 					{
-						Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(9.5f, -2.7f, 0.0f));
+						if (Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().GetPos() != glm::vec3(9.5f, -2.7f, 0.0f))
+						{
+							Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("ButtonHovered")->second, 0, false, Audio::GetInstance().GetAudioChannel());
+
+							Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(9.5f, -2.7f, 0.0f));
+						}
 					}
+					// Check if the mouse is hovering over the EXIT button
 					else if ((m_mouseX >= 1150.0f && m_mouseX <= 1265.0f) && (m_mouseY >= 588.0f && m_mouseY <= 639.0f))
 					{
-						Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(11.0f, -7.0f, 0.0f));
+						if (Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().GetPos() != glm::vec3(11.0f, -7.0f, 0.0f))
+						{
+							Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("ButtonHovered")->second, 0, false, Audio::GetInstance().GetAudioChannel());
+							Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(11.0f, -7.0f, 0.0f));
+						}
 					}
 					else
 					{
@@ -555,7 +573,11 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 				{
 					if ((m_mouseX >= 48 && m_mouseX <= 144) && (m_mouseY >= 800 && m_mouseY <= 867))
 					{
-						Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(-19.0f, -17.0f, 0.0f));
+						if (Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().GetPos() != glm::vec3(-19.0f, -17.0f, 0.0f))
+						{
+							Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("ButtonHovered")->second, 0, false, Audio::GetInstance().GetAudioChannel());
+							Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(-19.0f, -17.0f, 0.0f));
+						}
 					}
 					else
 					{
@@ -574,23 +596,26 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 					// Check if the Main Menu is active
 					if (m_gameState == GameState::MAIN_MENU)
 					{
-						// Check if the "Start" button was pressed
+						// Check if the START button was pressed
 						if ((m_mouseX >= 1125.0f && m_mouseX <= 1285.0f) && (m_mouseY >= 380.0f && m_mouseY <= 435.0f))
 						{
 							// Start game and lock mouse cursor
+							Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("ButtonClicked")->second, 0, false, Audio::GetInstance().GetAudioChannel());
 							m_gameState = GameState::PLAY;
 							RestartGame();
 							FreezeMouseCursor();
 						}
-						// Check if the "About" button was pressed
+						// Check if the ABOUT button was pressed
 						else if ((m_mouseX >= 1105.0f && m_mouseX <= 1300.0f) && (m_mouseY >= 485.0f && m_mouseY <= 540.0f))
 						{
+							Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("ButtonClicked")->second, 0, false, Audio::GetInstance().GetAudioChannel());
 							m_gameState = GameState::ABOUT;
 							HideIndicator();
 						}
-						// Check if the "Exit" button was pressed
+						// Check if the EXIT button was pressed
 						else if ((m_mouseX >= 1150.0f && m_mouseX <= 1265.0f) && (m_mouseY >= 588.0f && m_mouseY <= 639.0f))
 						{
+							Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("ButtonClicked")->second, 0, false, Audio::GetInstance().GetAudioChannel());
 							m_gameState = GameState::EXIT;
 						}
 					}
@@ -600,6 +625,7 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 						// Check if the back button was pressed
 						if ((m_mouseX >= 48 && m_mouseX <= 144) && (m_mouseY >= 800 && m_mouseY <= 867))
 						{
+							Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("ButtonClicked")->second, 0, false, Audio::GetInstance().GetAudioChannel());
 							m_gameState = GameState::MAIN_MENU;
 							HideIndicator();
 						}

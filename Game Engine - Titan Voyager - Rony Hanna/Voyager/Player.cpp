@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "Utils.h"
 #include "Dependencies/SDL2/include/SDL.h"
+#include "Audio.h"
 
 Player::Player() :
 	m_jumpHeight(50.0f),
@@ -306,12 +307,14 @@ void Player::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)
 					// Turn on the flash light
 					m_spotLight->GetDiffuse() = glm::vec3(5.0f, 5.0f, 5.0f);
 					m_spotLight->GetSpecular() = glm::vec3(1.0f, 1.0f, 1.0f);
+					Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("FlashOn")->second, 0, false, Audio::GetInstance().GetAudioChannel());
 				}
 				else
 				{
 					// Turn off the flash light
 					m_spotLight->GetDiffuse() = glm::vec3(0.0f, 0.0f, 0.0f);
 					m_spotLight->GetSpecular() = glm::vec3(0.0f, 0.0f, 0.0f);
+					Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("FlashOff")->second, 0, false, Audio::GetInstance().GetAudioChannel());
 				}
 
 				break;
