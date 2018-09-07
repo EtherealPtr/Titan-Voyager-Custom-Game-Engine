@@ -30,19 +30,22 @@ bool Audio::Init()
 	return true;
 }
 
-bool Audio::LoadAudioFile()
+bool Audio::LoadAudioFile(char* file, char* nameId)
 {
 	FMOD_RESULT result;
 
-	result = m_pAudioManager->createSound("res/Audio/Devils Never Cry.mp3", FMOD_DEFAULT, nullptr, &m_pSound);
+	FMOD::Sound* pSound;
+	result = m_pAudioManager->createSound(file, FMOD_DEFAULT, nullptr, &pSound);
+
 	if (result != FMOD_OK)
 	{
 		printf("FMOD ERROR: Unable to create sound, ensure file path is accurate");
 		return false;
 	}
 
-	m_pSound->setMode(FMOD_LOOP_NORMAL);
-
+	m_sounds[nameId] = pSound;
+	
+	//m_pBackgroundMusic->setMode(FMOD_LOOP_NORMAL);
 	//m_AudioManager->playSound(m_JumpSound, 0, false, &m_FmodChannel);
 
 	return true;

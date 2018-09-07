@@ -3,6 +3,8 @@
 #define __AUDIO_H__
 
 #include "Dependencies\FMOD\Include\fmod.hpp"
+#include <vector>
+#include <map>
 
 class Audio
 {
@@ -11,16 +13,16 @@ public:
 	~Audio();
 
 	bool Init();
-	bool LoadAudioFile();
+	bool LoadAudioFile(char* file, char* nameId);
 
 	FMOD::Channel* GetAudioChannel() { return m_pAudioChannel; }
 	FMOD::System* GetAudioManager() { return m_pAudioManager; }
-	FMOD::Sound* GetSound() { return m_pSound; }
+	std::map<char*, FMOD::Sound*> GetSoundsMap() { return m_sounds; }
 
 private:
 	FMOD::Channel* m_pAudioChannel;
 	FMOD::System* m_pAudioManager;
-	FMOD::Sound* m_pSound;
+	std::map<char*, FMOD::Sound*> m_sounds;
 };
 
 #endif // !__AUDIO_H__

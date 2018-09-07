@@ -177,9 +177,9 @@ void Game::InitPlayer()
 void Game::InitAudio()
 {
 	m_audio.Init();
-	m_audio.LoadAudioFile();
+	m_audio.LoadAudioFile("res/Audio/Devils Never Cry.mp3", "MainMenuMusic");
 	auto temp = m_audio.GetAudioChannel();
-	m_audio.GetAudioManager()->playSound(m_audio.GetSound(), 0, false, &temp);
+	m_audio.GetAudioManager()->playSound(m_audio.GetSoundsMap().find("MainMenuMusic")->second, 0, false, &temp);
 }
 
 void Game::GameLoop()

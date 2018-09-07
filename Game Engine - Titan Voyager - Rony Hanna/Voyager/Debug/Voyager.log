@@ -1,0 +1,28 @@
+﻿  Atmosphere.cpp
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\atmosphere.cpp(72): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  Audio.cpp
+  Enemy.cpp
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\player.h(29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+  Engine.cpp
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\player.h(29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+  Framebuffer.cpp
+  Game.cpp
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\player.h(29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\game.cpp(191): warning C4244: 'initializing': conversion from 'Uint32' to 'float', possible loss of data
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\game.cpp(298): warning C4018: '<': signed/unsigned mismatch
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\game.cpp(359): warning C4018: '<': signed/unsigned mismatch
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\game.cpp(415): warning C4018: '<': signed/unsigned mismatch
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\game.cpp(450): warning C4018: '<': signed/unsigned mismatch
+  GameObject.cpp
+  Physics.cpp
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\player.h(29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\physics.cpp(39): warning C4244: '=': conversion from 'Sint32' to 'float', possible loss of data
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\physics.cpp(40): warning C4244: '=': conversion from 'Sint32' to 'float', possible loss of data
+  Player.cpp
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\player.h(29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+  Renderer.cpp
+  Weapon.cpp
+  main.cpp
+d:\users\rony.han7006\desktop\graphics-demo\game engine - titan voyager - rony hanna\voyager\player.h(29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
+  Voyager.vcxproj -> D:\Users\Rony.han7006\Desktop\Graphics-Demo\Game Engine - Titan Voyager - Rony Hanna\Debug\Voyager.exe
