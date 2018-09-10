@@ -19,7 +19,7 @@ bool Audio::Init()
 		return false;
 	}
 	
-	result = m_pAudioManager->init(50, FMOD_INIT_NORMAL, nullptr);
+	result = m_pAudioManager->init(50, FMOD_INIT_NORMAL, NULL);
 
 	if (result != FMOD_OK)
 	{
@@ -30,12 +30,12 @@ bool Audio::Init()
 	return true;
 }
 
-bool Audio::LoadAudioFile(char* file, char* nameId)
+bool Audio::LoadAudioFile(char* pFile, char* pNnameId)
 {
 	FMOD_RESULT result;
 
 	FMOD::Sound* pSound;
-	result = m_pAudioManager->createSound(file, FMOD_DEFAULT, nullptr, &pSound);
+	result = m_pAudioManager->createSound(pFile, FMOD_DEFAULT, NULL, &pSound);
 
 	if (result != FMOD_OK)
 	{
@@ -43,17 +43,30 @@ bool Audio::LoadAudioFile(char* file, char* nameId)
 		return false;
 	}
 
-	m_sounds[nameId] = pSound;
-	
-	//m_pBackgroundMusic->setMode(FMOD_LOOP_NORMAL);
-	//m_AudioManager->playSound(m_JumpSound, 0, false, &m_FmodChannel);
+	m_sounds[pNnameId] = pSound;
 
 	return true;
 }
 
-bool Audio::IsSoundPlaying()
+void Audio::PlaySound(FMOD::Sound* pSound, bool bLooping)
 {
-	bool bIsPlaying;
-	m_pAudioChannel->isPlaying(&bIsPlaying);
-	return bIsPlaying;
+	if (!bLooping)
+		pSound->setMode(FMOD_LOOP_OFF);
+	else
+	{
+		pSound->setMode(FMOD_LOOP_NORMAL);
+		pSound->setLoopCount(-1);
+	}
+
+	m_pAudioManager->playSound(pSound, nullptr, false, 0);
+}
+
+void Audio::ReleaseSound(FMOD::Sound* pSound)
+{
+	pSound->release();
+}
+
+void Audio::Update()
+{
+	m_pAudioManager->update();
 }

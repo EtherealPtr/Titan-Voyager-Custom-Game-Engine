@@ -1,4 +1,4 @@
-#version 430 core
+#version 440 core
 layout (location = 0) in vec3 vertex_position;
 layout (location = 1) in vec3 vertex_color;
 layout (location = 2) in vec2 vertex_uv;
@@ -13,8 +13,8 @@ out mat3 TBN;
 
 // Fog items 
 out float visibility; 
-const float fogDensity = 0.0035f;
-const float gradient = 6.0f;
+const float fogDensity = 0.0020f;
+const float gradient = 7.0f;
 
 uniform mat4 model;
 uniform mat4 view;

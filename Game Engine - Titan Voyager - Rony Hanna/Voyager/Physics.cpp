@@ -1,6 +1,7 @@
 #include "Physics.h"
 #include "Renderer.h"
 #include "Player.h"
+#include "Audio.h"
 
 Physics::Physics() :
 	m_mouseX(0.0f),
@@ -154,11 +155,13 @@ void Physics::CheckRaySphereCollision(Camera& cam, std::vector<Enemy*> enemies)
 inline void Physics::OnEnemyHit(Enemy* enemy)
 {
 	enemy->ReduceHealth(Player::GetInstance().GetCurrWeapon().GetDamage());
+	Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("EnemyHit")->second); 
 }
 
  void Physics::OnPlayerHit(float damage)
 {
 	Player::GetInstance().ReduceHealth(damage);
+	Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("PlayerHit")->second);
 }
 
 bool Physics::PointInSphere(Camera& cam, glm::vec3& other, float radius)

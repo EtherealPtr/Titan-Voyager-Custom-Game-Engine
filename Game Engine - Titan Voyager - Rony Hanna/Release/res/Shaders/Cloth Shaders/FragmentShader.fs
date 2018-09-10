@@ -1,4 +1,4 @@
-#version 430 core
+#version 440 core
 out vec4 fragColor;
 
 uniform sampler2D mainTexture;

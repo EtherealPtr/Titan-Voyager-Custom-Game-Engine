@@ -45,20 +45,20 @@ class Mesh
 public:
 	Mesh(std::vector<MeshVertex> vertices, std::vector<GLuint> indices, std::vector<MeshTexture> textures, bool instancing);
 
-	std::vector<MeshVertex> m_vertices;
-	std::vector<GLuint> m_indices;
-	std::vector<MeshTexture> m_textures;
-	glm::mat4* m_modelMatricesIns;
-	GLuint m_vao;
+	glm::mat4* GetModelMatIns() { return m_modelMatricesIns; }
 
 	void SetTransform(Transform& transform) { m_transform = transform; }
 	void Draw(Camera& camera, Shader program, bool instancing, glm::vec3& pos = glm::vec3(1.0f), glm::vec3& rot = glm::vec3(1.0f), float amountOfRotation = 1.0f, 
 			  glm::vec3& scale = glm::vec3(1.0f), bool bDrawRelativeToCamera = false, bool bUseSpotlight = false);
 
 private:
-	GLuint m_vbo, m_ebo;
+	GLuint m_vao, m_vbo, m_ebo;
 	Transform m_transform;
-	float m_totalObjects;
+	glm::mat4* m_modelMatricesIns;
+	float m_totalObjectsIns;
+	std::vector<MeshVertex> m_vertices;
+	std::vector<GLuint> m_indices;
+	std::vector<MeshTexture> m_textures;
 
 	void CreateMesh(bool instancing);
 };

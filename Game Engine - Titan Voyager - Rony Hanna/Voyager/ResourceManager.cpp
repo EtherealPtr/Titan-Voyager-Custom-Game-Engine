@@ -66,7 +66,7 @@ bool ResourceManager::LoadTextureImagesFromFile(char* filename, char* id)
 
 	if (m_pImages.back() == nullptr)
 	{
-		std::cerr << "TEXTURE LOAD ERROR: Error occured while loading texture image.\n";
+		std::cerr << "ERROR: An error occurred while loading texture file.\n";
 		return false;
 	}
 

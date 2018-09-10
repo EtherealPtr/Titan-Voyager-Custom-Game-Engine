@@ -314,6 +314,7 @@ void Enemy::Respawn()
 {
 	if (m_canRespawn)
 	{
+		m_pos = glm::vec3(0.0f, 0.0f, 0.0f);
 		m_respawnTimer += 1.0f * m_deltaTime;
 
 		if (m_respawnTimer >= 15.0f)

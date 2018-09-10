@@ -75,7 +75,7 @@ void Mesh::Draw(Camera& camera, Shader shaderProgram, bool instancing, glm::vec3
 
 	if (instancing)
 	{
-		glDrawElementsInstanced(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0, m_totalObjects);
+		glDrawElementsInstanced(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0, m_totalObjectsIns);
 	}
 	else
 	{
@@ -115,55 +115,28 @@ void Mesh::CreateMesh(bool instancing)
 
 	if (instancing)
 	{
-		m_totalObjects = 20000;
-		unsigned int amount = m_totalObjects;
+		m_totalObjectsIns = 20000;
+		unsigned int amount = m_totalObjectsIns;
 		m_modelMatricesIns = new glm::mat4[amount];
 		float radius = 400.0f;
 		float offset = 60.0f;
 
-				// Saturn rings 
-		//for (unsigned int i = 0; i < amount; ++i)
-		//{
-		//	glm::mat4 model(1.0f);
-		//	float _x, _y, _z;
-
-		//	float angle = (float)i / (float)amount * 360.0f;
-		//	float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset + 200.0f;  
-		//	_x = sin(angle) * radius + displacement;
-
-		//	displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset + 35.0f;
-		//	_y = displacement * 2.7f;
-
-		//	displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset - 495.0f;
-		//	_z = cos(angle) * radius + displacement;
-
-		//	model = glm::translate(model, glm::vec3(_x, _y, _z));
-
-		//	float scale = (rand() % 20) / 100.0f + 0.1f;
-		//	model = glm::scale(model, glm::vec3(scale));
-
-		//	float rotAngle = (rand() % 360);
-		//	model = glm::rotate(model, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
-
-		//	m_modelMatricesIns[i] = model;
-		//}
-
 		for (unsigned int i = 0; i < amount; ++i)
 		{
 			glm::mat4 model(1.0f);
-			float _x, _y, _z;
+			float x = 0.0f, y = 0.0f, z = 0.0f;
 
 			float angle = (float)i / (float)amount * 360.0f;
 			float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset + 300.0f;  
-			_x = sin(angle) * radius + displacement;
+			x = sin(angle) * radius + displacement;
 
 			displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset + 40.0f;
-			_y = displacement * 3.7f;
+			y = displacement * 3.7f;
 
 			displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset + 390.0f;
-			_z = cos(angle) * radius + displacement;
+			z = cos(angle) * radius + displacement;
 
-			model = glm::translate(model, glm::vec3(_x, _y, _z));
+			model = glm::translate(model, glm::vec3(x, y, z));
 
 			float scale = (rand() % 25) / 100.0f + 0.4f;
 			model = glm::scale(model, glm::vec3(scale));

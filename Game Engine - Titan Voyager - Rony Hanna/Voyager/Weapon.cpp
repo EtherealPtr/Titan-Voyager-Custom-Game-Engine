@@ -56,7 +56,7 @@ void Weapon::Fire(Model& weapon, Camera& cam, float dt, bool& firing, bool& relo
 	{
 		Physics::GetInstance().CastRay();
 		m_animator.PlayFireFPS(weapon, cam, dt);
-		Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("AR_Fire")->second, 0, false, Audio::GetInstance().GetAudioChannel());
+		Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("AR_Fire")->second);
 
 		--m_ammoCount;
 

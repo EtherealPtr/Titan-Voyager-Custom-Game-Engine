@@ -1,6 +1,7 @@
 #include "Atmosphere.h"
 #include "Utils.h"
 #include "Renderer.h"
+#include "Audio.h"
 
 Atmosphere::Atmosphere() :
 	m_dayTimer(0.0f),
@@ -68,8 +69,9 @@ void Atmosphere::Thunderstorm()
 	// Check thunder chance (70% chance) 
 	if (m_dryThunderChance >= 30)
 	{
-		// Generate a duration for thunderstorm flashes
+		// Generate a duration for thunderstorm flashes and play thunderstorm sound
 		m_flashDuration = Utils::GetInstance().RandomNumBetweenTwo(1, 7);
 		m_playThunderstorm = true;
+		Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("ThunderStorm")->second);
 	}
 }

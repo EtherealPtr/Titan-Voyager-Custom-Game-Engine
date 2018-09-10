@@ -27,6 +27,9 @@ Game::~Game()
 		delete i;
 		i = nullptr;
 	}
+
+	// Deallocate the asteroid's model matrices
+	delete m_asteroid.meshes[0].GetModelMatIns();
 }
 
 void Game::Run()
@@ -85,7 +88,7 @@ void Game::InitMeshes()
 	m_terrain.CreateTerrainWithPerlinNoise();
 
 	m_asteroid.Init("res/Models3D/Rock/LowPolyRock.dae", m_camera, "res/Shaders/InstancingVert.vs", "res/Shaders/InstancingFrag.fs", true);
-
+ 
 	m_flagPole.Init("res/Models3D/FlagPole/Pole.obj", m_camera, "res/Shaders/SingleModelLoader.vs", "res/Shaders/SingleModelLoader.fs", false);
 	m_flagPole.SetSpotlight(true);
 
@@ -182,6 +185,9 @@ void Game::InitAudio()
 	Audio::GetInstance().LoadAudioFile("res/Audio/AR_Fired.wav", "AR_Fire");
 	Audio::GetInstance().LoadAudioFile("res/Audio/FlashLightOn.wav", "FlashOn");
 	Audio::GetInstance().LoadAudioFile("res/Audio/FlashLightOff.wav", "FlashOff");
+	Audio::GetInstance().LoadAudioFile("res/Audio/EnemyHit.wav", "EnemyHit");
+	Audio::GetInstance().LoadAudioFile("res/Audio/Hurt.wav", "PlayerHit");
+	Audio::GetInstance().LoadAudioFile("res/Audio/Thunder.wav", "ThunderStorm");
 }
 
 void Game::GameLoop()
@@ -289,7 +295,7 @@ void Game::RenderScene()
 
 	glDisable(GL_CULL_FACE);
 
-	//m_terrain.SetFog(m_atmosphere.GetDayTime() <= 0.15f ? true : false);
+	m_terrain.SetFog(m_atmosphere.GetDayTime() <= 0.3f ? false : true);
 	m_terrain.Draw(m_camera, &m_dirLight, &m_pointLight, Player::GetInstance().GetSpotLight());
 
 	Renderer::GetInstance().GetComponent(SKYBOX).GetTransformComponent().GetRot().y += 0.5f * m_deltaTime;
@@ -367,22 +373,22 @@ void Game::UpdateGame()
 	Physics::GetInstance().Update(m_camera, m_deltaTime, GetFrameEvents(), m_enemies);
 
 	// Update mountain rocks' fog effect 
-	//if (m_atmosphere.GetDayTime() >= 0.15f && m_atmosphere.GetDayTime() <= 0.16f)
-	//{
-	//	for (auto i : m_mountainRocks)
-	//	{
-	//		i.GetShaderProgram().ActivateProgram();
-	//		i.GetShaderProgram().SetBool("nightFog", true);
-	//	}
-	//}
-	//else if (m_atmosphere.GetDayTime() < 0.15f && m_atmosphere.GetDayTime() >= 0.14f)
-	//{
-	//	for (auto i : m_mountainRocks)
-	//	{
-	//		i.GetShaderProgram().ActivateProgram();
-	//		i.GetShaderProgram().SetBool("nightFog", false);
-	//	}
-	//}
+	if (m_atmosphere.GetDayTime() >= 0.3f && m_atmosphere.GetDayTime() <= 0.31f)
+	{
+		for (auto i : m_mountainRocks)
+		{
+			i.GetShaderProgram().ActivateProgram();
+			i.GetShaderProgram().SetBool("nightFog", true);
+		}
+	}
+	else if (m_atmosphere.GetDayTime() < 0.3f && m_atmosphere.GetDayTime() >= 0.29f)
+	{
+		for (auto i : m_mountainRocks)
+		{
+			i.GetShaderProgram().ActivateProgram();
+			i.GetShaderProgram().SetBool("nightFog", false);
+		}
+	}
 
 	// Update atmosphere (thunderstorms)
 	m_atmosphere.Update(m_deltaTime);
@@ -396,7 +402,7 @@ void Game::UpdateGame()
 			Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).GetShaderComponent().ActivateProgram();
 			Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).GetShaderComponent().SetBool("thunderstormEffect", true);
 		}
-
+		 
 		m_atmosphere.GetFlashTimer() += Utils::GetInstance().RandomNumBetweenTwo(0.5f, 1.0f) * m_deltaTime;
 		if (m_atmosphere.GetFlashTimer() > Utils::GetInstance().RandomNumBetweenTwo(0.05f, 0.1f))
 		{
@@ -404,6 +410,9 @@ void Game::UpdateGame()
 			m_atmosphere.GetFlashTimer() = 0.0f;
 		}
 	}
+
+	// Update audio
+	Audio::GetInstance().Update();
 
 	// Update data transmitter 
 	m_dataTransmitTimer += 0.59f * m_deltaTime;
@@ -540,7 +549,7 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 					{
 						if (Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().GetPos() != glm::vec3(10.0f, 2.0f, 0.0f))
 						{
-							Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("ButtonHovered")->second, 0, false, Audio::GetInstance().GetAudioChannel());
+							Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("ButtonHovered")->second);
 							Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(10.0f, 2.0f, 0.0f));
 						}
 					}
@@ -549,8 +558,7 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 					{
 						if (Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().GetPos() != glm::vec3(9.5f, -2.7f, 0.0f))
 						{
-							Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("ButtonHovered")->second, 0, false, Audio::GetInstance().GetAudioChannel());
-
+							Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("ButtonHovered")->second);
 							Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(9.5f, -2.7f, 0.0f));
 						}
 					}
@@ -559,7 +567,7 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 					{
 						if (Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().GetPos() != glm::vec3(11.0f, -7.0f, 0.0f))
 						{
-							Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("ButtonHovered")->second, 0, false, Audio::GetInstance().GetAudioChannel());
+							Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("ButtonHovered")->second);
 							Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(11.0f, -7.0f, 0.0f));
 						}
 					}
@@ -575,7 +583,7 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 					{
 						if (Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().GetPos() != glm::vec3(-19.0f, -17.0f, 0.0f))
 						{
-							Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("ButtonHovered")->second, 0, false, Audio::GetInstance().GetAudioChannel());
+							Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("ButtonHovered")->second);
 							Renderer::GetInstance().GetComponent(INDICATOR).GetTransformComponent().SetPos(glm::vec3(-19.0f, -17.0f, 0.0f));
 						}
 					}
@@ -600,7 +608,7 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 						if ((m_mouseX >= 1125.0f && m_mouseX <= 1285.0f) && (m_mouseY >= 380.0f && m_mouseY <= 435.0f))
 						{
 							// Start game and lock mouse cursor
-							Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("ButtonClicked")->second, 0, false, Audio::GetInstance().GetAudioChannel());
+							Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("ButtonClicked")->second);
 							m_gameState = GameState::PLAY;
 							RestartGame();
 							FreezeMouseCursor();
@@ -608,14 +616,14 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 						// Check if the ABOUT button was pressed
 						else if ((m_mouseX >= 1105.0f && m_mouseX <= 1300.0f) && (m_mouseY >= 485.0f && m_mouseY <= 540.0f))
 						{
-							Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("ButtonClicked")->second, 0, false, Audio::GetInstance().GetAudioChannel());
+							Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("ButtonClicked")->second);
 							m_gameState = GameState::ABOUT;
 							HideIndicator();
 						}
 						// Check if the EXIT button was pressed
 						else if ((m_mouseX >= 1150.0f && m_mouseX <= 1265.0f) && (m_mouseY >= 588.0f && m_mouseY <= 639.0f))
 						{
-							Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("ButtonClicked")->second, 0, false, Audio::GetInstance().GetAudioChannel());
+							Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("ButtonClicked")->second);
 							m_gameState = GameState::EXIT;
 						}
 					}
@@ -625,7 +633,7 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 						// Check if the back button was pressed
 						if ((m_mouseX >= 48 && m_mouseX <= 144) && (m_mouseY >= 800 && m_mouseY <= 867))
 						{
-							Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("ButtonClicked")->second, 0, false, Audio::GetInstance().GetAudioChannel());
+							Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("ButtonClicked")->second);
 							m_gameState = GameState::MAIN_MENU;
 							HideIndicator();
 						}

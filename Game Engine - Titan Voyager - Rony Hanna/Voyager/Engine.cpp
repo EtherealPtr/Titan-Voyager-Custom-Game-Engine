@@ -56,13 +56,13 @@ void Engine::LoadApplicationResources()
 	skyboxFaces.push_back("res/Textures/Skyboxes/TitanMoon/front.png");
 	skyboxFaces.push_back("res/Textures/Skyboxes/TitanMoon/back.png");
 
-	// Review this (make into a loop)
-	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(0), "skybox");  assert(bUnitTest);
-	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(1), "skybox1"); assert(bUnitTest);
-	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(2), "skybox2"); assert(bUnitTest);
-	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(3), "skybox3"); assert(bUnitTest);
-	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(4), "skybox4"); assert(bUnitTest);
-	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(5), "skybox5"); assert(bUnitTest);
+	std::vector<char*> skyboxIDs = { "skybox", "skybox1", "skybox2", "skybox3", "skybox4", "skybox5" };
 
+	for (auto i = 0; i < 6; ++i) 
+	{
+		bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile(skyboxFaces.at(i), skyboxIDs.at(i)); 
+		assert(bUnitTest);
+	}
+	 
 	ResourceManager::GetInstance().SetSkyboxTextureIDs();
 }

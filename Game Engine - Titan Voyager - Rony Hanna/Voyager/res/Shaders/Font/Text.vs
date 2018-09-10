@@ -1,4 +1,4 @@
-#version 430 core
+#version 440 core
 
 in layout (location = 0) vec4 vertex_position;
 
