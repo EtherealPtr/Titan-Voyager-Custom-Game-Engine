@@ -13,7 +13,7 @@ out mat3 TBN;
 
 // Fog items 
 out float visibility; 
-const float fogDensity = 0.0020f;
+const float fogDensity = 0.0022f;
 const float gradient = 7.0f;
 
 uniform mat4 model;

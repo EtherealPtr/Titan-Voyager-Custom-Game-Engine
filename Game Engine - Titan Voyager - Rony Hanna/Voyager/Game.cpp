@@ -11,7 +11,8 @@ Game::Game() :
 	m_deltaTime(0.0f),
 	m_gameState(GameState::MAIN_MENU),
 	m_sniperScope(false),
-	m_dataTransmitTimer(0.0f),
+	m_dataTransmitTimer(0.0f), 
+	m_gameStateTimer(0.0f),
 	m_enemyCount(1)
 {
 	srand(static_cast<unsigned int>(time(NULL)));
@@ -73,6 +74,8 @@ void Game::InitMeshes()
 	Renderer::GetInstance().InitMesh(QUAD, "mainMenu", ++id, hudShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f));
 	Renderer::GetInstance().InitMesh(QUAD, "indicator", ++id, hudShader, glm::vec3(-30.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f));
 	Renderer::GetInstance().InitMesh(QUAD, "aboutMenu", ++id, hudShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f));
+	Renderer::GetInstance().InitMesh(QUAD, "playerDead", ++id, hudShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(17.0f, 17.0f, 17.0f));
+	Renderer::GetInstance().InitMesh(QUAD, "victorious", ++id, hudShader, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(17.0f, 17.0f, 17.0f));
 
 	// Enemy ID registeration [100, 130] inclusively 
 	id = 100;
@@ -336,10 +339,27 @@ void Game::UpdateGame()
 {
 	m_camera.UpdateLookAt();
 	Player::GetInstance().Update(m_camera, m_terrain, m_deltaTime, GetFrameEvents());
-	
+
 	if (Player::GetInstance().IsPlayerDead())
 	{
-		RestartGame();
+		m_gameStateTimer += 1.0f * m_deltaTime;
+		Renderer::GetInstance().GetComponent(PLAYER_DEATH_SCREEN).Draw(m_cameraHUD);
+		
+		if (m_gameStateTimer > 5.0f)
+		{
+			RestartGame();
+			m_gameStateTimer = 0.0f;
+		}
+	}
+	else if (Player::GetInstance().GetHealth() <= 10)
+	{
+		Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).GetShaderComponent().ActivateProgram();
+		Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).GetShaderComponent().SetBool("grayScaleEffect", true);
+	}
+	else
+	{
+		Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).GetShaderComponent().ActivateProgram();
+		Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).GetShaderComponent().SetBool("grayScaleEffect", false);
 	}
 
 	if (Player::GetInstance().IsPlayerAiming())
@@ -399,7 +419,7 @@ void Game::UpdateGame()
 		{
 			--m_atmosphere.GetFlashDuration();
 			m_atmosphere.SetThunderFlash(false);
-			Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).GetShaderComponent().ActivateProgram();
+			Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).GetShaderComponent().ActivateProgram(); 
 			Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).GetShaderComponent().SetBool("thunderstormEffect", true);
 		}
 		 
@@ -439,8 +459,14 @@ void Game::UpdateGame()
 
 		if (m_endGame)
 		{
-			FreeMouseCursor();
-			m_gameState = GameState::MAIN_MENU;
+			Renderer::GetInstance().GetComponent(PLAYER_VICTORY_SCREEN).Draw(m_cameraHUD);
+			m_gameStateTimer += 1.0f * m_deltaTime;
+
+			if (m_gameStateTimer >= 5.0f)
+			{
+				FreeMouseCursor();
+				m_gameState = GameState::MAIN_MENU;
+			}
 		}
 	}
 

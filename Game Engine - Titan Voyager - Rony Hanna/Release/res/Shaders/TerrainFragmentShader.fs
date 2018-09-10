@@ -101,7 +101,8 @@ void main()
 	FragColor = vec4(directionLightResult + pointLightResult + spotlightResult, 1.0f) * totalColour;
 	
 	// Apply fog effect if the fog is active
-	//FragColor = mix(vec4(0.0f, 0.0f, 0.0f, 1.0f), FragColor, visibility);
+	if (fogActive)
+		FragColor = mix(vec4(0.0f, 0.0f, 0.0f, 1.0f), FragColor, visibility);
 } 
 
 vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir)

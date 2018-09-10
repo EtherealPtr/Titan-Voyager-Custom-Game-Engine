@@ -49,7 +49,8 @@ private:
 	enum { CAM_FORWARD, CAM_BACKWARD, CAM_LEFT, CAM_RIGHT, CAM_RISE, CAM_FALL, TOTAL_CAM_MOVES };
 	bool m_bCamMovements[TOTAL_CAM_MOVES];
 	
-	enum { SATURN_RINGS = 1, SPACE_CUBE, SKYBOX, SATURN, FPS_CROSSHAIR, AMMO, HEALTH, MUZZLE_FLASH, SNIPER_SCOPE, POSTPROCESSING_QUAD, ENEMY_DRONE, ENEMY_BLAST, MAIN_MENU, INDICATOR, ABOUT };
+	enum { SATURN_RINGS = 1, SPACE_CUBE, SKYBOX, SATURN, FPS_CROSSHAIR, AMMO, HEALTH, MUZZLE_FLASH, SNIPER_SCOPE, POSTPROCESSING_QUAD, ENEMY_DRONE, 
+		   ENEMY_BLAST, MAIN_MENU, INDICATOR, ABOUT, PLAYER_DEATH_SCREEN, PLAYER_VICTORY_SCREEN };
 	
 	enum class GameState { MAIN_MENU = 100, PLAY, ABOUT, EXIT, TOTAL_STATES };
 	GameState m_gameState;
@@ -73,7 +74,7 @@ private:
 	bool m_sniperScope, m_zoom;
 	int m_mouseX, m_mouseY;
 	int m_enemyCount;
-	float m_dataTransmitTimer, m_enemySpawnTimer;
+	float m_dataTransmitTimer, m_enemySpawnTimer, m_gameStateTimer;
 };
 
 #endif // !__GAME_H__

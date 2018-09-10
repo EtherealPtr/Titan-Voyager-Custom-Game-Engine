@@ -54,6 +54,9 @@ private:
 	SpotLight* m_spotLight;
 	Animation m_animationComponent;
 	Weapon* m_currWeapon, *m_assaultRifle, *m_sniperRifle;
+
+private:
+	void StopMoving();
 };
 
 #endif // !__PLAYER_H__

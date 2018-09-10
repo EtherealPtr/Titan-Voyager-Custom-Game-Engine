@@ -1,9 +1,10 @@
 #include "ResourceManager.h"
-#include <iostream>
 #include "Dependencies/glew/include/GL/glew.h"
+#include <iostream>
 
 ResourceManager::~ResourceManager()
 {
+	// Deallocate memory
 	for (auto iter = m_w.begin(); iter != m_w.end(); ++iter)
 	{
 		delete *iter;
@@ -42,7 +43,7 @@ void ResourceManager::GetImageDimension(char* id, std::vector<int>& result)
 {
 	for (auto it = m_widths.begin(); it != m_widths.end(); ++it)
 	{
-		// Check if the id corresponds to an image id, if so return the corresponding height of the img
+		// Check if the id corresponds to an image id, if so return the corresponding height of the image
 		if (id == it->first)
 		{
 			int w = *it->second;
@@ -66,7 +67,7 @@ bool ResourceManager::LoadTextureImagesFromFile(char* filename, char* id)
 
 	if (m_pImages.back() == nullptr)
 	{
-		std::cerr << "ERROR: An error occurred while loading texture file.\n";
+		std::cerr << "Loading failed: An error occurred while loading texture file.\n";
 		return false;
 	}
 

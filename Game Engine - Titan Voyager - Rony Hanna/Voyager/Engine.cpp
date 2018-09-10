@@ -39,6 +39,8 @@ void Engine::LoadApplicationResources()
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/menu.png", "mainMenu"); assert(bUnitTest);
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/Indicator.png", "indicator"); assert(bUnitTest);
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/AboutBackground.png", "aboutMenu"); assert(bUnitTest);
+	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/PlayerDeathScreen.png", "playerDead"); assert(bUnitTest); 
+	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/VictoryScreen.png", "victorious"); assert(bUnitTest);
 
 	// Terrain textures
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/soil01.jpg", "soil"); assert(bUnitTest);
@@ -48,13 +50,12 @@ void Engine::LoadApplicationResources()
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/soil04.jpg", "soil4"); assert(bUnitTest);
 	bUnitTest = ResourceManager::GetInstance().LoadTextureImagesFromFile("res/Textures/blendMap.png", "blendMap"); assert(bUnitTest);
 
-	std::vector<char*> skyboxFaces;
-	skyboxFaces.push_back("res/Textures/Skyboxes/TitanMoon/right.png");
-	skyboxFaces.push_back("res/Textures/Skyboxes/TitanMoon/left.png");
-	skyboxFaces.push_back("res/Textures/Skyboxes/TitanMoon/top.png");
-	skyboxFaces.push_back("res/Textures/Skyboxes/TitanMoon/bottom.png");
-	skyboxFaces.push_back("res/Textures/Skyboxes/TitanMoon/front.png");
-	skyboxFaces.push_back("res/Textures/Skyboxes/TitanMoon/back.png");
+	std::vector<char*> skyboxFaces = 
+	{
+		"res/Textures/Skyboxes/TitanMoon/right.png", "res/Textures/Skyboxes/TitanMoon/left.png", 
+		"res/Textures/Skyboxes/TitanMoon/top.png", "res/Textures/Skyboxes/TitanMoon/bottom.png", 
+		"res/Textures/Skyboxes/TitanMoon/front.png", "res/Textures/Skyboxes/TitanMoon/back.png"
+	};
 
 	std::vector<char*> skyboxIDs = { "skybox", "skybox1", "skybox2", "skybox3", "skybox4", "skybox5" };
 

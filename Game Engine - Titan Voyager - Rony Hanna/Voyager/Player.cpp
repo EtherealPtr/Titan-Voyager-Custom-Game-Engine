@@ -51,6 +51,8 @@ void Player::Update(Camera& cam, Terrain& terrain, float dt, std::vector<SDL_Eve
 	if (m_health <= 0)
 	{
 		m_dead = true;
+		StopMoving();
+		events.empty();
 		return;
 	}
 
@@ -210,6 +212,14 @@ void Player::Respawn(Camera& cam)
 	cam.GetCameraPos() = glm::vec3(256.0f, 0.0f, 300.0f);
 	m_assaultRifle->RestartWeapon();
 	m_sniperRifle->RestartWeapon();
+}
+
+void Player::StopMoving()
+{
+	m_bCamMovements[CAM_FORWARD] = false;
+	m_bCamMovements[CAM_BACKWARD] = false;
+	m_bCamMovements[CAM_LEFT] = false;
+	m_bCamMovements[CAM_RIGHT] = false;
 }
 
 void Player::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)

@@ -115,7 +115,7 @@ void Mesh::CreateMesh(bool instancing)
 
 	if (instancing)
 	{
-		m_totalObjectsIns = 20000;
+		m_totalObjectsIns = 17000;
 		unsigned int amount = m_totalObjectsIns;
 		m_modelMatricesIns = new glm::mat4[amount];
 		float radius = 400.0f;
@@ -138,7 +138,7 @@ void Mesh::CreateMesh(bool instancing)
 
 			model = glm::translate(model, glm::vec3(x, y, z));
 
-			float scale = (rand() % 25) / 100.0f + 0.4f;
+			float scale = (rand() % 25) / 100.0f + 0.35f;
 			model = glm::scale(model, glm::vec3(scale));
 
 			float rotAngle = (rand() % 360);

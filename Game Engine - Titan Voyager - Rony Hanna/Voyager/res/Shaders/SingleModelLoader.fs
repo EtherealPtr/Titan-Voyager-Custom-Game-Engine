@@ -66,10 +66,10 @@ void main()
 	
     FragColor = vec4(result, 1.0f);
 	
-	//if (nightFog)
-	//{
-	//	FragColor = mix(vec4(0.0f, 0.0f, 0.0f, 1.0f), FragColor, visibility);
-	//}
+	if (nightFog)
+	{
+		FragColor = mix(vec4(0.0f, 0.0f, 0.0f, 1.0f), FragColor, visibility);
+	}
 	//else
 	//{
 	//	FragColor = mix(vec4(0.97f, 0.88f, 0.70f, 1.0f), FragColor, visibility);

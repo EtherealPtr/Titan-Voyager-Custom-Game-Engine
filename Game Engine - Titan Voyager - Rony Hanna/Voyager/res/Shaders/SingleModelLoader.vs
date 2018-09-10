@@ -10,8 +10,8 @@ out vec3 fragPos;
 
 // Fog items 
 out float visibility; 
-const float fogDensity = 0.0035f;
-const float gradient = 6.0f;
+const float fogDensity = 0.0022f;
+const float gradient = 7.0f;
 
 uniform mat4 model;
 uniform mat4 view;
