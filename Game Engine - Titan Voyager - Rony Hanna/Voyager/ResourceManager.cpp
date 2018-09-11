@@ -1,5 +1,6 @@
 #include "ResourceManager.h"
 #include "Dependencies/glew/include/GL/glew.h"
+#include "Audio.h"
 #include <iostream>
 
 ResourceManager::~ResourceManager()
@@ -80,6 +81,23 @@ bool ResourceManager::LoadTextureImagesFromFile(char* filename, char* id)
 	m_heights[id] = m_h.back();
 
 	return true;
+}
+
+void ResourceManager::LoadAudioFiles()
+{
+	Audio::GetInstance().LoadAudioFile("res/Audio/ButtonHovered.wav", "ButtonHovered");
+	Audio::GetInstance().LoadAudioFile("res/Audio/ButtonClicked.wav", "ButtonClicked");
+	Audio::GetInstance().LoadAudioFile("res/Audio/AR_Fired.wav", "AR_Fire");
+	Audio::GetInstance().LoadAudioFile("res/Audio/FlashLightOn.wav", "FlashOn");
+	Audio::GetInstance().LoadAudioFile("res/Audio/FlashLightOff.wav", "FlashOff");
+	Audio::GetInstance().LoadAudioFile("res/Audio/EnemyHit.wav", "EnemyHit");
+	Audio::GetInstance().LoadAudioFile("res/Audio/Hurt.wav", "PlayerHit");
+	Audio::GetInstance().LoadAudioFile("res/Audio/Thunder.wav", "ThunderStorm");
+	Audio::GetInstance().LoadAudioFile("res/Audio/FootstepsWalk.wav", "WalkFootsteps", true, 0);
+	Audio::GetInstance().LoadAudioFile("res/Audio/FootstepsRun.wav", "RunFootsteps", true, 1);
+	Audio::GetInstance().LoadAudioFile("res/Audio/EnemyDead.wav", "EnemyDead");
+	Audio::GetInstance().LoadAudioFile("res/Audio/EnemyDead2.wav", "EnemyDead2");
+	Audio::GetInstance().LoadAudioFile("res/Audio/Reloading.wav", "Reload");
 }
 
 void ResourceManager::SetSkyboxTextureIDs()

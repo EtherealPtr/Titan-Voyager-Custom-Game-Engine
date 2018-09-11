@@ -156,6 +156,25 @@ void Player::Update(Camera& cam, Terrain& terrain, float dt, std::vector<SDL_Eve
 		m_currWeapon->Reload(m_currWeapon->GetModel(), cam, dt, m_reloading);
 	}
 
+	// Check if player is walking
+	if (m_walking)
+	{
+		// Play walk audio while stopping channel 1 which contains the run footsteps sound
+		Audio::GetInstance().StopSound(1);
+		Audio::GetInstance().PlaySoundOnCustomChannel(Audio::GetInstance().GetSoundsMap().find("WalkFootsteps")->second, 0);
+	}
+	else if (m_sprinting)
+	{
+		// Play run audio while stopping channel 0 which contains the walk footsteps sound
+		Audio::GetInstance().StopSound(0);
+		Audio::GetInstance().PlaySoundOnCustomChannel(Audio::GetInstance().GetSoundsMap().find("RunFootsteps")->second, 1);
+	}
+	else
+	{
+		// Stop playing both footsteps sounds (stops both channels)
+		Audio::GetInstance().StopSoundRanged(0, 1);
+	}
+
 	// Check if player is jumping
 	if (m_jumping)
 	{
@@ -168,6 +187,8 @@ void Player::Update(Camera& cam, Terrain& terrain, float dt, std::vector<SDL_Eve
 			cam.GetCameraPos().y = terrain.GetHeightOfTerrain(cam.GetCameraPos().x, cam.GetCameraPos().z) + 10.0f;
 			m_jumping = false;
 		}
+
+		Audio::GetInstance().StopSoundRanged(0, 1);
 	}
 	else
 	{
@@ -317,14 +338,14 @@ void Player::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)
 					// Turn on the flash light
 					m_spotLight->GetDiffuse() = glm::vec3(5.0f, 5.0f, 5.0f);
 					m_spotLight->GetSpecular() = glm::vec3(1.0f, 1.0f, 1.0f);
-					Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("FlashOn")->second, 0, false, Audio::GetInstance().GetAudioChannel());
+					Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("FlashOn")->second);
 				}
 				else
 				{
 					// Turn off the flash light
 					m_spotLight->GetDiffuse() = glm::vec3(0.0f, 0.0f, 0.0f);
 					m_spotLight->GetSpecular() = glm::vec3(0.0f, 0.0f, 0.0f);
-					Audio::GetInstance().GetAudioManager()->playSound(Audio::GetInstance().GetSoundsMap().find("FlashOff")->second, 0, false, Audio::GetInstance().GetAudioChannel());
+					Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("FlashOff")->second);
 				}
 
 				break;
@@ -335,7 +356,9 @@ void Player::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)
 				{
 					// Reload
 					m_reloading = true;
+					Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("Reload")->second);
 				}
+
 				break;
 
 			case SDLK_q:
@@ -343,6 +366,7 @@ void Player::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)
 				{
 					Switch();
 				}
+
 				break;
 
 			case SDLK_LSHIFT:

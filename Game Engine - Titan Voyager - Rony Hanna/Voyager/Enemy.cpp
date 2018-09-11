@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include <cmath>
 #include "Player.h"
+#include "Audio.h"
 
 Enemy::Enemy(Camera& cam) :
 	m_pos(Utils::GetInstance().RandomNumBetweenTwo(50.0f, 450.0f), 0.0f, Utils::GetInstance().RandomNumBetweenTwo(0.0f, 450.0f)),
@@ -113,10 +114,7 @@ void Enemy::Draw(short int enemyId, short int enemyDroneId, short int enemyDrone
 
 void Enemy::Update(Terrain& terrain, Camera& cam, float dt)
 {
-	// Check if this enemy is dead, otherwise update its properties
-	if (m_health <= 0)
-		m_dead = true;
-	else if (!m_dead)
+	if (!m_dead)
 	{
 		m_deltaTime = dt;
 		m_camera = cam;
@@ -225,6 +223,17 @@ void Enemy::ReduceHealth(int amount)
 {
 	m_health -= amount;
 	m_takingDamage = true;
+
+	if (m_health <= 0)
+	{
+		m_dead = true;
+
+		// Player one of the monster dead sounds
+		if (Utils::GetInstance().RandomNumBetweenTwo(1.0f, 2.0f) > 1.5f)
+			Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("EnemyDead")->second);
+		else
+			Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("EnemyDead2")->second);
+	}
 }
 
 // Function that finds the distance between two vectors
@@ -319,10 +328,19 @@ void Enemy::Respawn()
 
 		if (m_respawnTimer >= 15.0f)
 		{
+			// Restart some properties
 			m_respawnTimer = 0.0f;
-			m_pos = glm::vec3(Utils::GetInstance().RandomNumBetweenTwo(50.0f, 520.0f), 0.0f, Utils::GetInstance().RandomNumBetweenTwo(0.0f, 650.0f));
+			m_currLifeTimer = 0.0f;
+			m_blastRadius = 0.01f;
+			m_shootDuration = 0.0f;
+			m_evadeDurationCounter = 0.0f; 
+			m_damageTakenDuration = 0.0f;
+			m_takingDamage = false;
 			m_dead = false;
 			m_health = 100;
+
+			// Set new spawn position
+			m_pos = glm::vec3(Utils::GetInstance().RandomNumBetweenTwo(50.0f, 520.0f), 0.0f, Utils::GetInstance().RandomNumBetweenTwo(0.0f, 650.0f));
 		}
 	}
 }

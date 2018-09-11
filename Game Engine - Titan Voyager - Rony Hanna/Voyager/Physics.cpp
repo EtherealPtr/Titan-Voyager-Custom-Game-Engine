@@ -161,7 +161,9 @@ inline void Physics::OnEnemyHit(Enemy* enemy)
  void Physics::OnPlayerHit(float damage)
 {
 	Player::GetInstance().ReduceHealth(damage);
-	Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("PlayerHit")->second);
+
+	if (Player::GetInstance().GetHealth() > 0)
+		Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("PlayerHit")->second);
 }
 
 bool Physics::PointInSphere(Camera& cam, glm::vec3& other, float radius)

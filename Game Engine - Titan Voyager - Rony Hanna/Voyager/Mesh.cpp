@@ -115,7 +115,7 @@ void Mesh::CreateMesh(bool instancing)
 
 	if (instancing)
 	{
-		m_totalObjectsIns = 17000;
+		m_totalObjectsIns = 100;
 		unsigned int amount = m_totalObjectsIns;
 		m_modelMatricesIns = new glm::mat4[amount];
 		float radius = 400.0f;

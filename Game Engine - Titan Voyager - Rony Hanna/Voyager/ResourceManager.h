@@ -23,6 +23,7 @@ public:
 
 	unsigned char* GetTexture(char* id);
 	bool LoadTextureImagesFromFile(char* filename, char* id);
+	void LoadAudioFiles();
 
 	void SetSkyboxTextureIDs();
 	std::vector<char*> GetSkyboxTextureIds();

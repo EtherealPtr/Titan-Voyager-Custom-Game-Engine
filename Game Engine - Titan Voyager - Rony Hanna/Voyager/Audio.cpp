@@ -30,7 +30,7 @@ bool Audio::Init()
 	return true;
 }
 
-bool Audio::LoadAudioFile(char* pFile, char* pNnameId)
+bool Audio::LoadAudioFile(char* pFile, char* pNnameId, bool useChannel, unsigned short int id)
 {
 	FMOD_RESULT result;
 
@@ -44,6 +44,12 @@ bool Audio::LoadAudioFile(char* pFile, char* pNnameId)
 	}
 
 	m_sounds[pNnameId] = pSound;
+
+	if (useChannel)
+	{
+		FMOD::Channel* newChannel = nullptr;
+		m_channelMap[id] = newChannel;
+	}
 
 	return true;
 }
@@ -59,6 +65,30 @@ void Audio::PlaySound(FMOD::Sound* pSound, bool bLooping)
 	}
 
 	m_pAudioManager->playSound(pSound, nullptr, false, 0);
+}
+
+void Audio::PlaySoundOnCustomChannel(FMOD::Sound* pSound, unsigned short int id)
+{
+	// Check if a sound is already playing
+	bool isSoundPlaying;
+	m_channelMap[id]->isPlaying(&isSoundPlaying);
+
+	// If no sound is currently playing, then go ahead and play a sound
+	if (!isSoundPlaying)
+		m_pAudioManager->playSound(pSound, nullptr, false, &m_channelMap[id]);
+}
+
+void Audio::StopSound(unsigned short int channelId)
+{
+	m_channelMap[channelId]->stop();
+}
+
+void Audio::StopSoundRanged(unsigned short int from, unsigned short int to)
+{
+	for (auto i = from; i <= to; ++i)
+	{
+		m_channelMap[i]->stop();
+	}
 }
 
 void Audio::ReleaseSound(FMOD::Sound* pSound)

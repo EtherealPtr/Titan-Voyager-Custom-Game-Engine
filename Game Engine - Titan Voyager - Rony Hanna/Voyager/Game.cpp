@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Utils.h"
+#include "ResourceManager.h"
 
 std::vector<SDL_Event>& GetFrameEvents()
 {
@@ -183,14 +184,7 @@ void Game::InitPlayer()
 void Game::InitAudio()
 {
 	Audio::GetInstance().Init(); 
-	Audio::GetInstance().LoadAudioFile("res/Audio/ButtonHovered.wav", "ButtonHovered");
-	Audio::GetInstance().LoadAudioFile("res/Audio/ButtonClicked.wav", "ButtonClicked");
-	Audio::GetInstance().LoadAudioFile("res/Audio/AR_Fired.wav", "AR_Fire");
-	Audio::GetInstance().LoadAudioFile("res/Audio/FlashLightOn.wav", "FlashOn");
-	Audio::GetInstance().LoadAudioFile("res/Audio/FlashLightOff.wav", "FlashOff");
-	Audio::GetInstance().LoadAudioFile("res/Audio/EnemyHit.wav", "EnemyHit");
-	Audio::GetInstance().LoadAudioFile("res/Audio/Hurt.wav", "PlayerHit");
-	Audio::GetInstance().LoadAudioFile("res/Audio/Thunder.wav", "ThunderStorm");
+	ResourceManager::GetInstance().LoadAudioFiles();
 }
 
 void Game::GameLoop()
