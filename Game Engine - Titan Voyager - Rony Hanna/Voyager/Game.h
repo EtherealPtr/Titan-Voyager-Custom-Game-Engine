@@ -71,7 +71,6 @@ private:
 	std::vector<Enemy*> m_enemies;
 
 private:
-	bool m_sniperScope, m_zoom;
 	int m_mouseX, m_mouseY;
 	int m_enemyCount;
 	float m_dataTransmitTimer, m_enemySpawnTimer, m_gameStateTimer;

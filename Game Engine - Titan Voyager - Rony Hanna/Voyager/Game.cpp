@@ -11,7 +11,6 @@ std::vector<SDL_Event>& GetFrameEvents()
 Game::Game() :
 	m_deltaTime(0.0f),
 	m_gameState(GameState::MAIN_MENU),
-	m_sniperScope(false),
 	m_dataTransmitTimer(0.0f), 
 	m_gameStateTimer(0.0f),
 	m_enemyCount(1)
@@ -257,7 +256,7 @@ void Game::RenderScene()
 		i.Draw(m_camera, false);
 
 	// Check if the player is aiming
-	if (m_sniperScope)
+	if (Player::GetInstance().IsPlayerAiming())
 	{
 		// Render sniper scope
 		Renderer::GetInstance().GetComponent(SNIPER_SCOPE).Draw(m_cameraHUD);
@@ -266,7 +265,7 @@ void Game::RenderScene()
 		if (m_camera.GetCameraFOV() != 30.0f)
 		{
 			m_camera.InitCameraPerspective(30.0f, 1440.0f / 900.0f, 0.1f, 5000.0f);
-			m_camera.SetCameraSpeed(10.0f);
+			m_camera.SetCameraSpeed(7.0f);
 			m_camera.SetCameraSensitivity(4.0f);
 		}
 	}
@@ -355,11 +354,6 @@ void Game::UpdateGame()
 		Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).GetShaderComponent().ActivateProgram();
 		Renderer::GetInstance().GetComponent(POSTPROCESSING_QUAD).GetShaderComponent().SetBool("grayScaleEffect", false);
 	}
-
-	if (Player::GetInstance().IsPlayerAiming())
-		m_sniperScope = true;
-	else
-		m_sniperScope = false;
 
 	if (m_dataTransmitTimer < 100)
 	{
