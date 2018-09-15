@@ -97,15 +97,34 @@ void ResourceManager::LoadAudioFiles()
 	Audio::GetInstance().LoadAudioFile("res/Audio/FootstepsRun.wav", "RunFootsteps", true, 1);
 	Audio::GetInstance().LoadAudioFile("res/Audio/EnemyDead.wav", "EnemyDead");
 	Audio::GetInstance().LoadAudioFile("res/Audio/EnemyDead2.wav", "EnemyDead2");
-	Audio::GetInstance().LoadAudioFile("res/Audio/Reloading.wav", "Reload");
+	Audio::GetInstance().LoadAudioFile("res/Audio/MainMenu.mp3", "MainMenu", true, 2); 
+	Audio::GetInstance().LoadAudioFile("res/Audio/InGame.mp3", "InGame", true, 3);
+	Audio::GetInstance().LoadAudioFile("res/Audio/Reloading.wav", "Reload", true, 4); 
+}
+
+void ResourceManager::ReleaseAudioFiles()
+{
+	Audio::GetInstance().ReleaseSound(Audio::GetInstance().GetSoundsMap().find("ButtonHovered")->second);
+	Audio::GetInstance().ReleaseSound(Audio::GetInstance().GetSoundsMap().find("ButtonClicked")->second);
+	Audio::GetInstance().ReleaseSound(Audio::GetInstance().GetSoundsMap().find("AR_Fire")->second);
+	Audio::GetInstance().ReleaseSound(Audio::GetInstance().GetSoundsMap().find("FlashOn")->second);
+	Audio::GetInstance().ReleaseSound(Audio::GetInstance().GetSoundsMap().find("FlashOff")->second);
+	Audio::GetInstance().ReleaseSound(Audio::GetInstance().GetSoundsMap().find("EnemyHit")->second);
+	Audio::GetInstance().ReleaseSound(Audio::GetInstance().GetSoundsMap().find("PlayerHit")->second);
+	Audio::GetInstance().ReleaseSound(Audio::GetInstance().GetSoundsMap().find("ThunderStorm")->second);
+	Audio::GetInstance().ReleaseSound(Audio::GetInstance().GetSoundsMap().find("WalkFootsteps")->second);
+	Audio::GetInstance().ReleaseSound(Audio::GetInstance().GetSoundsMap().find("RunFootsteps")->second);
+	Audio::GetInstance().ReleaseSound(Audio::GetInstance().GetSoundsMap().find("EnemyDead")->second);
+	Audio::GetInstance().ReleaseSound(Audio::GetInstance().GetSoundsMap().find("EnemyDead2")->second);
+	Audio::GetInstance().ReleaseSound(Audio::GetInstance().GetSoundsMap().find("Reload")->second);
+	Audio::GetInstance().ReleaseSound(Audio::GetInstance().GetSoundsMap().find("MainMenu")->second);
+	Audio::GetInstance().ReleaseSound(Audio::GetInstance().GetSoundsMap().find("InGame")->second);
 }
 
 void ResourceManager::SetSkyboxTextureIDs()
 {
 	// Initializer list to store skybox IDs
-	skyboxTexturesIds = { "skybox" , "skybox1", "skybox2", "skybox3",
-						  "skybox4", "skybox5", "skybox6", "skybox7", 
-						  "skybox8", "skybox9", "skybox10", "skybox11" };
+	skyboxTexturesIds = { "skybox" , "skybox1", "skybox2", "skybox3", "skybox4", "skybox5" };
 }
 
 std::vector<char*> ResourceManager::GetSkyboxTextureIds()

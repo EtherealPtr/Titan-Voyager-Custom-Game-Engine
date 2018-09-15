@@ -31,6 +31,9 @@ Game::~Game()
 
 	// Deallocate the asteroid's model matrices
 	delete m_asteroid.meshes[0].GetModelMatIns();
+
+	// Release all audio files
+	ResourceManager::GetInstance().ReleaseAudioFiles();
 }
 
 void Game::Run()
@@ -271,7 +274,9 @@ void Game::RenderScene()
 	}
 	else
 	{
-		Renderer::GetInstance().GetComponent(FPS_CROSSHAIR).Draw(m_cameraHUD);
+		// Render FPS crosshair if player is not using sniper rifle
+		if (!Player::GetInstance().IsUsingSniper())
+			Renderer::GetInstance().GetComponent(FPS_CROSSHAIR).Draw(m_cameraHUD);
 
 		if (m_camera.GetCameraFOV() != 80.0f)
 		{
@@ -303,8 +308,14 @@ void Game::RenderScene()
 	{
 		// Check if this enemy unit can respawn (if the data transfer is at 100, then this enemy cannot respawn anymore)
 		m_enemies.at(i)->SetRespawnStatus(m_dataTransmitTimer < 100 ? true : false);
-		m_enemies.at(i)->Draw(enemyId, ENEMY_DRONE, ENEMY_BLAST);
+		m_enemies.at(i)->Draw(enemyId, ENEMY_DRONE);
 		++enemyId;
+	}
+
+	// Draw enemy shockwave if smart drones have exploded
+	for (unsigned int i = 0; i < m_enemyCount; ++i)
+	{
+		m_enemies.at(i)->DrawShockwave(ENEMY_BLAST);
 	}
 
 	// Text updates
@@ -420,6 +431,7 @@ void Game::UpdateGame()
 	}
 
 	// Update audio
+	Audio::GetInstance().PlaySoundOnCustomChannel(Audio::GetInstance().GetSoundsMap().find("InGame")->second, 3, 0.03f);
 	Audio::GetInstance().Update();
 
 	// Update data transmitter 
@@ -448,11 +460,13 @@ void Game::UpdateGame()
 		if (m_endGame)
 		{
 			Renderer::GetInstance().GetComponent(PLAYER_VICTORY_SCREEN).Draw(m_cameraHUD);
-			m_gameStateTimer += 1.0f * m_deltaTime;
+			m_gameStateTimer += 1.15f * m_deltaTime;
 
 			if (m_gameStateTimer >= 5.0f)
 			{
 				FreeMouseCursor();
+				m_gameStateTimer = 0.0f;
+				Audio::GetInstance().StopSound(3);
 				m_gameState = GameState::MAIN_MENU;
 			}
 		}
@@ -464,10 +478,16 @@ void Game::UpdateGame()
 void Game::UpdateMenu()
 {
 	GetFrameEvents().clear();
+	Audio::GetInstance().PlaySoundOnCustomChannel(Audio::GetInstance().GetSoundsMap().find("MainMenu")->second, 2);
 }
 
 void Game::RestartGame()
 {
+	// Restart in-game music
+	Audio::GetInstance().StopSound(3);
+
+	m_atmosphere.Restart();
+
 	// Respawn the player (reset position, ammo, health, flashlight)
 	Player::GetInstance().Respawn(m_camera);
 	
@@ -481,6 +501,9 @@ void Game::RestartGame()
 	m_dataTransmitTimer = 0.0f;
 	m_enemySpawnTimer = 0.0f;
 	m_enemyCount = 1;
+
+	// Ensure main menu music's channel is stopped
+	Audio::GetInstance().StopSound(2);
 }
 
 void Game::FreezeMouseCursor()
@@ -519,9 +542,20 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 				m_gameState = GameState::EXIT;
 				break;
 
-			case SDLK_x:
-				SDL_SetWindowFullscreen(Renderer::GetInstance().GetAppWindow(), SDL_WINDOW_FULLSCREEN);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			case SDLK_h:
+				static bool bFullscreen;
+
+				if (!bFullscreen)
+				{
+					SDL_SetWindowFullscreen(Renderer::GetInstance().GetAppWindow(), SDL_WINDOW_FULLSCREEN);
+					bFullscreen = !bFullscreen;
+				}
+				else
+				{
+					SDL_SetWindowFullscreen(Renderer::GetInstance().GetAppWindow(), 0);
+					bFullscreen = !bFullscreen;
+				}
+
 				break;
 
 			default: break;
@@ -534,14 +568,9 @@ void Game::ProcessInput(std::vector<SDL_Event>& events)
 		{
 			switch (i->key.keysym.sym)
 			{
-			case SDLK_x:
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				break;
-
-			case SDLK_z:
-				// Temp (Remove this later)
-				SDL_SetWindowFullscreen(Renderer::GetInstance().GetAppWindow(), 0);
-				break;
+			//case SDLK_x: // DEBUG PURPOSES
+			//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			//	break;
 
 			default: break;
 			}

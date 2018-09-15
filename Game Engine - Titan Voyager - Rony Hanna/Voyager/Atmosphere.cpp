@@ -62,6 +62,16 @@ void Atmosphere::Update(float dt)
 	Renderer::GetInstance().GetComponent(3).GetShaderComponent().SetFloat("darkness", m_dayTimer);
 }
 
+void Atmosphere::Restart()
+{
+	m_dayTimer = 0.0f;
+	m_flashTimer = 0.0f;
+	m_thunderFlash = false;
+	m_flashDuration = 0;
+	m_nightMode = false;
+	m_activateThunderstorms = false;
+}
+
 void Atmosphere::Thunderstorm()
 {
 	int m_dryThunderChance = Utils::GetInstance().RandomNumBetween1And100();

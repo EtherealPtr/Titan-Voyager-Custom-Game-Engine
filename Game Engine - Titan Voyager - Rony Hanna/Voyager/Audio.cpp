@@ -67,11 +67,12 @@ void Audio::PlaySound(FMOD::Sound* pSound, bool bLooping)
 	m_pAudioManager->playSound(pSound, nullptr, false, 0);
 }
 
-void Audio::PlaySoundOnCustomChannel(FMOD::Sound* pSound, unsigned short int id)
+void Audio::PlaySoundOnCustomChannel(FMOD::Sound* pSound, unsigned short int id, float channelVolume)
 {
 	// Check if a sound is already playing
 	bool isSoundPlaying;
 	m_channelMap[id]->isPlaying(&isSoundPlaying);
+	m_channelMap[id]->setVolume(channelVolume);
 
 	// If no sound is currently playing, then go ahead and play a sound
 	if (!isSoundPlaying)

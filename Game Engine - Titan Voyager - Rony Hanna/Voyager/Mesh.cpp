@@ -115,7 +115,7 @@ void Mesh::CreateMesh(bool instancing)
 
 	if (instancing)
 	{
-		m_totalObjectsIns = 100;
+		m_totalObjectsIns = 20000;
 		unsigned int amount = m_totalObjectsIns;
 		m_modelMatricesIns = new glm::mat4[amount];
 		float radius = 400.0f;
@@ -127,7 +127,7 @@ void Mesh::CreateMesh(bool instancing)
 			float x = 0.0f, y = 0.0f, z = 0.0f;
 
 			float angle = (float)i / (float)amount * 360.0f;
-			float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset + 300.0f;  
+			float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset + 300.0f;
 			x = sin(angle) * radius + displacement;
 
 			displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset + 40.0f;

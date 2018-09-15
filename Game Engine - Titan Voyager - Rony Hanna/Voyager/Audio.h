@@ -23,7 +23,7 @@ public:
 	bool Init();
 	bool LoadAudioFile(char* file, char* nameId, bool useChannel = false, unsigned short int id = 0);
 	void PlaySound(FMOD::Sound*, bool bLooping = false);
-	void PlaySoundOnCustomChannel(FMOD::Sound*, unsigned short int id);
+	void PlaySoundOnCustomChannel(FMOD::Sound*, unsigned short int id, float channelVolume = 1.0f);
 	void StopSound(unsigned short int channelId);
 	void StopSoundRanged(unsigned short int from, unsigned short int to);
 	void ReleaseSound(FMOD::Sound*);

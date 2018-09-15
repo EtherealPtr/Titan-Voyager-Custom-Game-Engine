@@ -13,6 +13,7 @@ public:
 	void SetFlashDuration(int duration)	{ m_flashDuration = duration; }
 	void SetThunderFlash(bool flash)	{ m_thunderFlash = flash; }
 	void SetFlashTimer(float timer)		{ m_flashTimer = timer; }
+	void Restart();
 
 	bool& GetThunderstorm()				{ return m_playThunderstorm; }
 	int& GetFlashDuration()				{ return m_flashDuration; }

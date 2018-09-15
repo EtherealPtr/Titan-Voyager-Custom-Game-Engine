@@ -37,7 +37,7 @@ Enemy::Enemy(Camera& cam) :
 Enemy::~Enemy()
 {}
 
-void Enemy::Draw(short int enemyId, short int enemyDroneId, short int enemyDroneBlastId)
+void Enemy::Draw(short int enemyId, short int enemyDroneId)
 {
 	if (!m_dead)
 	{
@@ -71,44 +71,47 @@ void Enemy::Draw(short int enemyId, short int enemyDroneId, short int enemyDrone
 				Physics::GetInstance().OnPlayerHit(m_attackDamage);
 			}
 		}
-
-		// Check if the small drone has reached its desired destination where it is about to explode
-		if (m_droneSelfDestruct)
-		{
-			// Increase the explosion radius
-			m_blastRadius += 5.0f * m_deltaTime;
-			
-			if (m_blastRadius < 7.0f)
-			{
-				// Update explosion blast 
-				Renderer::GetInstance().GetComponent(enemyDroneBlastId).SetTransform(m_oldPlayerPos, glm::vec3(m_blastRadius * 20, m_blastRadius * 20, m_blastRadius * 20), glm::vec3(m_blastRadius));
-				Renderer::GetInstance().GetComponent(enemyDroneBlastId).Draw(m_camera);
-				
-				// Check if enemy can damage and player is caught within the growing blast
-				if (m_damageToken && Physics::GetInstance().PointInSphere(m_camera, m_oldPlayerPos, (m_blastRadius * 4)))
-				{
-					// Inflict damage on player
-					Physics::GetInstance().OnPlayerHit(m_attackDamage);
-
-					// Take away the enemy's damage token
-					m_damageToken = false;
-				}
-			}
-			else
-			{
-				// Restart blast properties
-				m_droneSelfDestruct = false;
-				m_blastRadius = 0.01f;
-
-				// Restore the enemy's damage token
-				m_damageToken = true;
-			}
-		}
 	}
 	else
 	{
 		m_currLifeTimer = 0.0f;
 		Respawn();
+	}
+}
+
+void Enemy::DrawShockwave(short int enemyDroneBlastId)
+{
+	// Check if the smart drone has reached its desired destination where it is about to explode
+	if (m_droneSelfDestruct)
+	{
+		// Increase the explosion radius
+		m_blastRadius += 5.0f * m_deltaTime;
+
+		if (m_blastRadius < 7.0f)
+		{
+			// Update explosion blast 
+			Renderer::GetInstance().GetComponent(enemyDroneBlastId).SetTransform(m_oldPlayerPos, glm::vec3(m_blastRadius * 20, m_blastRadius * 20, m_blastRadius * 20), glm::vec3(m_blastRadius));
+			Renderer::GetInstance().GetComponent(enemyDroneBlastId).Draw(m_camera);
+
+			// Check if enemy can damage and player is caught within the growing blast
+			if (m_damageToken && Physics::GetInstance().PointInSphere(m_camera, m_oldPlayerPos, (m_blastRadius * 4)))
+			{
+				// Inflict damage on player
+				Physics::GetInstance().OnPlayerHit(m_attackDamage);
+
+				// Take away the enemy's damage token (so that player does not continuously get hit while within the blast) 
+				m_damageToken = false;
+			}
+		}
+		else
+		{
+			// Restart blast properties
+			m_droneSelfDestruct = false;
+			m_blastRadius = 0.01f;
+
+			// Restore the enemy's damage token
+			m_damageToken = true;
+		}
 	}
 }
 
@@ -324,6 +327,7 @@ void Enemy::Respawn()
 	if (m_canRespawn)
 	{
 		m_pos = glm::vec3(0.0f, 0.0f, 0.0f);
+		m_dronePos = m_pos;
 		m_respawnTimer += 1.0f * m_deltaTime;
 
 		if (m_respawnTimer >= 15.0f)
@@ -337,6 +341,8 @@ void Enemy::Respawn()
 			m_damageTakenDuration = 0.0f;
 			m_takingDamage = false;
 			m_dead = false;
+			m_droneSelfDestruct = false;
+			m_blastRadius = 0.01f;
 			m_health = 100;
 
 			// Set new spawn position

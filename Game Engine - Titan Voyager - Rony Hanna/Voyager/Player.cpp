@@ -104,6 +104,7 @@ void Player::Update(Camera& cam, Terrain& terrain, float dt, std::vector<SDL_Eve
 			m_sniperRifle->GetAnimComponent().SetWeaponZOffset(-4.0f);
 			m_sniperRifle->GetAnimComponent().SetSprintWeaponZOffset(-2.5f);
 			m_currWeapon = m_sniperRifle;
+			m_sniperEquipped = true;
 
 			// Check if the weapons swapping animation has finished
 			if (m_swapped)
@@ -118,6 +119,7 @@ void Player::Update(Camera& cam, Terrain& terrain, float dt, std::vector<SDL_Eve
 			m_assaultRifle->GetAnimComponent().SetWeaponZOffset(-2.5f);
 			m_assaultRifle->GetAnimComponent().SetSprintWeaponZOffset(-2.5f);
 			m_currWeapon = m_assaultRifle;
+			m_sniperEquipped = false;
 
 			if (m_swapped)
 			{
@@ -356,7 +358,7 @@ void Player::ProcessInput(Camera& cam, float dt, std::vector<SDL_Event> events)
 				{
 					// Reload
 					m_reloading = true;
-					Audio::GetInstance().PlaySound(Audio::GetInstance().GetSoundsMap().find("Reload")->second);
+					Audio::GetInstance().PlaySoundOnCustomChannel(Audio::GetInstance().GetSoundsMap().find("Reload")->second, 4);
 				}
 
 				break;

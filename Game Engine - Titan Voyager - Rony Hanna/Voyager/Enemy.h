@@ -13,7 +13,8 @@ public:
 	Enemy(Camera& cam);
 	~Enemy();
 
-	void Draw(short int id, short int enemyProjectileId, short int enemyDroneBlastId);
+	void Draw(short int id, short int enemyProjectileId);
+	void DrawShockwave(short int enemyDroneBlastId);
 	void Update(Terrain& terrain, Camera& cam, float dt);
 	void ReduceHealth(int amount);
 	
